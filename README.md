@@ -3,11 +3,23 @@ This is the source code for my personal website, built using Next.js 13 with the
 <h2>Installation</h2>
 To run the project locally, you must have Node.js and npm installed on your computer.
 <ol><li>Clone the repository:</li></ol>
- `git clone https://github.com/your-username/your-personal-website.git` 
+
+```shell
+git clone https://github.com/your-username/your-personal-website.git
+``` 
+
 <ol start="2"><li>Install dependencies:</li></ol>
- `npm install` 
+
+```shell
+npm install
+``` 
+
 <ol start="3"><li>Start the development server:</li></ol>
- `npm run dev` 
+
+```shell
+npm run dev
+```
+
 <ol start="4"><li>Open <a href="http://localhost:3000" target="_new">http://localhost:3000</a> in your web browser to view the website.</li></ol><h2>License</h2>
 The source code for this project is licensed under the MIT License. However, the website template from Cruip must be purchased separately and is not included in this license.
 <h2>Contact</h2>
