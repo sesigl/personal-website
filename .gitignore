@@ -34,5 +34,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# editor configuration
 .idea
 .vscode
+
+# terraform local secrets
+terraform.tfvars
+.terraform
