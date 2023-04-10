@@ -43,9 +43,9 @@ export default function RootLayout({
     <html lang="en">
       <Script id="dark-mode" strategy="afterInteractive">{`
       if (localStorage.getItem('dark-mode') === 'false' || !('dark-mode' in localStorage)) {
-        document.querySelector('body').classList.remove('dark');
+        document.documentElement.classList.remove('dark');
       } else {
-        document.querySelector('body').classList.add('dark');
+        document.documentElement.classList.add('dark');
       }
       `}</Script>
       <body
