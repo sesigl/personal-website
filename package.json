@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run test-ci && next build",
+    "test": "vitest",
+    "test-ci": "NODE_ENV=test vitest run",
     "start": "next start",
     "lint": "next lint"
   },
@@ -21,9 +23,11 @@
     "sib-api-v3-typescript": "^2.2.2"
   },
   "devDependencies": {
+    "@testing-library/react": "^14.0.0",
     "@types/node": "18.15.11",
     "@types/react": "18.0.33",
     "@types/react-transition-group": "^4.4.5",
+    "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.13",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",

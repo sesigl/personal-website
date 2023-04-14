@@ -7,6 +7,7 @@ import WidgetBook from "@/partials/WidgetBook";
 import Footer from "@/partials/Footer";
 
 import Image from "next/image";
+import SubscribeForm from "@/app/subscribe/SubscribeForm";
 
 function Subscribe() {
   return (
@@ -89,22 +90,7 @@ function Subscribe() {
                           </li>
                         </ul>
                         <div>
-                          {/* Subscribe form */}
-                          <form>
-                            <div className="flex flex-col md:flex-row justify-center max-w-xs mx-auto md:max-w-md md:mx-0">
-                              <input
-                                type="email"
-                                className="form-input w-full mb-2 md:mb-0 md:mr-2"
-                                placeholder="Your email"
-                                aria-label="Your email\u2026"
-                              />
-                              <button className="btn text-white bg-sky-500 hover:bg-sky-600">
-                                Subscribe
-                              </button>
-                            </div>
-                            {/* Success message */}
-                            {/* <p class="text-xs text-slate-500 mt-3 italic">Thanks for subscribing!</p> */}
-                          </form>
+                          <SubscribeForm />
                           <div className="flex items-center mt-5">
                             <div className="inline-flex -space-x-3 -ml-0.5">
                               <Image

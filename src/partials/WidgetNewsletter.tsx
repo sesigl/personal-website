@@ -1,45 +1,18 @@
 "use client";
 
-import React, { FormEvent, useState } from "react";
+import React from "react";
 import Image from "next/image";
+import { useNewsletter } from "@/partials/hooks/useNewsletter";
 
 function WidgetNewsletter() {
-  const [email, setEmail] = useState<string>("");
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
-
-  async function handleNewsletterSignUp(e: FormEvent) {
-    e.preventDefault();
-
-    try {
-      const result = await fetch("/api/addUserToNewsletter", {
-        credentials: "include",
-        method: "POST",
-        body: JSON.stringify({
-          email: email,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!result.ok) {
-        setError(true);
-        setSuccess(false);
-        console.error(result.statusText);
-      } else {
-        setEmail("");
-        setError(false);
-        setSuccess(true);
-      }
-    } catch (e) {
-      setError(true);
-      setSuccess(false);
-      console.error(e);
-    }
-
-    return false;
-  }
+  const {
+    errorMessage,
+    email,
+    setEmail,
+    success,
+    error,
+    handleNewsletterSignUp,
+  } = useNewsletter();
 
   return (
     <div className="rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 odd:rotate-1 even:-rotate-1 p-5">
@@ -113,13 +86,13 @@ function WidgetNewsletter() {
           </button>
         </form>
         {success && (
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-3 text-sky-600 text-center font-bold">
+          <p className="text-sm text-sky-500 mt-3 text-center font-bold">
             Thanks for subscribing!
           </p>
         )}
         {error && (
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-3 text-red-400 text-center font-bold">
-            Something went wrong. Check your mail address or try again later.
+            {errorMessage}
           </p>
         )}
       </div>
