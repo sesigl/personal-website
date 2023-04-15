@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
 
 function ArticleItem(props: {
@@ -37,9 +36,10 @@ function ArticleItem(props: {
             <div className="grow text-sm text-slate-500 dark:text-slate-400">
               {props.excerpt}
             </div>
-            <Link
+            <a
               className="hidden lg:flex shrink-0 text-sky-500 items-center justify-center w-12 group"
-              href={props.slug as any}
+              href={props.link}
+              target="_blank"
               tabIndex={-1}
             >
               <svg
@@ -50,7 +50,7 @@ function ArticleItem(props: {
               >
                 <path d="M9.586 5 6.293 1.707 7.707.293 13.414 6l-5.707 5.707-1.414-1.414L9.586 7H0V5h9.586Z" />
               </svg>
-            </Link>
+            </a>
           </div>
         </div>
       </div>

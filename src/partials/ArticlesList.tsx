@@ -17,8 +17,7 @@ function ArticlesList() {
     },
     {
       id: 1,
-      title:
-        "Java Random Number Generator – How to Generate Numbers with Math.random() and Convert to Integers",
+      title: "Java Random Number Generator",
       slug: "/post",
       image: "/images/post-thumb-02.jpg",
       date: "Jul 19, 2022",
@@ -40,7 +39,7 @@ function ArticlesList() {
     },
     {
       id: 3,
-      title: "What Does K8s Mean? How to Set Up Kubernetes and Manage Clusters",
+      title: "What Does K8s Mean?",
       slug: "/post",
       image: "/images/post-thumb-04.jpg",
       date: "Jun 6, 2022",
@@ -51,8 +50,7 @@ function ArticlesList() {
     },
     {
       id: 4,
-      title:
-        "What is Docker? Learn How to Use Containers – Explained with Examples",
+      title: "What is Docker?",
       slug: "/post",
       image: "/images/post-thumb-05.jpg",
       date: "Apr 19, 2022",
@@ -74,8 +72,7 @@ function ArticlesList() {
     },
     {
       id: 6,
-      title:
-        "Docker Cache – How to Do a Clean Image Rebuild and Clear Docker's Cache",
+      title: "How to Do a Clean Docker Image Rebuild and Clear Docker's Cache",
       slug: "/post",
       image: "/images/post-thumb-07.jpg",
       date: "Mar 28, 2022",
@@ -109,8 +106,7 @@ function ArticlesList() {
     },
     {
       id: 9,
-      title:
-        "Kubernetes VS Docker: What's the Difference? Explained With Examples",
+      title: "Kubernetes VS Docker: What's the Difference?",
       slug: "/post",
       image: "/images/post-thumb-02.jpg",
       date: "Dec 10, 2020",
@@ -133,7 +129,7 @@ function ArticlesList() {
     {
       id: 11,
       title:
-        "Docker Image Guide: How to Delete Docker Images, Stop Containers, and Remove all Volumes",
+        "Docker Image Guide: Handle Docker Images, Containers, and Volumes",
       slug: "/post",
       image: "/images/post-thumb-04.jpg",
       date: "Jan 30, 2020",
