@@ -8,6 +8,7 @@ function ArticleItem(props: {
   date: string;
   slug: string;
   excerpt: string;
+  link: string;
 }) {
   return (
     <article className="py-5 border-b border-slate-100 dark:border-slate-800">
@@ -24,12 +25,13 @@ function ArticleItem(props: {
             <span className="text-sky-500">—</span> {props.date}
           </div>
           <h3 className="font-aspekta text-lg font-[650] mb-1">
-            <Link
+            <a
               className="inline-flex relative hover:text-sky-500 duration-150 ease-out before:scale-x-0 before:origin-center before:absolute before:inset-0 before:bg-sky-200 dark:before:bg-sky-500 before:opacity-30 before:-z-10 before:translate-y-1/4 before:-rotate-2 hover:before:scale-100 before:duration-150 before:ease-in-out"
-              href={props.slug as any}
+              href={props.link}
+              target="_blank"
             >
               {props.title}
-            </Link>
+            </a>
           </h3>
           <div className="flex">
             <div className="grow text-sm text-slate-500 dark:text-slate-400">

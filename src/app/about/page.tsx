@@ -26,11 +26,11 @@ function About() {
                   <section>
                     {/* Page title */}
                     <h1 className="h1 font-aspekta mb-5">
-                      Hi. I&apos;m Mark{" "}
+                      Hi. I&apos;m Sebastian{" "}
                       <span className="inline-flex relative text-sky-500 before:absolute before:inset-0 before:bg-sky-200 dark:before:bg-sky-500 before:opacity-30 before:-z-10 before:-rotate-2 before:translate-y-1/4">
-                        @mrk27
+                        @sesigl
                       </span>{" "}
-                      Ivings 🤟
+                      Sigl 🤟
                     </h1>
                     <Image
                       className="w-full"
@@ -46,12 +46,13 @@ function About() {
                           Short Bio
                         </h2>
                         <p>
-                          I&apos;m a software engineer with more than 10 years
-                          of experience in a variety of domains. For the past
-                          few years, I&apos;ve focused on highload server-side
-                          projects, distributed systems, and platform
-                          development - tinkering with infrastructure, all
-                          things containers and Cloud Native.
+                          I am a seasoned software engineer with over 17 years
+                          of experience across various domains. In recent years,
+                          my focus has been on highload server-side projects,
+                          data- and machine-learning-driven applications, and
+                          platform development, where I love tinkering with
+                          infrastructure, containers, and Cloud Native
+                          technologies.
                         </p>
                         <p>
                           While there isn&apos;t a Wikipedia page about me
@@ -63,34 +64,58 @@ function About() {
                           Career
                         </h2>
                         <p>
-                          In my role as a Senior Software Engineer for Google
-                          Chrome, I am responsible for developing and
-                          maintaining the{" "}
-                          <a className="font-medium text-sky-500 hover:underline">
-                            Chrome Web Browser
+                          As a Tech Lead for Adevinta, I have the honor of
+                          leading a team that is dedicated to enhancing the
+                          search and relevancy features of various use cases.
+                          Specifically, our focus is on helping users find the
+                          perfect ads to suit their needs. I am privileged to be
+                          a part of the core team at{" "}
+                          <a
+                            className="font-medium text-sky-500 hover:underline"
+                            href="https://www.kleinanzeigen.de/"
+                            target="_blank"
+                          >
+                            Kleinanzeigen
                           </a>
-                          .
+                          , one of the largest and most renowned classifieds
+                          markets in the world. Together, we strive to provide
+                          the best user experience and make meaningful
+                          contributions to the industry.
                         </p>
                         <p>
-                          My work involves developing and testing new features,
-                          optimizing performance and security, and ensuring the
-                          browser works for users around the world. I also work
-                          closely with other Google teams ensure Chrome is
-                          well-integrated with other{" "}
-                          <a className="font-medium text-sky-500 hover:underline">
-                            Google
-                          </a>{" "}
-                          products and services.
+                          As a result of the integration of various classifieds
+                          enterprises under{" "}
+                          <a
+                            className="font-medium text-sky-500 hover:underline"
+                            href="https://www.adevinta.com"
+                            target="_blank"
+                          >
+                            Adevinta
+                          </a>
+                          , we have emerged as the preeminent global leader in
+                          facilitating environmentally-conscious transactions of
+                          second-hand goods.
                         </p>
                         <p>
-                          As CTO of AppForYou,{" "}
-                          <strong className="font-medium text-slate-800 dark:text-slate-100">
-                            I am responsible for leading
-                          </strong>{" "}
-                          the technical teamand developing the company&apos;s
-                          technology strategy. I work closely with the
-                          engineering team to ensure that the products and
-                          services we provide are secure.
+                          Technology is my driving force, and I firmly believe
+                          that anyone with a passion for it can learn to code.
+                          As a fervent advocate of this ideology, my heart lies
+                          in{" "}
+                          <a
+                            className="font-medium text-sky-500 hover:underline"
+                            href="https://twitter.com/sesigl"
+                            target="_blank"
+                          >
+                            content creation
+                          </a>
+                          . It affords me the opportunity to connect with
+                          like-minded individuals, stay up-to-date with the
+                          latest industry trends, and witness the growth of
+                          other tech enthusiasts - often younger generations -
+                          as they embark on their journey in this dynamic field.
+                          I am deeply inspired by the idea that we all stand on
+                          the shoulders of giants, and take great pride in
+                          observing the exponential expansion of our community.
                         </p>
                       </div>
                       <div className="space-y-4">
@@ -106,35 +131,36 @@ function About() {
                                 aria-hidden="true"
                               />
                               <div className="absolute left-0 h-14 w-14 flex items-center justify-center border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 bg-white dark:bg-slate-900 rounded-full">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
+                                <Image
+                                  alt="Adevinta"
+                                  src="/images/logos/adevinta.png"
                                   width="16"
                                   height="16"
-                                >
-                                  <path
-                                    fill="#DE4D3B"
-                                    d="M15.912 6.545h-7.75v3.273h4.393c-.702 2.182-2.437 2.91-4.428 2.91-2.12.002-3.992-1.368-4.601-3.37a4.693 4.693 0 0 1 1.959-5.307 4.854 4.854 0 0 1 5.722.33l2.414-2.265C10.947-.31 6.964-.69 3.867 1.186.771 3.06-.683 6.735.308 10.18c.99 3.445 4.185 5.822 7.819 5.82 4.477 0 8.525-2.91 7.785-9.456Z"
-                                  />
-                                </svg>
+                                />
                               </div>
                               <div className="pl-20 space-y-1">
                                 <div className="text-xs text-slate-500 uppercase">
-                                  May 2020{" "}
+                                  Dec 2022{" "}
                                   <span className="text-slate-400 dark:text-slate-600">
                                     ·
                                   </span>{" "}
                                   Present
                                 </div>
                                 <div className="font-aspekta font-[650] text-slate-800 dark:text-slate-100">
-                                  Senior Front-end Engineer
+                                  Tech Lead Relevancy & Personalization
                                 </div>
                                 <div className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                                  Google
+                                  Adevinta
                                 </div>
                                 <div className="text-sm text-slate-500 dark:text-slate-400">
-                                  In my role as a Senior Software Engineer for
-                                  Google, I am responsible for developing and
-                                  maintaining the Chrome Web Experience.
+                                  As the Tech lead at Adevinta, it is my
+                                  responsibility to create an exceptional search
+                                  experience for advertising in Germany, which
+                                  will be seamlessly integrated into a global
+                                  system. My focus is on building a
+                                  state-of-the-art solution that leverages the
+                                  latest technologies to meet the needs of our
+                                  users and exceed their expectations.
                                 </div>
                               </div>
                             </div>
@@ -147,35 +173,38 @@ function About() {
                                 aria-hidden="true"
                               />
                               <div className="absolute left-0 h-14 w-14 flex items-center justify-center border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 bg-white dark:bg-slate-900 rounded-full">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="20"
-                                  height="12"
-                                >
-                                  <path
-                                    className="fill-slate-800 dark:fill-slate-100"
-                                    d="M5.64 0c3.116 0 5.641 2.686 5.641 6s-2.525 6-5.64 6C2.526 12 0 9.314 0 6c0-3.313 2.525-6 5.64-6Zm9.008.351c1.558 0 2.82 2.53 2.82 5.65h.001c0 3.118-1.263 5.648-2.82 5.648-1.558 0-2.82-2.53-2.82-5.649S13.09.351 14.648.351Zm4.36.589C19.556.94 20 3.205 20 6c0 2.794-.444 5.06-.992 5.06s-.992-2.265-.992-5.06c0-2.794.444-5.06.992-5.06Z"
-                                  />
-                                </svg>
+                                <Image
+                                  alt="eBay"
+                                  src="/images/logos/ebay.png"
+                                  width="32"
+                                  height="32"
+                                />
                               </div>
                               <div className="pl-20 space-y-1">
                                 <div className="text-xs text-slate-500 uppercase">
-                                  May 2017{" "}
+                                  Oct 2018{" "}
                                   <span className="text-slate-400 dark:text-slate-600">
                                     ·
                                   </span>{" "}
-                                  Apr 2020
+                                  Dec 2022
                                 </div>
                                 <div className="font-aspekta font-[650] text-slate-800 dark:text-slate-100">
-                                  Senior Front-end Engineer
+                                  Classifieds Senior Full-Stack Engineer | Tech
+                                  Lead Advertising
                                 </div>
                                 <div className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                                  Medium
+                                  eBay
                                 </div>
                                 <div className="text-sm text-slate-500 dark:text-slate-400">
-                                  In my role as a Senior Software Engineer for
-                                  Google, I am responsible for developing and
-                                  maintaining the Chrome Web Experience.
+                                  As a senior Full-Stack Engineer and later as a
+                                  tech-lead for advertising, I had the privilege
+                                  of leading a talented team in the development
+                                  of a cutting-edge global advertising
+                                  configuration management system. With
+                                  scalability and flexibility at the forefront
+                                  of our approach, our system empowered yield
+                                  experts to optimize revenue while maintaining
+                                  maximum control.
                                 </div>
                               </div>
                             </div>
@@ -188,35 +217,83 @@ function About() {
                                 aria-hidden="true"
                               />
                               <div className="absolute left-0 h-14 w-14 flex items-center justify-center border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 bg-white dark:bg-slate-900 rounded-full">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="19"
-                                  height="16"
-                                >
-                                  <path
-                                    fill="#00ADEF"
-                                    d="M18.995 3.695c-.08 1.769-1.345 4.23-3.878 7.383C12.505 14.308 10.368 16 8.547 16 7.44 16 6.49 15 5.7 13c-.475-1.845-1.03-3.614-1.504-5.46-.554-2-1.187-3-1.82-3-.159 0-.634.308-1.504.847L0 4.31c.95-.77 1.9-1.615 2.77-2.384C4.036.849 4.986.31 5.62.234 7.122.08 7.993 1.08 8.31 3.156c.396 2.23.634 3.692.792 4.23.396 1.846.87 2.846 1.424 2.846.396 0 1.03-.615 1.82-1.846.792-1.23 1.188-2.153 1.267-2.769.08-1.076-.316-1.615-1.266-1.615-.475 0-.95.077-1.425.308.95-3 2.691-4.384 5.382-4.307 1.9.077 2.77 1.307 2.691 3.692Z"
-                                  />
-                                </svg>
+                                <Image
+                                  alt="Mister Spex"
+                                  src="/images/logos/mister-spex.png"
+                                  width="32"
+                                  height="32"
+                                />
                               </div>
                               <div className="pl-20 space-y-1">
                                 <div className="text-xs text-slate-500 uppercase">
-                                  Jan 2017{" "}
+                                  Oct 2016{" "}
                                   <span className="text-slate-400 dark:text-slate-600">
                                     ·
                                   </span>{" "}
-                                  Apr 2017
+                                  Sep 2018
                                 </div>
                                 <div className="font-aspekta font-[650] text-slate-800 dark:text-slate-100">
-                                  Cloud Software Developer
+                                  Senior Full-Stack Engineer
                                 </div>
                                 <div className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                                  Vimeo
+                                  MisterSpex
                                 </div>
                                 <div className="text-sm text-slate-500 dark:text-slate-400">
-                                  In my role as a Senior Software Engineer for
-                                  Google, I am responsible for developing and
-                                  maintaining the Chrome Web Experience.
+                                  As a Senior Full-Stack Engineer, I had the
+                                  privilege of leading a team that spearheaded
+                                  the evolution of essential features in our
+                                  system. One of our most noteworthy
+                                  accomplishments was the creation of an
+                                  innovative augmented reality application that
+                                  enabled our customers to virtually try on
+                                  glasses. This technology played a pivotal role
+                                  in transforming our primarily brick and mortar
+                                  business into a digital-first enterprise.
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                          {/* Role */}
+                          <li className="relative py-2">
+                            <div className="flex items-start mb-1">
+                              <div
+                                className="absolute left-0 h-full w-px bg-slate-200 dark:bg-slate-800 self-start ml-[28px] -translate-x-1/2 translate-y-3"
+                                aria-hidden="true"
+                              />
+                              <div className="absolute left-0 h-14 w-14 flex items-center justify-center border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 bg-white dark:bg-slate-900 rounded-full">
+                                <Image
+                                  alt="Sopra Steria"
+                                  src="/images/logos/sopra-steria.png"
+                                  width="32"
+                                  height="32"
+                                />
+                              </div>
+                              <div className="pl-20 space-y-1">
+                                <div className="text-xs text-slate-500 uppercase">
+                                  Oct 2014{" "}
+                                  <span className="text-slate-400 dark:text-slate-600">
+                                    ·
+                                  </span>{" "}
+                                  Sep 2016
+                                </div>
+                                <div className="font-aspekta font-[650] text-slate-800 dark:text-slate-100">
+                                  Mid-Level Backend Engineer
+                                </div>
+                                <div className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                                  Sopra Steria
+                                </div>
+                                <div className="text-sm text-slate-500 dark:text-slate-400">
+                                  As a Mid-Level Full-Stack Engineer, I had the
+                                  opportunity to modernize a Java-Swing
+                                  Application. With great attention to detail, I
+                                  focused on extracting both frontend and
+                                  backend components, resulting in a significant
+                                  improvement in backend performance and
+                                  frontend user-experience. Through advocating
+                                  for a test-first mentality, I ensured that the
+                                  components were not only successfully
+                                  extracted from a big monolith but were also
+                                  easier to change and caused fewer defects.
                                 </div>
                               </div>
                             </div>
@@ -225,35 +302,38 @@ function About() {
                           <li className="relative py-2">
                             <div className="flex items-start mb-1">
                               <div className="absolute left-0 h-14 w-14 flex items-center justify-center border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 bg-white dark:bg-slate-900 rounded-full">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="17"
-                                  height="17"
-                                >
-                                  <path
-                                    fill="#6366F1"
-                                    d="M2.486 5.549C3.974 7.044 5.953 7.89 8.009 8.045c-.138-2.065-.997-4.053-2.486-5.548C4.035 1.002 2.117.154 0 0c.138 2.065.997 4.053 2.486 5.549Zm12.028 0c-1.488 1.495-3.467 2.342-5.523 2.496.138-2.065.997-4.053 2.486-5.548C12.888 1.002 14.883.154 17 0c-.153 2.065-.997 4.053-2.486 5.549Zm0 5.902c-1.488-1.495-3.467-2.342-5.523-2.496.138 2.065.997 4.053 2.486 5.548C12.965 15.998 14.944 16.846 17 17c-.153-2.127-.997-4.13-2.486-5.549Zm-12.028 0c1.488-1.495 3.467-2.342 5.6-2.496-.138 2.065-.998 4.053-2.486 5.548C4.035 15.998 2.117 16.861 0 17c.138-2.127.997-4.13 2.486-5.549Z"
-                                  />
-                                </svg>
+                                <Image
+                                  alt="Freelance"
+                                  src="/images/logos/freelance.png"
+                                  width="32"
+                                  height="32"
+                                />
                               </div>
                               <div className="pl-20 space-y-1">
                                 <div className="text-xs text-slate-500 uppercase">
-                                  Feb 2016{" "}
+                                  Oct 2005{" "}
                                   <span className="text-slate-400 dark:text-slate-600">
                                     ·
                                   </span>{" "}
-                                  Dec 2016
+                                  Sep 2014
                                 </div>
                                 <div className="font-aspekta font-[650] text-slate-800 dark:text-slate-100">
-                                  Cloud Software Engineering Intern
+                                  High School, Computer Science Master &
+                                  Freelancer
                                 </div>
                                 <div className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                                  Qonto
+                                  Self-Employed
                                 </div>
                                 <div className="text-sm text-slate-500 dark:text-slate-400">
-                                  In my role as a Senior Software Engineer for
-                                  Google, I am responsible for developing and
-                                  maintaining the Chrome Web Experience.
+                                  From my teenage years onwards, coding has been
+                                  my passion. At the age of 17, I took on the
+                                  ambitious project of creating a Facebook clone
+                                  for Turkey - a significant accomplishment that
+                                  marked the beginning of my journey as a
+                                  developer. Since then, I have continued to
+                                  hone my skills by working for various
+                                  companies on a contractual basis, all while
+                                  pursuing my education.
                                 </div>
                               </div>
                             </div>
@@ -266,11 +346,18 @@ function About() {
                         </h2>
                         <p>
                           I&apos;m excited to connect with others via{" "}
-                          <a className="font-medium text-sky-500 hover:underline">
+                          <a
+                            className="font-medium text-sky-500 hover:underline"
+                            href="mailto:akrillo89@gmail.com"
+                          >
                             email
                           </a>{" "}
                           and{" "}
-                          <a className="font-medium text-sky-500 hover:underline">
+                          <a
+                            className="font-medium text-sky-500 hover:underline"
+                            href="https://twitter.com/sesigl"
+                            target="_blank"
+                          >
                             Twitter
                           </a>{" "}
                           to chat about projects and ideas. Currently, I&apos;m
