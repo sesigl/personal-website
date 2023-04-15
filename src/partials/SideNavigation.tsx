@@ -18,7 +18,7 @@ function SideNavigation() {
               <Link href="/">
                 <Image
                   className="rounded-full"
-                  src={"/images/me_sesigl_1.jpg"}
+                  src={"/images/me.jpg"}
                   width="32"
                   height="32"
                   alt="Me"
