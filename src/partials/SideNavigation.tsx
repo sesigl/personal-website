@@ -9,11 +9,13 @@ import { usePathname } from "next/navigation";
 function SideNavigation() {
   const pathname = usePathname();
 
+  const isHome = pathname === "/" || pathname?.includes("/home/");
+
   return (
     <div className="sticky top-0 w-16 md:w-24 shrink-0 h-screen overflow-y-auto no-scrollbar border-r border-slate-200 dark:border-slate-800">
       <div className="h-full flex flex-col justify-between after:flex-1 after:mt-auto">
         <div className="flex-1">
-          {pathname !== "/" && (
+          {!isHome && (
             <div className="flex justify-center my-4">
               <Link href="/">
                 <Image
@@ -35,7 +37,7 @@ function SideNavigation() {
                   href="/"
                   className={
                     "w-full h-6 flex items-center justify-center relative after:absolute after:w-0.5 after:right-0 after:top-0 after:bottom-0 " +
-                    (pathname === "/"
+                    (isHome
                       ? "text-sky-500 after:bg-sky-500"
                       : "text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400")
                   }
