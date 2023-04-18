@@ -1,0 +1,77 @@
+---
+title: "10 YouTube Channels That Will Make You Smarter"
+publishedAt: "2023-12-20"
+image: "/images/post-thumb-05.jpg"
+summary: "Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed."
+---
+
+Flexbox is a remarkably flexible layout mode. When we understand how it works, we can build responsive designs that rearrange themselves as needed.
+
+![Post](/images/post-image.jpg)
+
+Web designers sometimes believe that animating in CSS is more difficult than animating in JavaScript. **While CSS animation does have some limitations**, most of the time it's more capable than we give it credit for! Not to mention, typically more performant.
+
+Coupled with a touch of JavaScript, CSS animations and transitions are able to accomplish hardware-accelerated animations and interactions more efficiently than most JavaScript libraries. Let's jump straight in!
+
+Let's jump straight in!
+
+Manipulating CSS Transitions
+----------------------------
+
+There are countless questions on coding forums related to triggering and pausing an element's transition. The solution is actually quite simple using JavaScript.
+
+To trigger an element's transition, toggle a class name on that element that triggers it.
+
+To pause an element's transition, use getComputedStyle and getPropertyValue at the point in the transition you want to pause it. [Then set those CSS properties](#0) of that element equal to those values you just got.
+
+Using CSS “Callback Functions”
+------------------------------
+
+Some of the most useful yet little-known JavaScript tricks for manipulating CSS transitions and animations are the DOM events they fire. Like: **animationend, animationstart, and animationiteration for animations** and transitionend for transitions. You might guess what they do. These animation events fire when the animation on an element ends, starts, or completes one iteration, respectively.
+
+These events need to be vendor prefixed at this time, so in this demo, we use a function developed by Craig Buckler called PrefixedEvent, which has the parameters element, type, and callback to help make these events cross-browser. Here is his useful article on capturing CSS animations with JavaScript. And [here is another one](#0) determining which animation (name) the event is firing for.
+
+Manipulating CSS Transitions
+----------------------------
+
+Like we just learned, we can watch elements and react to animation-related events: animationStart, animationIteration, and animationEnd. But what happens if you want to change the CSS animation mid-animation? This requires a bit of trickery!
+
+### The animation-play-state Property
+
+The animation-play-state property of CSS is incredibly helpful when you simply need to pause an animation and potentially continue it later. You can change that CSS through JavaScript like this (mind your prefixes):
+
+```js title="js/main.js"
+element.style.webkitAnimationPlayState = "paused";
+element.style.webkitAnimationPlayState = "running";
+```
+
+### Obtaining the Current Keyvalue Percentage
+
+Unfortunately, at this time, there is no way to get the exact current “percentage completed” of a CSS keyframe animation. **The best method to approximate it is using a setInterval function** that iterates 100 times during the animation, which is essentially: the animation duration in ms / 100. For example, if the animation is 4 seconds long, then the setInterval needs to run every 40 milliseconds (4000/100).
+
+```js
+var showPercent = window.setInterval(function() {
+  if (currentPercent < 100) {
+    currentPercent += 1;
+  } else {
+    currentPercent = 0;
+  }
+  // Updates a div that displays the current percent
+  result.innerHTML = currentPercent;
+}, 40);
+```
+
+Use Your Head
+-------------
+
+Before starting to code, thinking about and planning how a transition or animation should run is the best way to minimize your problems and get the effect you desire. Even better than Googling for solutions later! The techniques and tricks overviewed in this article may not always be the best way to create the animation your project calls for.
+
+Here's a little example of **where getting clever with HTML and CSS** alone can solve a problem where you might have thought to go to JavaScript.
+
+In Conclusion
+-------------
+
+*   Developers used to need to choose between CSS and JavaScript.
+*   In JavaScript, CSS transitions are generally easier to work with than CSS animations.
+*   CSS Matrices are generally a pain to deal with, especially for beginners.
+*   Thinking about what should be done and planning how to do it.

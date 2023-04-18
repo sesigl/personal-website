@@ -1,6 +1,3 @@
-
-
-
 @tailwind base;
 @tailwind components;
 
@@ -100,5 +97,4 @@
         scrollbar-width: none;
         /* Firefox */
     }
-
 }

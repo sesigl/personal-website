@@ -41,3 +41,7 @@ next-env.d.ts
 # terraform local secrets
 terraform.tfvars
 .terraform
+
+
+# Contentlayer
+.contentlayer
