@@ -4,11 +4,17 @@ import ArticleItem from "../partials/ArticleItem";
 import FilterItem from "@/app/home/[category]/FilterItem";
 import ArticleCategory from "@/lib/domain/article/ArticleType";
 import ArticleRepository from "@/lib/domain/article/ArticleRepository";
+import PostItem from "@/app/home/[category]/post-item";
 
 function ArticlesList({ category }: { category: ArticleCategory }) {
   let inMemoryArticleRepository = new ArticleRepository();
-  const items = inMemoryArticleRepository.findAll();
-  const filteredItems = items.filter((i) => i.category === category);
+  const items = inMemoryArticleRepository.findExternalArticles();
+  const filteredItems =
+    category === "All" ? items : items.filter((i) => i.category === category);
+
+  const posts = inMemoryArticleRepository.findPosts();
+  const filteredPosts =
+    category === "All" ? posts : posts.filter((p) => p.category === category);
 
   return (
     <section>
@@ -16,16 +22,16 @@ function ArticlesList({ category }: { category: ArticleCategory }) {
 
       {/* Filters */}
       <ul className="flex flex-wrap text-sm border-b border-slate-100 dark:border-slate-800">
-        <FilterItem value="Backend" active={category === "Backend"} />
-        <FilterItem value="DevOps" active={category === "DevOps"} />
-        <FilterItem
-          value="Machine-Learning"
-          active={category === "Machine-Learning"}
-        />
+        <FilterItem value="All" active={category === "All"} />
+        <FilterItem value="Tech" active={category === "Tech"} />
+        <FilterItem value="Leadership" active={category === "Leadership"} />
       </ul>
 
       {/* Articles list */}
       <div>
+        {filteredPosts.map((post, postIndex) => (
+          <PostItem key={postIndex} {...post} />
+        ))}
         {filteredItems.map((item) => {
           return (
             <ArticleItem

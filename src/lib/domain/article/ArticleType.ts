@@ -1,3 +1,3 @@
-type ArticleCategory = "Backend" | "DevOps" | "Machine-Learning";
+type ArticleCategory = "All" | "Tech" | "Leadership";
 
 export default ArticleCategory;
