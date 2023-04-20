@@ -1,4 +1,5 @@
 import React from "react";
+import configuration from "@/configuration";
 
 function Footer() {
   return (
@@ -11,6 +12,8 @@ function Footer() {
               <a
                 className="flex justify-center items-center text-sky-500 hover:text-sky-600 transition duration-150 ease-in-out"
                 aria-label="Twitter"
+                target="_blank"
+                href={configuration.links.socialMedia.twitter}
               >
                 <svg
                   className="w-8 h-8 fill-current"

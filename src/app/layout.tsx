@@ -9,6 +9,7 @@ import Script from "next/script";
 import Theme from "@/app/theme-provider";
 import SideNavigation from "@/partials/SideNavigation";
 import Header from "@/partials/Header";
+import Footer from "@/partials/Footer";
 
 // @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=PT+Mono&display=fallback');
 const inter = Inter({
@@ -66,6 +67,8 @@ export default function RootLayout({
                   <Header />
 
                   {children}
+
+                  <Footer />
                 </div>
               </main>
             </div>

@@ -2,6 +2,7 @@ import React from "react";
 import WidgetNewsletter from "@/partials/WidgetNewsletter";
 import WidgetSponsor from "@/partials/WidgetSponsor";
 import Image from "next/image";
+import configuration from "@/configuration";
 
 function About() {
   return (
@@ -334,8 +335,8 @@ function About() {
                     and{" "}
                     <a
                       className="font-medium text-sky-500 hover:underline"
-                      href="https://twitter.com/sesigl"
                       target="_blank"
+                      href={configuration.links.socialMedia.twitter}
                     >
                       Twitter
                     </a>{" "}

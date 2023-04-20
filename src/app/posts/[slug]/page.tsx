@@ -7,6 +7,7 @@ import WidgetNewsletter from "@/partials/WidgetNewsletter";
 import WidgetSponsor from "@/partials/WidgetSponsor";
 import WidgetPosts from "@/partials/WidgetPosts";
 import PostDate from "@/partials/post-date";
+import configuration from "@/configuration";
 
 export async function generateStaticParams() {
   return allPosts.map((post) => ({
@@ -77,8 +78,9 @@ export default async function SinglePost({
                   <li>
                     <a
                       className="flex justify-center items-center text-slate-400 dark:text-slate-500 hover:text-sky-500 dark:hover:text-sky-500 transition duration-150 ease-in-out"
-                      href="#0"
                       aria-label="Twitter"
+                      target="_blank"
+                      href={configuration.links.socialMedia.twitter}
                     >
                       <svg
                         className="w-8 h-8 fill-current"
