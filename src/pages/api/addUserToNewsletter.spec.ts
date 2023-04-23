@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
 import handler, {
+  API_ERROR_MESSAGE_CONTACT_EXISTS,
   EMAIL_REQUIRED_CLIENT_ERROR_MESSAGE,
+  ERROR_NEWSLETTER_ALREADY_EXISTS,
 } from "@/pages/api/addUserToNewsletter";
 import NewsletterApplicationService from "@/lib/application/NewsletterApplicationService";
 import NewsletterFakeClient from "@/test/fake/newsletterClient/NewsletterFakeClient";
@@ -67,6 +69,44 @@ describe("addUserToNewsletter", () => {
     });
   });
 
+  describe("newsletter client already subscribed", () => {
+    let originalConsoleError: (...data: any[]) => void;
+    let response: NextApiResponse;
+
+    beforeEach(async () => {
+      originalConsoleError = console.error;
+      console.error = vitest.fn(() => {});
+
+      const error = {
+        response: {
+          body: {
+            message: API_ERROR_MESSAGE_CONTACT_EXISTS,
+          },
+        },
+      } as any as Error;
+
+      response = await callHandlerWithInternalError(
+        requestResponseFakeFactory,
+        response,
+        error
+      );
+    });
+    afterEach(() => {
+      console.error = originalConsoleError;
+    });
+
+    it("throws 500 with message if already subscribed", async () => {
+      expect(response.status).toHaveBeenCalledWith(500);
+      expect(response.send).toHaveBeenCalledWith(
+        ERROR_NEWSLETTER_ALREADY_EXISTS
+      );
+    });
+
+    it("logs no errors", async () => {
+      expect(console.error).not.toHaveBeenCalled();
+    });
+  });
+
   describe("success", () => {
     let response: NextApiResponse;
 
@@ -91,10 +131,11 @@ describe("addUserToNewsletter", () => {
 
   async function callHandlerWithInternalError(
     requestResponseFakeFactory: RequestResponseFakeFactory,
-    response: NextApiResponse
+    response: NextApiResponse,
+    error = new Error("internal error")
   ) {
     const newsletterApplicationService = new NewsletterApplicationService(
-      new NewsletterFakeClient(true)
+      new NewsletterFakeClient(true, error)
     );
     const result = requestResponseFakeFactory.getWithBody({
       email: "valid@email.com",

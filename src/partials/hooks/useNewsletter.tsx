@@ -10,7 +10,7 @@ const nextJsApiClient = new NextJsApiClient();
 export function useNewsletter() {
   const [email, setEmail] = useState<string>("");
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleNewsletterSignUp(e: FormEvent) {
     e.preventDefault();
@@ -19,16 +19,17 @@ export function useNewsletter() {
       const result = await nextJsApiClient.subscribeToNewsletter(email);
 
       if (!result.ok) {
-        setError(true);
+        const error = await result.text();
+        setError(error ?? defaultErrorMessage);
         setSuccess(false);
         console.error(result.statusText);
       } else {
         setEmail("");
-        setError(false);
+        setError(null);
         setSuccess(true);
       }
     } catch (e) {
-      setError(true);
+      setError(defaultErrorMessage);
       setSuccess(false);
       console.error(e);
     }
@@ -42,7 +43,6 @@ export function useNewsletter() {
     success,
     error,
     handleNewsletterSignUp,
-    errorMessage: defaultErrorMessage,
     okMessage: defaultOkMessage,
   };
 }

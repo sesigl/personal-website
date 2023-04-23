@@ -3,15 +3,8 @@ import React from "react";
 import { useNewsletter } from "@/partials/hooks/useNewsletter";
 
 function SubscribeForm() {
-  const {
-    errorMessage,
-    okMessage,
-    email,
-    setEmail,
-    success,
-    error,
-    handleNewsletterSignUp,
-  } = useNewsletter();
+  const { okMessage, email, setEmail, success, error, handleNewsletterSignUp } =
+    useNewsletter();
 
   return (
     <form onSubmit={handleNewsletterSignUp}>
@@ -39,7 +32,7 @@ function SubscribeForm() {
 
       {error && (
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-3 italic">
-          {errorMessage}
+          {error}
         </p>
       )}
     </form>

@@ -3,9 +3,14 @@ import NewsletterClient from "@/lib/domain/newsletter/NewsletterClient";
 export default class NewsletterFakeClient implements NewsletterClient {
   public contacts: string[] = [];
   private readonly alwaysErrors: boolean;
+  private readonly error: Error;
 
-  constructor(alwaysErrors = false) {
+  constructor(
+    alwaysErrors = false,
+    error: Error = new Error("internal error")
+  ) {
     this.alwaysErrors = alwaysErrors;
+    this.error = error;
   }
 
   createContact(email: string): Promise<void> {
@@ -24,7 +29,7 @@ export default class NewsletterFakeClient implements NewsletterClient {
 
   private beforeExecute() {
     if (this.alwaysErrors) {
-      throw Error("internal error");
+      throw this.error;
     }
   }
 }
