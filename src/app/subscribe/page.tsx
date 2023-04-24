@@ -138,9 +138,10 @@ function Subscribe() {
                           “ Incredible Value “
                         </div>
                         <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
-                          I was able to quickly master the skills necessary to
-                          advance my career. I&apos;m grateful for the resources
-                          Mark provided and would recommend him to anyone.
+                          With Sebastian&apos;s help, I quickly acquired the
+                          essential skills to progress in my career, and
+                          I&apos;m thankful for his resources. I would highly
+                          suggest him to others.
                         </p>
                       </div>
                       <div className="text-xs font-aspekta font-[650] text-sky-500">
@@ -162,9 +163,10 @@ function Subscribe() {
                           “ The Best Newsletter “
                         </div>
                         <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
-                          I was able to quickly master the skills necessary to
-                          advance my career. I&apos;m grateful for the resources
-                          Mark provided and would recommend him to anyone.
+                          Sebastian provided me with the necessary resources to
+                          swiftly acquire the skills needed for career
+                          advancement, and I&apos;m grateful. I would definitely
+                          endorse him to anyone seeking similar assistance.
                         </p>
                       </div>
                       <div className="text-xs font-aspekta font-[650] text-sky-500">
