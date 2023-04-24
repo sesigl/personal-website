@@ -43,6 +43,46 @@ function Footer() {
             <li>
               <a
                 className="flex justify-center items-center text-sky-500 hover:text-sky-600 transition duration-150 ease-in-out"
+                aria-label="Facebook"
+                target="_blank"
+                href={configuration.links.socialMedia.facebook}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4 m-2 fill-current"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 14222 14222"
+                >
+                  <circle cx="7111" cy="7112" r="7111" />
+                  <path
+                    d="M9879 9168l315-2056H8222V5778c0-562 275-1111 1159-1111h897V2917s-814-139-1592-139c-1624 0-2686 984-2686 2767v1567H4194v2056h1806v4969c362 57 733 86 1111 86s749-30 1111-86V9168z"
+                    fill="#ffffff"
+                  />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                className="flex justify-center items-center text-sky-500 hover:text-sky-600 transition duration-150 ease-in-out"
+                aria-label="LinkedIn"
+                target="_blank"
+                href={configuration.links.socialMedia.linkedIn}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4 m-2 fill-current"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                className="flex justify-center items-center text-sky-500 hover:text-sky-600 transition duration-150 ease-in-out"
                 aria-label="Github"
                 target="_blank"
                 href={configuration.links.socialMedia.github}
