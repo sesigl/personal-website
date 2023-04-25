@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run lint && npm run test-ci && next build",
-    "test": "vitest",
-    "test-ci": "NODE_ENV=test vitest run",
+    "test": " contentlayer build && vitest",
+    "test-ci": "contentlayer build && NODE_ENV=test vitest run",
     "start": "next start",
     "lint": "next lint"
   },
