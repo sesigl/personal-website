@@ -1,7 +1,6 @@
 import { defineConfig } from "vitest/config";
 import { resolve } from "path";
 import react from "@vitejs/plugin-react";
-import url from "url";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,9 +14,7 @@ export default defineConfig({
       { find: "@", replacement: resolve(__dirname, "./src") },
       {
         find: "contentlayer/generated",
-        replacement: url.fileURLToPath(
-          new URL("./.contentlayer/generated", import.meta.url)
-        ),
+        replacement: resolve(__dirname, "./.contentlayer/generated"),
       },
     ],
   },
