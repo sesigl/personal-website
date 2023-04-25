@@ -1,8 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import PostDate from "@/partials/post-date";
+import { Post } from "contentlayer/generated";
 
-export default function PostItem({ ...props }) {
+interface PostItemProps extends Post {
+  showTags: boolean;
+}
+
+export default function PostItem(props: PostItemProps) {
   return (
     <article className="py-5 border-b border-slate-100 dark:border-slate-800">
       <div className="flex items-start">
@@ -45,6 +50,20 @@ export default function PostItem({ ...props }) {
               </svg>
             </Link>
           </div>
+          {props.showTags && (
+            <div className="mt-3">
+              <ul className="flex flex-wrap text-xs font-medium -m-1">
+                <li className="m-1">
+                  <Link
+                    className="inline-flex text-center text-gray-100 py-1 px-3 rounded-full bg-sky-500 hover:bg-sky-600 transition duration-150 ease-in-out"
+                    href={`/search/${props.category}?categoryOnly`}
+                  >
+                    {props.category}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </article>

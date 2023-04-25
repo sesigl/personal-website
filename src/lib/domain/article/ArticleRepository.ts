@@ -1,5 +1,6 @@
 import Article from "@/lib/domain/article/Article";
 import { allPosts } from "contentlayer/generated";
+import Fuse from "fuse.js";
 
 let articleId = 0;
 const items: Article[] = [
@@ -168,5 +169,21 @@ export default class ArticleRepository {
     return allPosts.sort((a, b) => {
       return new Date(a.publishedAt) > new Date(b.publishedAt) ? -1 : 1;
     });
+  }
+
+  findPostByQuery(query: string, isCategoryOnly = false) {
+    const posts = this.findPosts();
+
+    const postKeys = Object.keys(posts[0] ?? {});
+
+    const options = {
+      includeScore: true,
+      // Search in `author` and in `tags` array
+      keys: isCategoryOnly ? ["category"] : postKeys,
+    };
+
+    const fuse = new Fuse(posts, options);
+
+    return fuse.search(query).map((result) => result.item);
   }
 }

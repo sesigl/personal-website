@@ -30,7 +30,7 @@ function ArticlesList({ category }: { category: ArticleCategory }) {
       {/* Articles list */}
       <div>
         {filteredPosts.map((post, postIndex) => (
-          <PostItem key={postIndex} {...post} />
+          <PostItem key={postIndex} {...post} showTags={false} />
         ))}
         {filteredItems.map((item) => {
           return (
