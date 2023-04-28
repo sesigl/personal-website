@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.sebastiansigl.com
+
+# Sitemaps
+Sitemap: https://www.sebastiansigl.com/sitemap.xml
