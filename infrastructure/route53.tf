@@ -17,3 +17,11 @@ resource "aws_route53_record" "cname" {
   ttl     = 300
   records = ["cname.vercel-dns.com"]
 }
+
+resource "aws_route53_record" "google_verification_txt" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = ""
+  type    = "TXT"
+  ttl     = 300
+  records = ["google-site-verification=XPyaSlZabo5ucYd56L0VZd6-hFbyiQ0-lK0p3AxsxTA"]
+}
