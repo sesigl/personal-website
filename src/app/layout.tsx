@@ -10,6 +10,7 @@ import Theme from "@/app/theme-provider";
 import SideNavigation from "@/partials/SideNavigation";
 import Header from "@/partials/Header";
 import Footer from "@/partials/Footer";
+import configuration from "@/configuration";
 
 // @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=PT+Mono&display=fallback');
 const inter = Inter({
@@ -36,6 +37,14 @@ const aspekta = localFont({
 export const metadata: Metadata = {
   title:
     "Sebastian Sigl | Software Engineer who loves frontend, backend, architecture, data and machine-learning.",
+  alternates: {
+    canonical: configuration.baseUrl,
+    types: {
+      "application/rss+xml": [
+        { url: "/rss.xml", title: "sebastiansigl.com rss feed" },
+      ],
+    },
+  },
 };
 
 export default function RootLayout({

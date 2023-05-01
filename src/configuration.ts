@@ -1,5 +1,7 @@
 const configuration = {
   baseUrl: "https://www.sebastiansigl.com",
+  email: "akrillo89@gmail.com",
+  name: "Sebastian Sigl",
   links: {
     socialMedia: {
       twitter: "https://twitter.com/sesigl",

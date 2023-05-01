@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Sebastian Sigl's blog about software engineering</title>
+        <link>https://www.sebastiansigl.com</link>
+        <description>Experience reports, reflecions, opinions and much more about software egineering focused on frontend, backend, architecture, data and machine-learning.</description>
+        <lastBuildDate>Mon, 01 May 2023 19:35:38 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>en</language>
+        <copyright>All rights reserved, Sebastian Sigl</copyright>
+        <item>
+            <title><![CDATA[5 Advanced ChatGPT Prompt For Software Developers]]></title>
+            <link>https://www.sebastiansigl.com/posts/5-advanced-chatgpt-prompt-techniques-every-passionate-software-developer-should-know</link>
+            <guid>https://www.sebastiansigl.com/posts/5-advanced-chatgpt-prompt-techniques-every-passionate-software-developer-should-know</guid>
+            <pubDate>Thu, 27 Apr 2023 22:00:00 GMT</pubDate>
+            <description><![CDATA[Get ahead in your career and business by using ChatGPT's advanced prompt techniques, including generating tables, controlling creativity with temperature settings, simulating an expert, creating unique business ideas, and explaining complex concepts in simple language.]]></description>
+            <author>akrillo89@gmail.com (Sebastian Sigl)</author>
+            <category>Tech</category>
+            <enclosure url="https://www.sebastiansigl.com/images/posts/5-chatgpt-prompts-blog-post.png" length="0" type="image/png"/>
+        </item>
+        <item>
+            <title><![CDATA[13 Free & Stunning Resources to Master Data Engineering]]></title>
+            <link>https://www.sebastiansigl.com/posts/become-a-data-superstar-13-free-and-stunning-resources-to-master-data-engineering</link>
+            <guid>https://www.sebastiansigl.com/posts/become-a-data-superstar-13-free-and-stunning-resources-to-master-data-engineering</guid>
+            <pubDate>Fri, 21 Apr 2023 22:00:00 GMT</pubDate>
+            <description><![CDATA[Become a data-engineer in only one year and learn the basics of Python, SQL, Git, Linux, NoSQL, Big Data with Spark and Hadoop, AWS Cloud, DBT, Airflow and Kafka.]]></description>
+            <author>akrillo89@gmail.com (Sebastian Sigl)</author>
+            <category>Tech</category>
+            <enclosure url="https://www.sebastiansigl.com/images/posts/data-engineer-thread-image-2.png" length="0" type="image/png"/>
+        </item>
+        <item>
+            <title><![CDATA[The Power of Self-Reflection: 5 Habits for Successful Developers]]></title>
+            <link>https://www.sebastiansigl.com/posts/5-powerful-habits-for-self-assessment-to-boost-your-success</link>
+            <guid>https://www.sebastiansigl.com/posts/5-powerful-habits-for-self-assessment-to-boost-your-success</guid>
+            <pubDate>Tue, 18 Apr 2023 22:00:00 GMT</pubDate>
+            <description><![CDATA[Self-reflection is the most important habit for success. Five habits for self-assessment to help developers continuously grow and succeed.]]></description>
+            <author>akrillo89@gmail.com (Sebastian Sigl)</author>
+            <category>Leadership</category>
+            <enclosure url="https://www.sebastiansigl.com/images/posts/self-assessment.png" length="0" type="image/png"/>
+        </item>
+    </channel>
+</rss>
