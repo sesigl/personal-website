@@ -18,6 +18,7 @@ const feed = new Feed({
     email: "akrillo89@gmail.com",
     link: configuration.baseUrl,
   },
+  image: configuration.baseUrl + "/favicon.ico",
 });
 
 allPosts
