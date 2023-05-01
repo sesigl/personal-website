@@ -4,10 +4,15 @@
         <title>Sebastian Sigl's blog about software engineering</title>
         <link>https://www.sebastiansigl.com</link>
         <description>Experience reports, reflecions, opinions and much more about software egineering focused on frontend, backend, architecture, data and machine-learning.</description>
-        <lastBuildDate>Mon, 01 May 2023 19:35:38 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 01 May 2023 19:52:42 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <image>
+            <title>Sebastian Sigl's blog about software engineering</title>
+            <url>https://www.sebastiansigl.com/favicon.png</url>
+            <link>https://www.sebastiansigl.com</link>
+        </image>
         <copyright>All rights reserved, Sebastian Sigl</copyright>
         <item>
             <title><![CDATA[5 Advanced ChatGPT Prompt For Software Developers]]></title>
