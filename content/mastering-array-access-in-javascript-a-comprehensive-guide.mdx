@@ -27,14 +27,14 @@ This code will assign the value 'apple' to the variable firstElement. Array acce
 .at()
 ====
 
-The at() method is a more recent addition to the JavaScript language, introduced in ECMAScript 2019. It allows for more flexible array access, as it can accept both positive and negative indices. Negative indices count from the end of the array, with -1 representing the last element. The at() method can also handle out-of-bounds indices more gracefully, returning undefined instead of throwing an error. Here is an example of using at():
+The `at()` method is a more recent addition to the JavaScript language, introduced in ECMAScript 2019. It allows for more flexible array access, as it can accept both positive and negative indices. Negative indices count from the end of the array, with -1 representing the last element. The `at()` method can also handle out-of-bounds indices more gracefully, returning undefined instead of throwing an error. Here is an example of using `at()`:
 
 ```js
 let myArray = ['apple', 'banana', 'orange'];
 let lastElement = myArray.at(-1);
 ```
 
-This code will assign the value 'orange' to the variable lastElement. Using at() can help make your code more concise and less prone to errors.
+This code will assign the value 'orange' to the variable lastElement. Using `at()` can help make your code more concise and less prone to errors.
 
 .join()
 ======
@@ -46,12 +46,12 @@ let myArray = ['apple', 'banana', 'orange'];
 let myString = myArray.join('-');
 ```
 
-This code concatenates all elements in an array into a string. The final value of myString will be a string with these values separated by a hyphen: "apple-banana-orange".
+This code concatenates all elements in an array into a string. The final value of myString will be a string with these values separated by a hyphen: 'apple-banana-orange'.
 
 .every()
 =======
 
-The every() method tests whether all elements in the array pass the specified test function. It returns a boolean value - true if all elements pass the test and false if at least one element fails the test:
+The `every()` method tests whether all elements in the array pass the specified test function. It returns a boolean value - true if all elements pass the test and false if at least one element fails the test:
 
 ```js
 const numbers = [2, 4, 6, 8, 10];
@@ -59,13 +59,12 @@ const allEven = numbers.every(num => num % 2 === 0);
 console.log(allEven); // true
 ```
 
-
-The code creates an array of numbers and checks if all elements are even using the .every method. The boolean result is stored in the allEven variable, which is then logged to the console.
+The code creates an array of numbers and checks if all elements are even using the `every()` method. The boolean result is stored in the allEven variable, which is then logged to the console.
 
 .some()
 ======
 
-The some() method tests whether at least one element in the array passes the specified test function. It returns a boolean value - true if at least one element passes the test and false if none of the elements pass the test:
+The `some()` method tests whether at least one element in the array passes the specified test function. It returns a boolean value - true if at least one element passes the test and false if none of the elements pass the test:
 
 ```js
 const numbers = [1, 2, 3, 4, 5];
@@ -73,12 +72,12 @@ const hasEven = numbers.some(num => num % 2 === 0);
 console.log(hasEven); // true
 ```
 
-The code defines an array of numbers and uses the .some method to check if it contains any even numbers. If the array contains at least one even number, the method returns true and logs it to the console.
+The code defines an array of numbers and uses the `some()` method to check if it contains any even numbers. If the array contains at least one even number, the method returns true and logs it to the console.
 
 .find()
 ======
 
-The find() method returns the first element in the array that passes the specified test function. If no elements pass the test, it returns undefined:
+The `find()` method returns the first element in the array that passes the specified test function. If no elements pass the test, it returns undefined:
 
 ```js
 const numbers = [1, 2, 3, 4, 5];
@@ -91,7 +90,7 @@ The `.find()` method is used to find the first even number in the `numbers` arra
 .indexOf()
 =========
 
-The indexOf() method returns the index of the first occurrence of a specified element in the array. If the element is not found, it returns -1:
+The `indexOf()` method returns the index of the first occurrence of a specified element in the array. If the element is not found, it returns -1:
 
 ```js
 const fruits = ['apple', 'banana', 'orange'];
@@ -99,12 +98,12 @@ const index = fruits.indexOf('banana');
 console.log(index); // 1
 ```
 
-The indexOf method is used to find the index of a specific element in an array. In this code, it is used to find the index of the 'banana' element in the fruits array, which is 1.
+In this code, `indexOf()` is used to find the index of the 'banana' element in the fruits array, which is 1.
 
 .pop()
 =====
 
-The pop() method removes the last element from the array and returns that element:
+The `pop()` method removes the last element from the array and returns that element:
 
 ```js
 const fruits = ['apple', 'banana', 'orange'];
@@ -112,12 +111,12 @@ const lastFruit = fruits.pop();
 console.log(lastFruit); // orange
 ```
 
-The .pop() method is used to remove the last element from an array. In this code, it removes the 'orange' element from the 'fruits' array and assigns it to the 'lastFruit' variable, which is then logged to the console.
+The `pop()` method is used to remove the last element from an array. In this code, it removes the 'orange' element from the 'fruits' array and assigns it to the 'lastFruit' variable, which is then logged to the console.
 
 .push()
 ======
 
-The push() method adds one or more elements to the end of the array and returns the new length of the array:
+The `push()` method adds one or more elements to the end of the array and returns the new length of the array:
 
 ```js
 const fruits = ['apple', 'banana'];
@@ -125,12 +124,12 @@ const newLength = fruits.push('orange', 'pear');
 console.log(newLength); // 4
 ```
 
-The `push` method adds one or more elements to the end of an array. In this example, `orange` and `pear` are added to the `fruits` array using `push`, increasing the array length to 4. The new length is then logged to the console using `console.log`.
+In this example, `orange` and `pear` are added to the `fruits` array using `push`, increasing the array length to 4. The new length is then logged to the console using `console.log`.
 
 .map()
 ======
 
-The map() method creates a new array with the results of calling a provided function on every element in the calling array:
+The `map()` method creates a new array with the results of calling a provided function on every element in the calling array:
 
 ```js
 const numbers = [1, 2, 3, 4, 5];
@@ -138,12 +137,12 @@ const doubled = numbers.map(num => num * 2);
 console.log(doubled); // [2, 4, 6, 8, 10]
 ```
 
-The `map` method creates a new array by calling a function on each element of an original array. In this example, the `numbers` array is mapped to a new array `doubled`, where each element is multiplied by 2 using an arrow function. The resulting `doubled` array is then logged to the console.
+In this example, the `numbers` array is mapped to a new array `doubled`, where each element is multiplied by 2 using an arrow function. The resulting `doubled` array is then logged to the console.
 
 .forEach()
 ==========
 
-The forEach() method is used to loop over an array and execute a callback function for each element. This method does not return a new array but instead allows you to perform an action on each element in the original array. Here's an example of how to use forEach() to log each element of an array to the console:
+The `forEach()` method is used to loop over an array and execute a callback function for each element. This method does not return a new array but instead allows you to perform an action on each element in the original array. Here's an example of how to use `forEach()` to log each element of an array to the console:
 
 ```js
 const numbers = [1, 2, 3, 4, 5];
@@ -153,7 +152,7 @@ numbers.forEach(number => console.log(number));
 .splice()
 =========
 
-The splice() method is used to add or remove elements from an array. This method modifies the original array and returns the removed elements. Here's an example of how to use splice() to remove the second element from an array:
+The `splice()` method is used to add or remove elements from an array. This method modifies the original array and returns the removed elements. Here's an example of how to use splice() to remove the second element from an array:
 
 ```js
 const fruits = ['apple', 'banana', 'orange'];
@@ -165,7 +164,7 @@ console.log(removedFruit); // Output: ['banana']
 .filter()
 =========
 
-The filter() method is used to create a new array that contains all elements that pass a certain test. This method does not modify the original array but instead returns a new array that satisfies the condition. Here's an example of how to use filter() to create a new array that contains only even numbers:
+The `filter()` method is used to create a new array that contains all elements that pass a certain test. This method does not modify the original array but instead returns a new array that satisfies the condition. Here's an example of how to use `filter()` to create a new array that contains only even numbers:
 
 ```js
 const numbers = [1, 2, 3, 4, 5];
@@ -176,7 +175,7 @@ console.log(evenNumbers); // Output: [2, 4]
 .concat()
 =========
 
-The concat() method is used to combine two or more arrays into a single array. This method does not modify the original arrays but instead returns a new array that contains all the elements from the original arrays. Here's an example of how to use concat() to combine two arrays:
+The `concat()` method is used to combine two or more arrays into a single array. This method does not modify the original arrays but instead returns a new array that contains all the elements from the original arrays. Here's an example of how to use `concat()` to combine two arrays:
 
 ```js
 const fruits = ['apple', 'banana'];
@@ -188,7 +187,7 @@ console.log(combined); // Output: ['apple', 'banana', 'carrot', 'celery']
 .fill()
 =======
 
-The fill() method is used to fill all the elements in an array with a static value. This method modifies the original array and returns the modified array. Here's an example of how to use fill() to fill an array with a default value:
+The `fill()` method is used to fill all the elements in an array with a static value. This method modifies the original array and returns the modified array. Here's an example of how to use `fill()` to fill an array with a default value:
 
 ```js
 const numbers = [1, 2, 3, 4, 5];
@@ -199,7 +198,7 @@ console.log(filledNumbers); // Output: [0, 0, 0, 0, 0]
 .slice()
 ========
 
-The slice() method is used to create a new array that contains a portion of an existing array. This method does not modify the original array but instead returns a new array that contains the selected elements. Here's an example of how to use slice() to create a new array that contains the first three elements of an array:
+The `slice()` method is used to create a new array that contains a portion of an existing array. This method does not modify the original array but instead returns a new array that contains the selected elements. Here's an example of how to use `slice()` to create a new array that contains the first three elements of an array:
 
 ```js
 const numbers = [1, 2, 3, 4, 5];
@@ -211,7 +210,7 @@ console.log(slicedNumbers); // Output: [1, 2, 3]
 .shift()
 ========
 
-The shift() method removes the first element from an array and returns that element. It also shifts all subsequent elements to a lower index. Here's an example:
+The `shift()` method removes the first element from an array and returns that element. It also shifts all subsequent elements to a lower index. Here's an example:
 
 ```js
 const array = ["apple", "banana", "cherry"];
@@ -221,12 +220,12 @@ console.log(shifted); // "apple"
 console.log(array);   // ["banana", "cherry"]
 ```
 
-In this example, we start with an array containing three elements. We then call shift() on that array, which removes the first element ("apple") and returns it. Finally, we log the returned value and the updated array to the console.
+In this example, we start with an array containing three elements. We then call `shift()` on that array, which removes the first element ("apple") and returns it. Finally, we log the returned value and the updated array to the console.
 
 .unshift()
 =========
 
-The unshift() method adds one or more elements to the beginning of an array and returns the new length of the array. Here's an example:
+The `unshift()` method adds one or more elements to the beginning of an array and returns the new length of the array. Here's an example:
 
 ```js
 const array = ["apple", "banana", "cherry"];
@@ -241,7 +240,7 @@ In this example, we start with an array containing three elements. We then call 
 .sort()
 =======
 
-The sort() method sorts the elements of an array in place and returns the sorted array. The default sort order is built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values. Here's an example:
+The `sort()` method sorts the elements of an array in place and returns the sorted array. The default sort order is built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values. Here's an example:
 
 ```js
 const array = [1, 4, 2, 3, 5];
@@ -251,15 +250,15 @@ console.log(sorted); // [1, 2, 3, 4, 5]
 console.log(array);  // [1, 2, 3, 4, 5]
 ```
 
-In this example, we start with an array containing five elements. We then call sort() on that array, which sorts the elements in ascending order and returns the sorted array. Finally, we log both the returned value and the updated array to the console.
+In this example, we start with an array containing five elements. We then call `sort()` on that array, which sorts the elements in ascending order and returns the sorted array. Finally, we log both the returned value and the updated array to the console.
 
 Conclusion
 ==========
 
 Understanding popular JavaScript array methods is crucial for any software developer looking to master the language. Each of these methods serves a specific purpose, and they all offer different pros and cons depending on your use case.
 
-For example, methods like `push` and `pop` can quickly and easily add or remove elements from an array, while methods like `filter` and `map` can help you manipulate and transform data within an array. Similarly, methods like `indexOf` and `find` can help you quickly search for specific elements within an array.
+For example, methods like `push()` and `pop()` can quickly and easily add or remove elements from an array, while methods like `filter()` and `map()` can help you manipulate and transform data within an array. Similarly, methods like `indexOf()` and `find()` can help you quickly search for specific elements within an array.
 
-It's also worth noting that innovations in JavaScript development have led to the creation of new array methods in recent years. There are much more methods available than described in this post, like the `flat` method can flatten nested arrays, while the `flatMap` method combines the functionality of `map` and `flat` to transform and flatten arrays in one step.
+It's also worth noting that innovations in JavaScript development have led to the creation of new array methods in recent years. There are much more methods available than described in this post, like the `flat()` method can flatten nested arrays, while the `flatMap()` method combines the functionality of `map()` and `flat()` to transform and flatten arrays in one step.
 
 Overall, whether you're a seasoned JavaScript developer or just starting out, understanding popular array methods is a must. By knowing when and how to use each method, you'll be able to write cleaner, more efficient code and unlock new possibilities for your JavaScript projects.
