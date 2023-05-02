@@ -1,6 +1,8 @@
 # *
 User-agent: *
-Allow: /
+Disallow: https://sebastiansigl.com
+Disallow: http://sebastiansigl.com
+Disallow: http://www.sebastiansigl.com
 
 # Host
 Host: https://www.sebastiansigl.com
