@@ -102,4 +102,8 @@
     .prose :where(blockquote):not(:where([class~="not-prose"] *)) {
        @apply text-slate-500 dark:text-slate-400
     }
+
+    .prose :where(code):not(:where([class~="not-prose"] *)) {
+        @apply text-slate-500 dark:text-slate-400
+    }
 }
