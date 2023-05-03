@@ -1,5 +1,6 @@
 import React from "react";
 import configuration from "@/configuration";
+import Link from "next/link";
 
 function Footer() {
   return (
@@ -121,7 +122,10 @@ function Footer() {
 
           {/* Copyright */}
           <div className="text-sm text-slate-500 dark:text-slate-400">
-            Copyright © Sebastian Sigl. All rights reserved.
+            Copyright © Sebastian Sigl. All rights reserved. |{" "}
+            <Link href="/imprint" className="font-medium hover:underline">
+              Imprint
+            </Link>
           </div>
         </div>
       </div>
