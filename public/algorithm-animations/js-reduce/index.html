@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+<div class="container">
+  <h1>Understanding JavaScript's Reduce Function</h1>
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">JavaScript Code</span>
+          <pre><code id="jsCode" class="language-javascript"></code></pre>
+        </div>
+      </div>
+    </div>
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Animation</span>
+          <div id="arrayContainer"></div>
+          <div id="accumulatorContainer"></div>
+          <div id="currentValueContainer"></div>
+          <div id="remainingArrayContainer"></div>
+          <button class="btn waves-effect waves-light" id="startButton">Start Animation</button>
+          <div class="input-field">
+            <input id="userArray" type="text" class="validate">
+            <label for="userArray">Enter comma-separated numbers</label>
+          </div>
+          <button class="btn waves-effect waves-light" id="userArrayButton">Test Your Array</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Finding the Maximum in an Array</span>
+          <pre><code id="jsCodeMax" class="language-javascript"></code></pre>
+        </div>
+      </div>
+    </div>
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Animation</span>
+          <div id="arrayContainerMax"></div>
+          <div id="maxContainer"></div>
+          <button class="btn waves-effect waves-light" id="startButtonMax">Start Animation</button>
+          <div class="input-field">
+            <input id="userArrayMax" type="text" class="validate">
+            <label for="userArrayMax">Enter comma-separated numbers</label>
+          </div>
+          <button class="btn waves-effect waves-light" id="userArrayButtonMax">Test Your Array</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
