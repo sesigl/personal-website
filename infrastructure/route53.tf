@@ -31,15 +31,7 @@ resource "aws_route53_record" "icloud_verification_mx" {
   name    = ""
   type    = "MX"
   ttl     = 300
-  records = ["mx01.mail.icloud.com."]
-}
-
-resource "aws_route53_record" "icloud_verification_mx_2" {
-  zone_id = aws_route53_zone.primary.zone_id
-  name    = ""
-  type    = "MX"
-  ttl     = 300
-  records = ["mx02.mail.icloud.com."]
+  records = ["10 mx01.mail.icloud.com.", "10 mx02.mail.icloud.com."]
 }
 
 resource "aws_route53_record" "cname_icloud" {
