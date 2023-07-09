@@ -23,7 +23,7 @@ function About() {
               </h1>
               <Image
                 className="w-full"
-                src={"/images/about.png"}
+                src={"/images/about_v3.png"}
                 width="692"
                 height="390"
                 alt="About"

@@ -8,7 +8,7 @@ function Hero() {
         <div className="pt-8 pb-10">
           <Image
             className="rounded-full mb-5"
-            src={"/images/me_sesigl_1.jpg"}
+            src={"/images/me_sesigl_2.png"}
             width="56"
             height="56"
             alt="Me"
