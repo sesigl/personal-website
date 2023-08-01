@@ -4,14 +4,12 @@ import Image from "next/image";
 function Projects() {
   return (
     <section>
-      <h2 className="font-aspekta text-xl font-[650] mb-5">
-        Open-Source Projects
-      </h2>
+      <h2 className="font-aspekta text-xl font-[650] mb-5">Projects</h2>
 
       {/* Cards */}
       <div className="grid sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-5">
         <a
-          href="https://github.com/sesigl/fullstack-news"
+          href="https://www.traveladventurewithchild.com/"
           target="_blank"
           className="rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 odd:-rotate-1 even:rotate-1 hover:rotate-0 transition-transform duration-700 hover:duration-100 ease-in-out p-5"
         >
@@ -19,19 +17,19 @@ function Projects() {
             <div className="grow">
               <div className="h-10 w-10 flex items-center justify-center border border-slate-200 dark:border-slate-700 rounded-full mb-2">
                 <Image
-                  alt="FullStack News"
-                  src={"/images/fsn_icon_x96.png"}
-                  width="24"
-                  height="24"
+                  alt="Travel Adventure with a Child"
+                  src={"/images/logos/traveladventure.png"}
+                  width="32"
+                  height="32"
                   className="overflow-hidden rounded-2xl"
                 />
               </div>
               <div className="text-lg font-aspekta font-[650] mb-1">
-                FullStack News
+                Travel Adventure with a Child
               </div>
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
-                Solution for personalized news aggregation connected to
-                community provided tasks and panels.
+                With Backpack and Teddy Bear: Chronicles of our Family
+                Adventures from Packing to Homecoming.
               </p>
             </div>
             <div className="text-sky-500 flex justify-end">
@@ -56,16 +54,17 @@ function Projects() {
               <div className="h-10 w-10 flex items-center justify-center border border-slate-200 dark:border-slate-700 rounded-full mb-2">
                 <Image
                   alt="Selysia"
-                  src={"/images/selysia_black_bg_rounded.png"}
-                  width="32"
-                  height="32"
+                  src={"/images/logos/ddd_template_go.png"}
+                  width="40"
+                  height="40"
                 />
               </div>
               <div className="text-lg font-aspekta font-[650] mb-1">
-                Selysia
+                DDD Template for GoLang projects
               </div>
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
-                Solutions for managing social media posts accelerated by AI.
+                Domain Driven Design (DDD) template for Golang to properly
+                organize a project with many useful tools set up.
               </p>
             </div>
             <div className="text-sky-500 flex justify-end">
