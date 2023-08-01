@@ -54,7 +54,7 @@ function Projects() {
               <div className="h-10 w-10 flex items-center justify-center border border-slate-200 dark:border-slate-700 rounded-full mb-2">
                 <Image
                   alt="Selysia"
-                  src={"/images/logos/ddd_template_go.png"}
+                  src={"/images/logos/ddd_template_go_v2.png"}
                   width="40"
                   height="40"
                 />
