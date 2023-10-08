@@ -25,11 +25,28 @@ export async function generateMetadata({
 
   if (!post) return;
 
-  const { title, summary: description } = post;
+  const { title, summary: description, image } = post;
 
   return {
     title,
     description,
+    authors: {
+      name: "Sebastian Sigl",
+    },
+    openGraph: {
+      title,
+      description,
+      images: [image],
+    },
+
+    twitter: {
+      title,
+      description,
+      images: [image],
+      card: "summary_large_image",
+      creator: "@sesigl",
+      site: "@sesigl",
+    },
   };
 }
 
