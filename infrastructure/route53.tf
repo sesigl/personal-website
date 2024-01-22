@@ -23,7 +23,10 @@ resource "aws_route53_record" "google_verification_txt" {
   name    = ""
   type    = "TXT"
   ttl     = 300
-  records = ["google-site-verification=XPyaSlZabo5ucYd56L0VZd6-hFbyiQ0-lK0p3AxsxTA", "apple-domain=XMFMGL9LHP5pJW20", "v=spf1 include:icloud.com ~all"]
+  records = [
+    "google-site-verification=XPyaSlZabo5ucYd56L0VZd6-hFbyiQ0-lK0p3AxsxTA",
+    "apple-domain=lYxPxVEiZphkzEnL",
+    "v=spf1 include:icloud.com ~all"]
 }
 
 resource "aws_route53_record" "icloud_verification_mx" {
@@ -40,4 +43,12 @@ resource "aws_route53_record" "cname_icloud" {
   type    = "CNAME"
   ttl     = 300
   records = ["sig1.dkim.sebastiansigl.com.at.icloudmailadmin.com."]
+}
+
+resource "aws_route53_record" "cname_gumroad" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "store"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["domains.gumroad.com"]
 }
