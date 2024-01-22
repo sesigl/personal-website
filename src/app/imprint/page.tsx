@@ -22,8 +22,8 @@ function About() {
                     sebastiansigl.com is:
                   </p>
                   <p>
-                    Sebastian Sigl, Roquettestr. 34, 01157 Dresden, akrillo89
-                    [at] gmail.com
+                    Sebastian Sigl, Roquettestr. 34, 01157 Dresden, support [at]
+                    sebastiansigl.com
                   </p>
                 </div>
               </div>

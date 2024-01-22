@@ -7,7 +7,7 @@ terraform {
   }
 
   cloud {
-    organization = "social-media-post-scheduler"
+    organization = "learn-to-code"
 
     workspaces {
       name = "personal-website"

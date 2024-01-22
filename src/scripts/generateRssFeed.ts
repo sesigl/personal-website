@@ -15,7 +15,7 @@ const feed = new Feed({
   copyright: "All rights reserved, Sebastian Sigl",
   author: {
     name: "Sebastian Sigl",
-    email: "akrillo89@gmail.com",
+    email: "support@sebastiansigl.com",
     link: configuration.baseUrl,
   },
   image: configuration.baseUrl + "/favicon.png",

@@ -328,7 +328,7 @@ function About() {
                     I&apos;m excited to connect with others via{" "}
                     <a
                       className="font-medium text-sky-500 hover:underline"
-                      href="mailto:akrillo89@gmail.com"
+                      href="mailto:support@sebastiansigl.com"
                     >
                       email
                     </a>{" "}
