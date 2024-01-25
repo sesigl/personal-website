@@ -370,3 +370,16 @@ However, it's crucial to assess whether Event Sourcing aligns with your objectiv
 - Technical and Operational Fit: Evaluate if your team and infrastructure can support the complexities of an event-sourced system.
 
 As technology evolves, the principles of Event Sourcing continue to be relevant and potent. By integrating this pattern into your systems, you prepare your projects not just for current demands but also for future challenges and advancements.
+
+# Contributors
+
+This post has been enriched by insightful reviews and feedback, making it much more accessible and
+understandable. I want to extend my heartfelt thanks once again to those who contributed their
+valuable time and expertise. 
+
+A big shoutout
+to [@ishmambytes](https://twitter.com/ishmambytes), [@Emmauzoezie](https://twitter.com/Emmauzoezie), [@KMirzaguliyev](https://twitter.com/KMirzaguliyev), [@TejasCh32900009](https://twitter.com/TejasCh32900009), [@ebunorun](https://twitter.com/ebunorun), [@plantsfortrees](https://twitter.com/plantsfortrees), [@nditah_sammy](https://twitter.com/nditah_sammy),
+and [@gratatouille23](https://twitter.com/gratatouille23). 
+
+Your contributions truly make our
+community outstanding. ❤️
