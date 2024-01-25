@@ -38,7 +38,7 @@ function Post() {
                           <span className="text-slate-400 dark:text-slate-600">
                             ·
                           </span>{" "}
-                          4 Min read
+                          10 Min read
                         </div>
                         {/* Share buttons */}
                         <ul className="inline-flex">

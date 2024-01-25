@@ -76,7 +76,7 @@ export default async function SinglePost({
                   <span className="text-sky-500">—</span>{" "}
                   <PostDate dateString={post.publishedAt} />{" "}
                   <span className="text-slate-400 dark:text-slate-600">·</span>{" "}
-                  4 Min read
+                  10 Min read
                 </div>
                 <ShareButtons
                   url={`${configuration.baseUrl}/posts/${post.slug}`}

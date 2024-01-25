@@ -61,3 +61,8 @@
 [data-rehype-pretty-code-title]+pre {
     @apply mt-0 rounded-t-none border-t-0;
 }
+
+html.dark article img {
+    background-color: white;
+    border-radius: 10px;
+}
