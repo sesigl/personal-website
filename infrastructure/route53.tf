@@ -52,3 +52,11 @@ resource "aws_route53_record" "cname_gumroad" {
   ttl     = 300
   records = ["domains.gumroad.com"]
 }
+
+resource "aws_route53_record" "cname_learn" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "learn"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["cname.vercel-dns.com."]
+}
