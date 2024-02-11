@@ -29,3 +29,11 @@ provider "aws" {
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 }
+
+# US-East-1 is required for certain AWS Services like managed certificates that should be wired to API Gateway
+provider "aws" {
+  alias = "us_east_1"
+  region = "us-east-1"
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
+}

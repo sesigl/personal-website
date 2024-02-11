@@ -60,3 +60,15 @@ resource "aws_route53_record" "cname_learn" {
   ttl     = 300
   records = ["cname.vercel-dns.com."]
 }
+
+resource "aws_route53_record" "prod_learn_api" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "api.learn.sebastiansigl.com"
+  type    = "A"
+
+  alias {
+    name                   = "d1q6r79usmskkd.cloudfront.net"
+    zone_id                = "Z2FDTNDATAQYW2" # CloudFront's hosted zone ID
+    evaluate_target_health = false
+  }
+}
