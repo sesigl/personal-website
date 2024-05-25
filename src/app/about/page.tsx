@@ -35,9 +35,9 @@ function About() {
                     Short Bio
                   </h2>
                   <p>
-                    I am a seasoned software engineer with over 17 years of
+                    I am a seasoned software engineer with over 18 years of
                     experience across various domains. In recent years, my focus
-                    has been on highload server-side projects, data- and
+                    has been on high-load server-side projects, data- and
                     machine-learning-driven applications, and platform
                     development, where I love tinkering with infrastructure,
                     containers, and Cloud Native technologies.
@@ -52,21 +52,30 @@ function About() {
                     Career
                   </h2>
                   <p>
-                    As a Tech Lead for Adevinta, I have the honor of leading a
-                    team that is dedicated to enhancing the search and relevancy
-                    features of various use cases. Specifically, our focus is on
-                    helping users find the perfect ads to suit their needs. I am
-                    privileged to be a part of the core team at{" "}
+                    As a Staff Engineer at Adevinta, I have the honor of
+                    supporting multiple teams dedicated to delivering the best
+                    possible content based on first and third-party data. My
+                    primary focus is to support teams providing users with
+                    personalized content maximizing relevancy and revenue. I am
+                    privileged to empower multiple markets like{" "}
                     <a
                       className="font-medium text-sky-500 hover:underline"
                       href="https://www.kleinanzeigen.de/"
                       target="_blank"
                     >
                       Kleinanzeigen
-                    </a>
-                    , one of the largest and most renowned classifieds markets
-                    in the world. Together, we strive to provide the best user
-                    experience and make meaningful contributions to the
+                    </a>{" "}
+                    or{" "}
+                    <a
+                      className="font-medium text-sky-500 hover:underline"
+                      href="https://www.leboncoin.fr/"
+                      target="_blank"
+                    >
+                      Leboncoin
+                    </a>{" "}
+                    two of the largest and most renowned classifieds markets in
+                    the world. Together, we aim to set new standards in user
+                    experience and drive impactful innovations within the
                     industry.
                   </p>
                   <p>
@@ -133,19 +142,22 @@ function About() {
                             Present
                           </div>
                           <div className="font-aspekta font-[650] text-slate-800 dark:text-slate-100">
-                            Tech Lead Relevancy & Personalization
+                            MTS 2, Software Engineer
                           </div>
                           <div className="text-sm font-medium text-slate-800 dark:text-slate-100">
                             Adevinta
                           </div>
                           <div className="text-sm text-slate-500 dark:text-slate-400">
-                            As the Tech lead at Adevinta, it is my
+                            As the Staff Engineer at Adevinta, it is my
                             responsibility to create an exceptional search
-                            experience for advertising in Germany, which will be
-                            seamlessly integrated into a global system. My focus
-                            is on building a state-of-the-art solution that
-                            leverages the latest technologies to meet the needs
-                            of our users and exceed their expectations.
+                            experience for advertising in Germany, which is
+                            seamlessly integrated into multiple digital
+                            marketplaces, each of them having millions of
+                            monthly active users. My focus is on building
+                            state-of-the-art solution that leverages the latest
+                            technologies to deliver the best content possible,
+                            which meet the needs of our users and exceed their
+                            expectations.
                           </div>
                         </div>
                       </div>

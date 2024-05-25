@@ -35,6 +35,7 @@ const aspekta = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sebastiansigl.com"),
   title:
     "Sebastian Sigl | Software Engineer who loves frontend, backend, architecture, data and machine-learning.",
   alternates: {
