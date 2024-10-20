@@ -4,7 +4,7 @@
         <title>Sebastian Sigl's blog about software engineering</title>
         <link>https://www.sebastiansigl.com</link>
         <description>Experience reports, reflecions, opinions and much more about software egineering focused on frontend, backend, architecture, data and machine-learning.</description>
-        <lastBuildDate>Mon, 01 May 2023 19:52:42 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 20 Oct 2024 19:36:36 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
@@ -14,6 +14,66 @@
             <link>https://www.sebastiansigl.com</link>
         </image>
         <copyright>All rights reserved, Sebastian Sigl</copyright>
+        <item>
+            <title><![CDATA[Separating Decision Gathering from Decision Making]]></title>
+            <link>https://www.sebastiansigl.com/posts/separating-decision-gathering-from-decision-making</link>
+            <guid>https://www.sebastiansigl.com/posts/separating-decision-gathering-from-decision-making</guid>
+            <pubDate>Sun, 19 Oct 2025 22:00:00 GMT</pubDate>
+            <description><![CDATA[Separating decision gathering from decision making enhances agility by allowing teams to collect diverse input without being slowed by the need for consensus. Empowering individuals to make informed decisions based on collective insights fosters innovation and swift progress in tech environments.]]></description>
+            <author>support@sebastiansigl.com (Sebastian Sigl)</author>
+            <category>Leadership</category>
+            <enclosure url="https://www.sebastiansigl.com/images/posts/separating-decision-gathering-and-making/Fork-in-the-Road-2024-10-20.webp" length="0" type="image/webp"/>
+        </item>
+        <item>
+            <title><![CDATA[Understanding Coupling in Software Development]]></title>
+            <link>https://www.sebastiansigl.com/posts/understanding-coupling-in-software-development</link>
+            <guid>https://www.sebastiansigl.com/posts/understanding-coupling-in-software-development</guid>
+            <pubDate>Fri, 23 May 2025 22:00:00 GMT</pubDate>
+            <description><![CDATA[Explores the concept of coupling in software development, its various forms, practical implications, and strategies to balance coupling and decoupling for better system architecture and maintainability.]]></description>
+            <author>support@sebastiansigl.com (Sebastian Sigl)</author>
+            <category>Tech</category>
+            <enclosure url="https://www.sebastiansigl.com/images/posts/understand-coupling/2-devs-in-front-of-a-whiteboard.png" length="0" type="image/png"/>
+        </item>
+        <item>
+            <title><![CDATA[Event Sourcing Simplified: Mastering Real-World Event Processing in Your Application]]></title>
+            <link>https://www.sebastiansigl.com/posts/event-sourcing-simplified</link>
+            <guid>https://www.sebastiansigl.com/posts/event-sourcing-simplified</guid>
+            <pubDate>Wed, 31 Jan 2024 23:00:00 GMT</pubDate>
+            <description><![CDATA[A guide to processing real-world events in applications, with practical steps, strategies, and real-world examples. Elevate your system's resilience and adaptability.]]></description>
+            <author>support@sebastiansigl.com (Sebastian Sigl)</author>
+            <category>Tech</category>
+            <enclosure url="https://www.sebastiansigl.com/images/posts/event-sourcing-simplified.png" length="0" type="image/png"/>
+        </item>
+        <item>
+            <title><![CDATA[Your Comprehensive Guide to Mastering Cloud Architecture: Acing the AWS Solution Architect Associate Exam]]></title>
+            <link>https://www.sebastiansigl.com/posts/mastering-the-aws-solution-architect-associate-exam</link>
+            <guid>https://www.sebastiansigl.com/posts/mastering-the-aws-solution-architect-associate-exam</guid>
+            <pubDate>Fri, 06 Oct 2023 22:00:00 GMT</pubDate>
+            <description><![CDATA[Unlock the secrets to mastering cloud computing fundamentals with this comprehensive guide. From understanding key AWS components to hands-on training, the content is designed to refine knowledge and offer critical insights for exam preparation.]]></description>
+            <author>support@sebastiansigl.com (Sebastian Sigl)</author>
+            <category>Tech</category>
+            <enclosure url="https://www.sebastiansigl.com/images/posts/aws_solution_architect_associate/aws_cover.jpeg" length="0" type="image/jpeg"/>
+        </item>
+        <item>
+            <title><![CDATA[Mastering Virtual Meetings in Remote Work: From Meeting Madness to Productive Paradise]]></title>
+            <link>https://www.sebastiansigl.com/posts/mastering-virtual-meetings-in-remote-work-from-meeting-madness-to-productive-paradise</link>
+            <guid>https://www.sebastiansigl.com/posts/mastering-virtual-meetings-in-remote-work-from-meeting-madness-to-productive-paradise</guid>
+            <pubDate>Fri, 30 Jun 2023 22:00:00 GMT</pubDate>
+            <description><![CDATA[Strategies for optimizing virtual meetings in a remote work environment focus on balancing various types of meetings and personalizing schedules to individual work rhythms.]]></description>
+            <author>support@sebastiansigl.com (Sebastian Sigl)</author>
+            <category>Leadership</category>
+            <enclosure url="https://www.sebastiansigl.com/images/posts/meeting-madness.png" length="0" type="image/png"/>
+        </item>
+        <item>
+            <title><![CDATA[Mastering Array Access in JavaScript: A Comprehensive Guide]]></title>
+            <link>https://www.sebastiansigl.com/posts/mastering-array-access-in-javascript-a-comprehensive-guide</link>
+            <guid>https://www.sebastiansigl.com/posts/mastering-array-access-in-javascript-a-comprehensive-guide</guid>
+            <pubDate>Mon, 01 May 2023 22:00:00 GMT</pubDate>
+            <description><![CDATA[Learn accessing, searching and mutating array elements and gain essential knowledge to master array handling in JavaScript.]]></description>
+            <author>support@sebastiansigl.com (Sebastian Sigl)</author>
+            <category>Tech</category>
+            <enclosure url="https://www.sebastiansigl.com/images/posts/js-array-methods-blog-post-image.jpeg" length="0" type="image/jpeg"/>
+        </item>
         <item>
             <title><![CDATA[5 Advanced ChatGPT Prompt For Software Developers]]></title>
             <link>https://www.sebastiansigl.com/posts/5-advanced-chatgpt-prompt-techniques-every-passionate-software-developer-should-know</link>
