@@ -55,7 +55,7 @@ function About() {
                     possible content based on first and third-party data. My
                     primary focus is to support teams providing users with
                     personalized content maximizing relevancy and revenue. I am
-                    privileged to empower multiple teams in {" "}
+                    privileged to empower multiple teams in{" "}
                     <a
                       className="font-medium text-sky-500 hover:underline"
                       href="https://www.kleinanzeigen.de/"
