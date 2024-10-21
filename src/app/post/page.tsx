@@ -1,13 +1,10 @@
-import React from "react";
-
-import SideNavigation from "@/partials/SideNavigation";
-import Header from "@/partials/Header";
-import WidgetNewsletter from "@/partials/WidgetNewsletter";
-import WidgetSponsor from "@/partials/WidgetSponsor";
-import WidgetPosts from "@/partials/WidgetPosts";
-import Footer from "@/partials/Footer";
-import Image from "next/image";
 import BackButton from "@/partials/BackButton";
+import Footer from "@/partials/Footer";
+import Header from "@/partials/Header";
+import SideNavigation from "@/partials/SideNavigation";
+import WidgetNewsletter from "@/partials/WidgetNewsletter";
+import WidgetPosts from "@/partials/WidgetPosts";
+import Image from "next/image";
 
 function Post() {
   return (
@@ -347,8 +344,7 @@ function Post() {
               <aside className="md:w-[240px] lg:w-[300px] shrink-0">
                 <div className="space-y-6">
                   <WidgetNewsletter />
-                  <WidgetSponsor />
-                  <WidgetPosts />
+                  <WidgetPosts excludedPostIds={[]} />
                 </div>
               </aside>
             </div>

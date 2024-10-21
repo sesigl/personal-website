@@ -1,5 +1,4 @@
 import React from "react";
-import WidgetSponsor from "@/partials/WidgetSponsor";
 import WidgetBook from "@/partials/WidgetBook";
 
 import Image from "next/image";
@@ -183,7 +182,6 @@ function Subscribe() {
         {/* Right sidebar */}
         <aside className="md:w-[240px] lg:w-[300px] shrink-0">
           <div className="space-y-6">
-            <WidgetSponsor />
             <WidgetBook />
           </div>
         </aside>

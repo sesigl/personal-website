@@ -1,12 +1,10 @@
-import React from "react";
-import Hero from "@/partials/Hero";
-import ArticlesList from "@/partials/ArticlesList";
-import Talks from "@/partials/Talks";
-import Projects from "@/partials/Projects";
-import WidgetNewsletter from "@/partials/WidgetNewsletter";
-import WidgetSponsor from "@/partials/WidgetSponsor";
-import WidgetBook from "@/partials/WidgetBook";
 import ArticleCategory from "@/lib/domain/article/ArticleType";
+import ArticlesList from "@/partials/ArticlesList";
+import Hero from "@/partials/Hero";
+import Projects from "@/partials/Projects";
+import Talks from "@/partials/Talks";
+import WidgetBook from "@/partials/WidgetBook";
+import WidgetNewsletter from "@/partials/WidgetNewsletter";
 
 function HomeCategoryPage({
   params,
@@ -34,7 +32,6 @@ function HomeCategoryPage({
         <aside className="md:w-[240px] lg:w-[300px] shrink-0">
           <div className="space-y-6">
             <WidgetNewsletter />
-            <WidgetSponsor />
             <WidgetBook />
           </div>
         </aside>

@@ -1,5 +1,4 @@
 import WidgetNewsletter from "@/partials/WidgetNewsletter";
-import WidgetSponsor from "@/partials/WidgetSponsor";
 
 function About() {
   return (
@@ -35,7 +34,6 @@ function About() {
         <aside className="md:w-[240px] lg:w-[300px] shrink-0">
           <div className="space-y-6">
             <WidgetNewsletter />
-            <WidgetSponsor />
           </div>
         </aside>
       </div>

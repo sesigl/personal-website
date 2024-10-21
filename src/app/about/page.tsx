@@ -1,8 +1,6 @@
-import React from "react";
-import WidgetNewsletter from "@/partials/WidgetNewsletter";
-import WidgetSponsor from "@/partials/WidgetSponsor";
-import Image from "next/image";
 import configuration from "@/configuration";
+import WidgetNewsletter from "@/partials/WidgetNewsletter";
+import Image from "next/image";
 
 function About() {
   return (
@@ -57,7 +55,7 @@ function About() {
                     possible content based on first and third-party data. My
                     primary focus is to support teams providing users with
                     personalized content maximizing relevancy and revenue. I am
-                    privileged to empower multiple markets like{" "}
+                    privileged to empower multiple teams in {" "}
                     <a
                       className="font-medium text-sky-500 hover:underline"
                       href="https://www.kleinanzeigen.de/"
@@ -65,15 +63,7 @@ function About() {
                     >
                       Kleinanzeigen
                     </a>{" "}
-                    or{" "}
-                    <a
-                      className="font-medium text-sky-500 hover:underline"
-                      href="https://www.leboncoin.fr/"
-                      target="_blank"
-                    >
-                      Leboncoin
-                    </a>{" "}
-                    two of the largest and most renowned classifieds markets in
+                    one of the largest and most renowned classifieds market in
                     the world. Together, we aim to set new standards in user
                     experience and drive impactful innovations within the
                     industry.
@@ -148,16 +138,19 @@ function About() {
                             Adevinta
                           </div>
                           <div className="text-sm text-slate-500 dark:text-slate-400">
-                            As the Staff Engineer at Adevinta, it is my
-                            responsibility to create an exceptional search
-                            experience for advertising in Germany, which is
-                            seamlessly integrated into multiple digital
-                            marketplaces, each of them having millions of
-                            monthly active users. My focus is on building
-                            state-of-the-art solution that leverages the latest
-                            technologies to deliver the best content possible,
-                            which meet the needs of our users and exceed their
-                            expectations.
+                            As a Staff Engineer at Adevinta, I am responsible
+                            for creating an exceptional search experience for
+                            advertising in Germany, seamlessly integrated into
+                            Kleinanzeigen, the largest German marketplace, with
+                            millions of monthly active users. Beyond delivering
+                            state-of-the-art solutions using the latest
+                            technologies, I also lead cross-team initiatives and
+                            empower multiple teams to succeed. I am committed to
+                            fostering a strong engineering culture within our
+                            advertising department, ensuring that our approach
+                            meets and exceeds the needs of our users while
+                            driving innovation and collaboration across the
+                            organization.
                           </div>
                         </div>
                       </div>
@@ -367,7 +360,6 @@ function About() {
         <aside className="md:w-[240px] lg:w-[300px] shrink-0">
           <div className="space-y-6">
             <WidgetNewsletter />
-            <WidgetSponsor />
           </div>
         </aside>
       </div>

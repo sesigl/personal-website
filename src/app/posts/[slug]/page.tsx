@@ -3,7 +3,6 @@ import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
 import { Mdx } from "@/partials/mdx/mdx";
 import WidgetNewsletter from "@/partials/WidgetNewsletter";
-import WidgetSponsor from "@/partials/WidgetSponsor";
 import WidgetPosts from "@/partials/WidgetPosts";
 import PostDate from "@/partials/post-date";
 import configuration from "@/configuration";
@@ -95,8 +94,7 @@ export default async function SinglePost({
       <aside className="md:w-[240px] lg:w-[300px] shrink-0">
         <div className="space-y-6">
           <WidgetNewsletter />
-          <WidgetSponsor />
-          <WidgetPosts />
+          <WidgetPosts excludedPostIds={[post._id]} />
         </div>
       </aside>
     </div>

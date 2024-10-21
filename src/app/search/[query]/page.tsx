@@ -1,5 +1,4 @@
 import React from "react";
-import WidgetSponsor from "@/partials/WidgetSponsor";
 import WidgetBook from "@/partials/WidgetBook";
 import PostItem from "@/app/home/[category]/post-item";
 import ArticleRepository from "@/lib/domain/article/ArticleRepository";
@@ -51,7 +50,6 @@ function SearchPage({
         {/* Right sidebar */}
         <aside className="md:w-[240px] lg:w-[300px] shrink-0">
           <div className="space-y-6">
-            <WidgetSponsor />
             <WidgetBook />
           </div>
         </aside>
