@@ -4,7 +4,7 @@
         <title>Sebastian Sigl's blog about software engineering</title>
         <link>https://www.sebastiansigl.com</link>
         <description>Experience reports, reflecions, opinions and much more about software egineering focused on frontend, backend, architecture, data and machine-learning.</description>
-        <lastBuildDate>Sun, 20 Oct 2024 19:36:36 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 02 Nov 2024 14:13:11 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
@@ -15,16 +15,6 @@
         </image>
         <copyright>All rights reserved, Sebastian Sigl</copyright>
         <item>
-            <title><![CDATA[Separating Decision Gathering from Decision Making]]></title>
-            <link>https://www.sebastiansigl.com/posts/separating-decision-gathering-from-decision-making</link>
-            <guid>https://www.sebastiansigl.com/posts/separating-decision-gathering-from-decision-making</guid>
-            <pubDate>Sun, 19 Oct 2025 22:00:00 GMT</pubDate>
-            <description><![CDATA[Separating decision gathering from decision making enhances agility by allowing teams to collect diverse input without being slowed by the need for consensus. Empowering individuals to make informed decisions based on collective insights fosters innovation and swift progress in tech environments.]]></description>
-            <author>support@sebastiansigl.com (Sebastian Sigl)</author>
-            <category>Leadership</category>
-            <enclosure url="https://www.sebastiansigl.com/images/posts/separating-decision-gathering-and-making/Fork-in-the-Road-2024-10-20.webp" length="0" type="image/webp"/>
-        </item>
-        <item>
             <title><![CDATA[Understanding Coupling in Software Development]]></title>
             <link>https://www.sebastiansigl.com/posts/understanding-coupling-in-software-development</link>
             <guid>https://www.sebastiansigl.com/posts/understanding-coupling-in-software-development</guid>
@@ -33,6 +23,16 @@
             <author>support@sebastiansigl.com (Sebastian Sigl)</author>
             <category>Tech</category>
             <enclosure url="https://www.sebastiansigl.com/images/posts/understand-coupling/2-devs-in-front-of-a-whiteboard.png" length="0" type="image/png"/>
+        </item>
+        <item>
+            <title><![CDATA[Separating Decision Gathering from Decision Making]]></title>
+            <link>https://www.sebastiansigl.com/posts/separating-decision-gathering-from-decision-making</link>
+            <guid>https://www.sebastiansigl.com/posts/separating-decision-gathering-from-decision-making</guid>
+            <pubDate>Sat, 19 Oct 2024 22:00:00 GMT</pubDate>
+            <description><![CDATA[Separating decision gathering from decision making enhances agility by allowing teams to collect diverse input without being slowed by the need for consensus. Empowering individuals to make informed decisions based on collective insights fosters innovation and swift progress in tech environments.]]></description>
+            <author>support@sebastiansigl.com (Sebastian Sigl)</author>
+            <category>Leadership</category>
+            <enclosure url="https://www.sebastiansigl.com/images/posts/separating-decision-gathering-and-making/Fork-in-the-Road-2024-10-20.webp" length="0" type="image/webp"/>
         </item>
         <item>
             <title><![CDATA[Event Sourcing Simplified: Mastering Real-World Event Processing in Your Application]]></title>

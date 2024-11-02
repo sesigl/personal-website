@@ -9,7 +9,7 @@ function Projects() {
       {/* Cards */}
       <div className="grid sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-5">
         <a
-          href="https://www.traveladventurewithchild.com/"
+          href="https://skillmatch.de/"
           target="_blank"
           className="rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 odd:-rotate-1 even:rotate-1 hover:rotate-0 transition-transform duration-700 hover:duration-100 ease-in-out p-5"
         >
@@ -17,19 +17,19 @@ function Projects() {
             <div className="grow">
               <div className="h-10 w-10 flex items-center justify-center border border-slate-200 dark:border-slate-700 rounded-full mb-2">
                 <Image
-                  alt="Travel Adventure with a Child"
-                  src={"/images/logos/traveladventure.png"}
+                  alt="SkillMatch"
+                  src={"/images/logos/skillmatch.svg"}
                   width="32"
                   height="32"
                   className="overflow-hidden rounded-2xl"
                 />
               </div>
               <div className="text-lg font-aspekta font-[650] mb-1">
-                Travel Adventure with a Child
+                Skill Match
               </div>
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
-                With Backpack and Teddy Bear: Chronicles of our Family
-                Adventures from Packing to Homecoming.
+                Finde und buche Experten, Coaches und Trainer basierend auf
+                Skills
               </p>
             </div>
             <div className="text-sky-500 flex justify-end">
