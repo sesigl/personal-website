@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://www.sebastiansigl.com/imprint</loc><lastmod>2025-01-01T17:52:02.685Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/about</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/posts/5-advanced-chatgpt-prompt-techniques-every-passionate-software-developer-should-know</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/posts/5-powerful-habits-for-self-assessment-to-boost-your-success</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/posts/become-a-data-superstar-13-free-and-stunning-resources-to-master-data-engineering</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/posts/empowered-execution-in-large-organizations</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/posts/event-sourcing-simplified</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/posts/mastering-array-access-in-javascript-a-comprehensive-guide</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/posts/mastering-the-aws-solution-architect-associate-exam</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/posts/mastering-virtual-meetings-in-remote-work-from-meeting-madness-to-productive-paradise</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/posts/separating-decision-gathering-from-decision-making</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/posts/understanding-coupling-in-software-development</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/post</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.sebastiansigl.com/subscribe</loc><lastmod>2025-01-01T17:52:02.686Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/about</loc><lastmod>2025-01-01T18:03:30.177Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/subscribe</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/post</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/imprint</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/posts/5-advanced-chatgpt-prompt-techniques-every-passionate-software-developer-should-know</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/posts/5-powerful-habits-for-self-assessment-to-boost-your-success</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/posts/become-a-data-superstar-13-free-and-stunning-resources-to-master-data-engineering</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/posts/empowered-execution-in-large-organizations</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/posts/event-sourcing-simplified</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/posts/mastering-array-access-in-javascript-a-comprehensive-guide</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/posts/mastering-the-aws-solution-architect-associate-exam</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/posts/mastering-virtual-meetings-in-remote-work-from-meeting-madness-to-productive-paradise</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/posts/separating-decision-gathering-from-decision-making</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.sebastiansigl.com/posts/understanding-coupling-in-software-development</loc><lastmod>2025-01-01T18:03:30.178Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>
