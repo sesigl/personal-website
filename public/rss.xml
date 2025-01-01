@@ -4,7 +4,7 @@
         <title>Sebastian Sigl's blog about software engineering</title>
         <link>https://www.sebastiansigl.com</link>
         <description>Experience reports, reflecions, opinions and much more about software egineering focused on frontend, backend, architecture, data and machine-learning.</description>
-        <lastBuildDate>Sat, 02 Nov 2024 14:13:11 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 01 Jan 2025 11:16:36 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
@@ -15,14 +15,14 @@
         </image>
         <copyright>All rights reserved, Sebastian Sigl</copyright>
         <item>
-            <title><![CDATA[Understanding Coupling in Software Development]]></title>
-            <link>https://www.sebastiansigl.com/posts/understanding-coupling-in-software-development</link>
-            <guid>https://www.sebastiansigl.com/posts/understanding-coupling-in-software-development</guid>
-            <pubDate>Fri, 23 May 2025 22:00:00 GMT</pubDate>
-            <description><![CDATA[Explores the concept of coupling in software development, its various forms, practical implications, and strategies to balance coupling and decoupling for better system architecture and maintainability.]]></description>
+            <title><![CDATA[Empowered Execution in Large Organizations: A Practical Guide for Engineers and Leaders]]></title>
+            <link>https://www.sebastiansigl.com/posts/empowered-execution-in-large-organizations</link>
+            <guid>https://www.sebastiansigl.com/posts/empowered-execution-in-large-organizations</guid>
+            <pubDate>Tue, 31 Dec 2024 23:00:00 GMT</pubDate>
+            <description><![CDATA[High-performing teams often seem to operate seamlessly, navigating challenges such as tight deadlines or resource limitations while consistently delivering exceptional results. Efficient teams in project-based industries are 2.5 times more likely to meet quality standards and operate with 19% improvement in productivity.]]></description>
             <author>support@sebastiansigl.com (Sebastian Sigl)</author>
-            <category>Tech</category>
-            <enclosure url="https://www.sebastiansigl.com/images/posts/understand-coupling/2-devs-in-front-of-a-whiteboard.png" length="0" type="image/png"/>
+            <category>Leadership</category>
+            <enclosure url="https://www.sebastiansigl.com/images/posts/empowered-execution-in-large-organizations/empowered-execution-in-large-organizations.webp" length="0" type="image/webp"/>
         </item>
         <item>
             <title><![CDATA[Separating Decision Gathering from Decision Making]]></title>
@@ -33,6 +33,16 @@
             <author>support@sebastiansigl.com (Sebastian Sigl)</author>
             <category>Leadership</category>
             <enclosure url="https://www.sebastiansigl.com/images/posts/separating-decision-gathering-and-making/Fork-in-the-Road-2024-10-20.webp" length="0" type="image/webp"/>
+        </item>
+        <item>
+            <title><![CDATA[Understanding Coupling in Software Development]]></title>
+            <link>https://www.sebastiansigl.com/posts/understanding-coupling-in-software-development</link>
+            <guid>https://www.sebastiansigl.com/posts/understanding-coupling-in-software-development</guid>
+            <pubDate>Thu, 23 May 2024 22:00:00 GMT</pubDate>
+            <description><![CDATA[Explores the concept of coupling in software development, its various forms, practical implications, and strategies to balance coupling and decoupling for better system architecture and maintainability.]]></description>
+            <author>support@sebastiansigl.com (Sebastian Sigl)</author>
+            <category>Tech</category>
+            <enclosure url="https://www.sebastiansigl.com/images/posts/understand-coupling/2-devs-in-front-of-a-whiteboard.png" length="0" type="image/png"/>
         </item>
         <item>
             <title><![CDATA[Event Sourcing Simplified: Mastering Real-World Event Processing in Your Application]]></title>
