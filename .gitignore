@@ -45,3 +45,5 @@ terraform.tfvars
 
 # Contentlayer
 .contentlayer
+
+.env
