@@ -1,5 +1,5 @@
 import NewsletterClient from "@/lib/domain/newsletter/NewsletterClient";
-import * as defaultDb from "@/lib/infrastructure/db";
+import { getDb } from "@/lib/infrastructure/db";
 import { usersTable } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
@@ -7,7 +7,7 @@ import { NeonHttpDatabase } from "drizzle-orm/neon-http";
 
 export default class PostgresNewsletterClient implements NewsletterClient {
   constructor(
-    private readonly db: NodePgDatabase | NeonHttpDatabase = defaultDb.default
+    private readonly db: NodePgDatabase | NeonHttpDatabase = getDb()
   ) {}
 
   async deleteEmailFromNewsletter(email: string): Promise<void> {
