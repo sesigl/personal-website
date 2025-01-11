@@ -7,44 +7,48 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { assertNotNull } from "@/test/assert/anyAssertions";
 
 describe("PostgresUserRepository", () => {
-  let userRepository: PostgresUserRepository;
-  let db: NodePgDatabase;
+  if (process.env.CI) {
+    let userRepository: PostgresUserRepository;
+    let db: NodePgDatabase;
 
-  beforeAll(async () => {
-    db = await TestDatabase.setup();
-    userRepository = new PostgresUserRepository(db, "test-secret");
-  });
-
-  it("finds user by email", async () => {
-    const testEmail = `test-${randomUUID()}@example.com`;
-    await db.insert(usersTable).values({
-      email: testEmail,
-      creationDate: new Date().toISOString(),
+    beforeAll(async () => {
+      db = await TestDatabase.setup();
+      userRepository = new PostgresUserRepository(db, "test-secret");
     });
 
-    const user = await userRepository.findByEmail(testEmail);
+    it("finds user by email", async () => {
+      const testEmail = `test-${randomUUID()}@example.com`;
+      await db.insert(usersTable).values({
+        email: testEmail,
+        creationDate: new Date().toISOString(),
+      });
 
-    assertNotNull(user);
-    expect(user.email).toBe(testEmail);
-    expect(user.secretToken).toBeDefined();
-  });
+      const user = await userRepository.findByEmail(testEmail);
 
-  it("a user secret is always the same", async () => {
-    const testEmail = `test-${randomUUID()}@example.com`;
-    await db.insert(usersTable).values({
-      email: testEmail,
-      creationDate: new Date().toISOString(),
+      assertNotNull(user);
+      expect(user.email).toBe(testEmail);
+      expect(user.secretToken).toBeDefined();
     });
 
-    const user = await userRepository.findByEmail(testEmail);
-    const user2 = await userRepository.findByEmail(testEmail);
+    it("a user secret is always the same", async () => {
+      const testEmail = `test-${randomUUID()}@example.com`;
+      await db.insert(usersTable).values({
+        email: testEmail,
+        creationDate: new Date().toISOString(),
+      });
 
-    expect(user!!.secretToken).toBe(user2!!.secretToken);
-  });
+      const user = await userRepository.findByEmail(testEmail);
+      const user2 = await userRepository.findByEmail(testEmail);
 
-  it("returns null for non-existing user", async () => {
-    const nonExistingEmail = "non-existing@example.com";
-    const user = await userRepository.findByEmail(nonExistingEmail);
-    expect(user).toBeNull();
-  });
+      expect(user!!.secretToken).toBe(user2!!.secretToken);
+    });
+
+    it("returns null for non-existing user", async () => {
+      const nonExistingEmail = "non-existing@example.com";
+      const user = await userRepository.findByEmail(nonExistingEmail);
+      expect(user).toBeNull();
+    });
+  } else {
+    it("skipped because not in CI", () => {});
+  }
 });

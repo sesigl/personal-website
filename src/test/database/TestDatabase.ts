@@ -1,4 +1,3 @@
-import { usersTable } from "@/lib/infrastructure/db/schema";
 import { PostgreSqlContainer } from "@testcontainers/postgresql";
 import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
