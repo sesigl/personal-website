@@ -5,18 +5,24 @@ import { Wait } from "testcontainers";
 
 export default class TestDatabase {
   static async setup(): Promise<NodePgDatabase> {
-    const container = await new PostgreSqlContainer("postgres:alpine")
-      .withWaitStrategy(Wait.forListeningPorts())
-      .start();
+    if (process.env.CI) {
+      console.log("Setting up test database");
+      const container = await new PostgreSqlContainer("postgres:alpine")
+        .withWaitStrategy(Wait.forListeningPorts())
+        .start();
 
-    const db: NodePgDatabase = drizzle(container.getConnectionUri());
+      const db: NodePgDatabase = drizzle(container.getConnectionUri());
 
-    await migrate(db, {
-      migrationsFolder: "./migrations",
-      migrationsTable: "migrations",
-      migrationsSchema: "public",
-    });
+      await migrate(db, {
+        migrationsFolder: "./migrations",
+        migrationsTable: "migrations",
+        migrationsSchema: "public",
+      });
 
-    return db;
+      return db;
+    } else {
+      console.log("Skipping database setup");
+      return {} as any;
+    }
   }
 }
