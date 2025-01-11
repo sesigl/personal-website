@@ -8,25 +8,25 @@ import { setDb } from "@/lib/infrastructure/db";
 import TestDatabase from "@/test/database/TestDatabase";
 
 describe("unsubscribe", () => {
-  const requestResponseFakeFactory = new RequestResponseFakeFactory();
-  let newsletterApplicationService: NewsletterApplicationService;
-  let userApplicationService: UserApplicationService;
-  let newsletterFakeClient: NewsletterFakeClient;
-
-  beforeAll(async () => {
-    const db = await TestDatabase.setup();
-    setDb(db);
-  });
-
-  beforeEach(() => {
-    newsletterFakeClient = new NewsletterFakeClient();
-    newsletterApplicationService = new NewsletterApplicationService(
-      newsletterFakeClient
-    );
-    userApplicationService = new UserApplicationService();
-  });
-
   if (process.env.CI) {
+    const requestResponseFakeFactory = new RequestResponseFakeFactory();
+    let newsletterApplicationService: NewsletterApplicationService;
+    let userApplicationService: UserApplicationService;
+    let newsletterFakeClient: NewsletterFakeClient;
+
+    beforeAll(async () => {
+      const db = await TestDatabase.setup();
+      setDb(db);
+    });
+
+    beforeEach(() => {
+      newsletterFakeClient = new NewsletterFakeClient();
+      newsletterApplicationService = new NewsletterApplicationService(
+        newsletterFakeClient
+      );
+      userApplicationService = new UserApplicationService();
+    });
+
     describe("invalid request parameters", () => {
       it("returns 400 when email is missing", async () => {
         const { request, response } = requestResponseFakeFactory.getWithQuery({
