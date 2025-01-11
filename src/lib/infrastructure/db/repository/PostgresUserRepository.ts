@@ -28,10 +28,6 @@ export default class PostgresUserRepository implements UserRepository {
 
     const userSecret = this.createUserSecretFromDate(userCreationDate);
 
-    console.log(
-      `User read with email: ${email} and secret: ${userSecret} at timestamp: ${userCreationDate}`
-    );
-
     return new User(email, userSecret);
   }
 
@@ -43,10 +39,6 @@ export default class PostgresUserRepository implements UserRepository {
       .execute();
 
     const userSecret = this.createUserSecretFromDate(now);
-
-    console.log(
-      `User created with email: ${email} and secret: ${userSecret} at timestamp: ${now}`
-    );
 
     return new User(email, userSecret);
   }

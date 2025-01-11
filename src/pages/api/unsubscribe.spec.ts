@@ -113,8 +113,6 @@ describe("unsubscribe", () => {
       const email = generateRandomEmail();
       const user = await userApplicationService.createUser(email);
 
-      console.log("user", user);
-
       const { request, response } = requestResponseFakeFactory.getWithQuery({
         email,
         token: user.secretToken,
