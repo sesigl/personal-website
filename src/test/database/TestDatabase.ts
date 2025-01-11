@@ -10,7 +10,7 @@ export default class TestDatabase {
       .withWaitStrategy(Wait.forListeningPorts())
       .start();
 
-    const db = drizzle(container.getConnectionUri());
+    const db: NodePgDatabase = drizzle(container.getConnectionUri());
 
     await migrate(db, {
       migrationsFolder: "./migrations",

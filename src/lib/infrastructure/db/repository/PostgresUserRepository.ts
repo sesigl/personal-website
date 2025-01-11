@@ -9,7 +9,7 @@ import { NeonHttpDatabase } from "drizzle-orm/neon-http";
 
 export default class PostgresUserRepository implements UserRepository {
   constructor(
-    private readonly db: NodePgDatabase | NeonHttpDatabase = defaultDb.default,
+    private readonly db: NodePgDatabase | NeonHttpDatabase = defaultDb.getDb(),
     private readonly secretKey: string = process.env.USER_SECRET_KEY!!
   ) {}
 
@@ -27,6 +27,26 @@ export default class PostgresUserRepository implements UserRepository {
     const userCreationDate = user[0].creationDate;
 
     const userSecret = this.createUserSecretFromDate(userCreationDate);
+
+    console.log(
+      `User read with email: ${email} and secret: ${userSecret} at timestamp: ${userCreationDate}`
+    );
+
+    return new User(email, userSecret);
+  }
+
+  async createUser(email: string): Promise<User> {
+    const now = new Date().toISOString().split("T")[0];
+    await this.db
+      .insert(usersTable)
+      .values({ email, creationDate: now })
+      .execute();
+
+    const userSecret = this.createUserSecretFromDate(now);
+
+    console.log(
+      `User created with email: ${email} and secret: ${userSecret} at timestamp: ${now}`
+    );
 
     return new User(email, userSecret);
   }

@@ -10,4 +10,8 @@ export default class UserApplicationService {
   async getUser(email: string): Promise<User | null> {
     return await this.userRepository.findByEmail(email);
   }
+
+  async createUser(email: string): Promise<User> {
+    return await this.userRepository.createUser(email);
+  }
 }

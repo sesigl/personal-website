@@ -12,6 +12,7 @@ export default class RequestResponseFakeFactory {
       status: vitest.fn().mockImplementation(() => response),
       json: vitest.fn().mockImplementation(() => response),
       send: vitest.fn().mockImplementation(() => response),
+      write: vitest.fn().mockImplementation(() => response),  // Add this line
     } as unknown as NextApiResponse;
 
     return { request, response };

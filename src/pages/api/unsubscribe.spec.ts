@@ -1,19 +1,22 @@
-import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import handler from "./unsubscribe";
 import NewsletterApplicationService from "@/lib/application/NewsletterApplicationService";
 import UserApplicationService from "@/lib/application/UserApplicationService";
 import RequestResponseFakeFactory from "@/test/fake/requestResponse/factory/RequestResponseFakeFactory";
-import { NextApiResponse } from "next";
 import NewsletterFakeClient from "@/test/fake/newsletterClient/NewsletterFakeClient";
-
-const EMAIL = "test@email.com";
-const TOKEN = "valid-token";
+import { setDb } from "@/lib/infrastructure/db";
+import TestDatabase from "@/test/database/TestDatabase";
 
 describe("unsubscribe", () => {
   const requestResponseFakeFactory = new RequestResponseFakeFactory();
   let newsletterApplicationService: NewsletterApplicationService;
   let userApplicationService: UserApplicationService;
   let newsletterFakeClient: NewsletterFakeClient;
+
+  beforeAll(async () => {
+    const db = await TestDatabase.setup();
+    setDb(db);
+  });
 
   beforeEach(() => {
     newsletterFakeClient = new NewsletterFakeClient();
@@ -26,7 +29,7 @@ describe("unsubscribe", () => {
   describe("invalid request parameters", () => {
     it("returns 400 when email is missing", async () => {
       const { request, response } = requestResponseFakeFactory.getWithQuery({
-        token: TOKEN,
+        token: "some-token",
       });
       await handler(request, response);
       expect(response.status).toHaveBeenCalledWith(400);
@@ -37,7 +40,7 @@ describe("unsubscribe", () => {
 
     it("returns 400 when token is missing", async () => {
       const { request, response } = requestResponseFakeFactory.getWithQuery({
-        email: EMAIL,
+        email: generateRandomEmail(),
       });
       await handler(request, response);
       expect(response.status).toHaveBeenCalledWith(400);
@@ -49,10 +52,9 @@ describe("unsubscribe", () => {
 
   describe("authentication failures", () => {
     it("returns 404 when user not found", async () => {
-      vitest.spyOn(userApplicationService, "getUser").mockResolvedValue(null);
       const { request, response } = requestResponseFakeFactory.getWithQuery({
-        email: EMAIL,
-        token: TOKEN,
+        email: generateRandomEmail(),
+        token: "invalid-token",
       });
 
       await handler(request, response);
@@ -62,14 +64,12 @@ describe("unsubscribe", () => {
     });
 
     it("returns 403 when token is invalid", async () => {
-      vitest.spyOn(userApplicationService, "getUser").mockResolvedValue({
-        email: EMAIL,
-        secretToken: "different-token",
-      });
+      const email = generateRandomEmail();
+      await userApplicationService.createUser(email);
 
       const { request, response } = requestResponseFakeFactory.getWithQuery({
-        email: EMAIL,
-        token: TOKEN,
+        email,
+        token: "invalid-token",
       });
 
       await handler(request, response);
@@ -81,23 +81,19 @@ describe("unsubscribe", () => {
 
   describe("unsubscribe operation", () => {
     it("returns 500 when newsletter unsubscribe fails", async () => {
-      vitest.spyOn(userApplicationService, "getUser").mockResolvedValue({
-        email: EMAIL,
-        secretToken: TOKEN,
-      });
-
-      const newsletterError = new Error("Newsletter service error");
+      const email = generateRandomEmail();
+      const user = await userApplicationService.createUser(email);
       const failingNewsletterClient = new NewsletterFakeClient(
         true,
-        newsletterError
+        new Error("Newsletter service error")
       );
       const failingNewsletterService = new NewsletterApplicationService(
         failingNewsletterClient
       );
 
       const { request, response } = requestResponseFakeFactory.getWithQuery({
-        email: EMAIL,
-        token: TOKEN,
+        email,
+        token: user.secretToken,
       });
 
       await handler(
@@ -114,14 +110,14 @@ describe("unsubscribe", () => {
     });
 
     it("returns 200 on successful unsubscribe", async () => {
-      vitest.spyOn(userApplicationService, "getUser").mockResolvedValue({
-        email: EMAIL,
-        secretToken: TOKEN,
-      });
+      const email = generateRandomEmail();
+      const user = await userApplicationService.createUser(email);
+
+      console.log("user", user);
 
       const { request, response } = requestResponseFakeFactory.getWithQuery({
-        email: EMAIL,
-        token: TOKEN,
+        email,
+        token: user.secretToken,
       });
 
       await handler(
@@ -138,3 +134,6 @@ describe("unsubscribe", () => {
     });
   });
 });
+
+const generateRandomEmail = () =>
+  `test-${Math.random().toString(36).substring(7)}@example.com`;
