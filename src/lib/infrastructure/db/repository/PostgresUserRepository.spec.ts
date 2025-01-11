@@ -4,6 +4,7 @@ import { randomUUID } from "crypto";
 import PostgresUserRepository from "./PostgresUserRepository";
 import { usersTable } from "../schema";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { assertNotNull } from "@/test/assert/anyAssertions";
 
 describe("PostgresUserRepository", () => {
   let userRepository: PostgresUserRepository;
@@ -23,9 +24,9 @@ describe("PostgresUserRepository", () => {
 
     const user = await userRepository.findByEmail(testEmail);
 
-    expect(user).not.toBeNull();
-    expect(user!!.email).toBe(testEmail);
-    expect(user!!.secretToken).toBeDefined();
+    assertNotNull(user);
+    expect(user.email).toBe(testEmail);
+    expect(user.secretToken).toBeDefined();
   });
 
   it("a user secret is always the same", async () => {
