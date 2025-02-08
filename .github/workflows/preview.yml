@@ -1,0 +1,51 @@
+name: Vercel Preview Deployment
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+on:
+  workflow_dispatch:
+
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  Deploy-Preview:
+    if: github.actor!= 'dependabot-preview[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN_CUSTOM }}
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: npm Install
+        run: npm install
+      - name: Run Tests
+        run: npm run test:ci
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build Project Artifacts
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+#      - name: Migrate Database
+#        run: npm run db:migrate
+#        env:
+#          DB_URL: ${{ secrets.DB_URL_DEV }}
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+      - name: vercel-preview-url
+        uses: zentered/vercel-preview-url@v1.1.9
+        id: vercel_preview_url
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        with:
+          vercel_project_id: ${{ secrets.VERCEL_PROJECT_ID }}
+      - uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            **Preview ready:**
+            
+            [${{ steps.vercel_preview_url.outputs.preview_url }}](https://${{ steps.vercel_preview_url.outputs.preview_url }})

@@ -6,11 +6,9 @@ on:
             - main
         paths:
           - 'infrastructure/**'
-          - '.github/**'
     pull_request:
         paths:
           - 'infrastructure/**'
-          - '.github/**'
 
 jobs:
     terraform:

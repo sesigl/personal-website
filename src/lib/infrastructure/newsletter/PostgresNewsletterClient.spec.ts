@@ -1,10 +1,9 @@
-import TestDatabase from "@/test/database/TestDatabase";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import PostgresNewsletterClient from "./PostgresNewsletterClient";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { beforeAll, describe, expect, it } from "vitest";
+import PostgresNewsletterClient from "./PostgresNewsletterClient";
+import TestDatabase from "../../../test/database/TestDatabase";
 
 describe("PostgresNewsletterClient", () => {
-  if (process.env.CI) {
     let postgresNewsletterClient: PostgresNewsletterClient;
     let db: NodePgDatabase;
 
@@ -23,7 +22,4 @@ describe("PostgresNewsletterClient", () => {
         postgresNewsletterClient.deleteEmailFromNewsletter("non-existing")
       ).rejects.toBeDefined();
     });
-  } else {
-    it("skipped because not in CI", () => {});
-  }
 });

@@ -1,13 +1,12 @@
-import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import TestDatabase from "@/test/database/TestDatabase";
 import { randomUUID } from "crypto";
-import PostgresUserRepository from "./PostgresUserRepository";
-import { usersTable } from "../schema";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { assertNotNull } from "@/test/assert/anyAssertions";
+import { beforeAll, describe, expect, it } from "vitest";
+import { assertNotNull } from "../../../../test/assert/anyAssertions";
+import TestDatabase from "../../../../test/database/TestDatabase";
+import { usersTable } from "../schema";
+import PostgresUserRepository from "./PostgresUserRepository";
 
 describe("PostgresUserRepository", () => {
-  if (process.env.CI) {
     let userRepository: PostgresUserRepository;
     let db: NodePgDatabase;
 
@@ -48,7 +47,4 @@ describe("PostgresUserRepository", () => {
       const user = await userRepository.findByEmail(nonExistingEmail);
       expect(user).toBeNull();
     });
-  } else {
-    it("skipped because not in CI", () => {});
-  }
 });

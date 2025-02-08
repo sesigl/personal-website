@@ -13,8 +13,6 @@ const params = Astro.url.searchParams;
 const searchQuery = params.get('q')?.trim();
 
 const isCategoryOnly = params.get("categoryOnly") !== null;
-console.log('isCategoryOnly', isCategoryOnly)
-console.log('searchQuery', searchQuery)
 let searchResulPosts: Post[] = [];
 
 if (searchQuery) {

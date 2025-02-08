@@ -37,16 +37,12 @@ export function getUniqueCategories(
 
 const { category } = Astro.props;
 
-console.log('category', category);
-
 const posts = await postRepository.findPosts();
 
 const categories: Set<string> = posts.reduce((acc, post) => {
 	acc.add(post.data.category);
 	return acc;
 }, new Set<string>());
-
-console.log(categories);
 
 const filteredPosts =
 	category !== "all"

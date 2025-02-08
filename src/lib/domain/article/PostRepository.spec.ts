@@ -1,12 +1,18 @@
-import { describe, expect, it } from "vitest";
-import PostRepository from "./PostRepository";
+import { beforeEach, describe, expect, it } from "vitest";
+import PostRepository, { Post } from "./PostRepository";
 import { getCollection } from "astro:content";
 
 const QUERY_WITHOUT_SEACH_RESULTS = "fdsfjdfi3ojcns";
-const allPosts = await getCollection("blog");
 
 describe("PostRepository", () => {
+
+  let allPosts: Post[];
   let postRepository = new PostRepository();
+
+
+  beforeEach(async () => {
+    allPosts = await postRepository.findPosts();
+  })
 
   it("should return posts", async function () {
     const posts = await postRepository.findPosts();
@@ -21,12 +27,12 @@ describe("PostRepository", () => {
     expectSortedDesc(dates);
   });
 
-  it("does not find any posts for not matching query", () => {
-    const posts = postRepository.findPostByQuery(
+  it("does not find any posts for not matching query", async () => {
+    const posts = await postRepository.findPostByQuery(
       QUERY_WITHOUT_SEACH_RESULTS
     );
 
-    expect(posts).lengthOf(0);
+    expect(posts).lengthOf(0); 
   });
 
   it("finds posts by matching query", async () => {

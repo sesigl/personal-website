@@ -1,6 +1,6 @@
 import { drizzle, NeonHttpDatabase } from "drizzle-orm/neon-http";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { DATABASE_URL } from "astro:env/server"
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
 
 export type Database = NodePgDatabase | NeonHttpDatabase;
 
