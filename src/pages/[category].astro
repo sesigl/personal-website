@@ -1,0 +1,31 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Startpage from "../layouts/Startpage.astro";
+
+const { category } = Astro.params;
+
+// Define valid categories and generate static paths
+export async function getStaticPaths() {
+	const posts = await getCollection("blog");
+	const categories = getUniqueCategories(posts);
+
+	categories.add("all");
+
+	return Array.from(categories).map((category) => ({
+		params: { category },
+		props: { category },
+	}));
+}
+
+export function getUniqueCategories(
+	posts: CollectionEntry<"blog">[],
+): Set<string> {
+	return posts.reduce((acc: Set<any>, post: any) => {
+		if (post.data.category) {
+			acc.add(post.data.category);
+		}
+		return acc;
+	}, new Set());
+}
+---
+<Startpage category={category}/>	

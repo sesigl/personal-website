@@ -1,12 +1,16 @@
-import SendInBlueNewsletterClient from "@/lib/infrastructure/newsletter/SendInBlueNewsletterClient";
-import NewsletterClient from "@/lib/domain/newsletter/NewsletterClient";
+import PostgresNewsletterClient from "../infrastructure/newsletter/PostgresNewsletterClient";
+import type NewsletterClient from "../domain/newsletter/NewsletterClient";
 
 export default class NewsletterApplicationService {
   constructor(
-    private readonly newsletterClient: NewsletterClient = new SendInBlueNewsletterClient()
+    private readonly newsletterClient: NewsletterClient = new PostgresNewsletterClient()
   ) {}
 
   async addToNewsletter(email: string) {
-    await this.newsletterClient.createContact(email);
+    return await this.newsletterClient.createContact(email);
+  }
+
+  async removeFromNewsletter(email: string) {
+    await this.newsletterClient.deleteEmailFromNewsletter(email);
   }
 }

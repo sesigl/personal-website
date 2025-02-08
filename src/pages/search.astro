@@ -1,0 +1,73 @@
+---
+import BackButton from "../components/post/BackButton.astro";
+import PostItem from "../components/post/PostItem.astro";
+import WidgetBook from "../components/WidgetBook.astro";
+import Layout from "../layouts/Layout.astro";
+import PostRepository, { type Post } from "../lib/domain/article/PostRepository";
+
+export const prerender = false;
+
+const postRepository = new PostRepository();
+
+const params = Astro.url.searchParams;
+const searchQuery = params.get('q')?.trim();
+
+const isCategoryOnly = params.get("categoryOnly") !== null;
+console.log('isCategoryOnly', isCategoryOnly)
+console.log('searchQuery', searchQuery)
+let searchResulPosts: Post[] = [];
+
+if (searchQuery) {
+    searchResulPosts = await postRepository.findPostByQuery(
+        searchQuery,
+        isCategoryOnly,
+    );
+}
+---
+
+<Layout>
+    <div
+        class="grow md:flex space-y-8 md:space-y-0 md:space-x-8 pt-12 md:pt-16 pb-16 md:pb-20"
+    >
+        {/* Middle area */}
+        <div class="grow">
+            <div class="max-w-[700px]">
+                <BackButton />
+
+                <div class="space-y-10">
+                    <section>
+                        <h2 class="font-aspekta text-xl font-[650] mb-3">
+                            {
+                                isCategoryOnly ? (
+                                    <>
+                                        Search results for Category &quot;
+                                        {searchQuery}&quot;
+                                    </>
+                                ) : (
+                                    <>
+                                        Search results for &quot;{searchQuery}&quot;
+                                    </>
+                                )
+                            }
+                        </h2>
+                        {
+                            searchResulPosts.map((post) => (
+                                <PostItem
+                                    {...post}
+                                    showTags={true}
+                                />
+                            ))
+                        }
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        {/* Right sidebar */}
+        <aside class="md:w-[240px] lg:w-[300px] shrink-0">
+            <div class="space-y-6">
+                <WidgetBook />
+            </div>
+        </aside>
+    </div>
+</Layout>

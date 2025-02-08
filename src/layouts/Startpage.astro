@@ -1,0 +1,358 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import { format } from "date-fns";
+import WidgetNewsletter from "../components/WidgetNewsletter.astro";
+import Layout from "../layouts/Layout.astro";
+import PostRepository from "../lib/domain/article/PostRepository";
+import WidgetBook from "../components/WidgetBook.astro";
+import PostItem from "../components/post/PostItem.astro";
+
+const postRepository = new PostRepository();
+
+// Define valid categories and generate static paths
+export async function getStaticPaths() {
+	const posts = await getCollection("blog");
+	const categories = getUniqueCategories(posts);
+
+	categories.add("all");
+
+	return Array.from(categories).map((category) => ({
+		params: { category },
+		props: { category },
+	}));
+}
+
+export function getUniqueCategories(
+	posts: CollectionEntry<"blog">[],
+): Set<string> {
+	return posts.reduce((acc: Set<any>, post: any) => {
+		if (post.data.category) {
+			acc.add(post.data.category);
+		}
+		return acc;
+	}, new Set());
+}
+
+const { category } = Astro.props;
+
+console.log('category', category);
+
+const posts = await postRepository.findPosts();
+
+const categories: Set<string> = posts.reduce((acc, post) => {
+	acc.add(post.data.category);
+	return acc;
+}, new Set<string>());
+
+console.log(categories);
+
+const filteredPosts =
+	category !== "all"
+		? posts.filter((post) => post.data.category === category)
+		: posts;
+
+const activeCategoryPostClassNames =
+	"block py-3 font-medium text-slate-800 dark:text-slate-100 border-b-2 border-sky-500";
+const categoryPostClassNames =
+	"block py-3 text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300";
+---
+<Layout
+	active="Home"
+	title="Sebastian Sigl | Software Engineer who loves frontend, backend, architecture, data and machine-learning."
+>
+
+	<!-- Hero -->
+	<section>
+		<div class="max-w-[700px]">
+			<div class="pt-8 pb-10">
+				<Image
+					class="rounded-full mb-5"
+					src="/images/me_sesigl_2.png"
+					width="56"
+					height="56"
+					alt="Me"
+				/>
+				<h1 class="h1 font-aspekta mb-5">
+					I write about coding and being a{" "}
+					<span
+						class="inline-flex relative text-sky-500 before:absolute before:inset-0 before:bg-sky-200 dark:before:bg-sky-500 before:opacity-30 before:-z-10 before:-rotate-2 before:translate-y-1/4"
+					>
+						full-time
+					</span>{" "}
+					software engineer.
+				</h1>
+				<p class="text-lg text-slate-500 dark:text-slate-400">
+					Writer, Speaker and Developer. I write about coding,
+					startups, and my journey as a full-time software engineer.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Content -->
+	<div
+		class="grow md:flex space-y-8 md:space-y-0 md:space-x-8 pb-16 md:pb-20"
+	>
+		<!-- Middle area -->
+		<div class="grow">
+			<div class="max-w-[700px]">
+				<div class="space-y-10">
+					<!-- Latest Articles -->
+					<section>
+						<h2 class="font-aspekta text-xl font-[650] mb-3">
+							Latest Articles
+						</h2>
+
+						<!-- Filters -->
+						<ul
+							class="flex flex-wrap text-sm border-b border-slate-100 dark:border-slate-800"
+						>
+							<li class="px-3 -mb-px">
+								<a
+									class={category === "all"
+										? activeCategoryPostClassNames
+										: categoryPostClassNames}
+									href="/"
+								>
+									All
+								</a>
+							</li>
+							{
+								Array.from(categories).map(
+									(currentCategory: string) => (
+										<li class="px-3 -mb-px">
+											<a
+												class={
+													category === currentCategory
+														? activeCategoryPostClassNames
+														: categoryPostClassNames
+												}
+												href={`/${currentCategory}`}
+											>
+												{
+													// capitliaze
+													currentCategory
+														.charAt(0)
+														.toUpperCase() +
+														currentCategory.slice(1)
+												}
+											</a>
+										</li>
+									),
+								)
+							}
+						</ul>
+
+						<!-- Articles list -->
+						<div>
+							{
+								filteredPosts.map((post) => (
+									<PostItem {...post} showTags={false}  />
+								))
+							}
+						</div>
+					</section>
+
+					<!-- Popular Talks -->
+					<section>
+						<h2 class="font-aspekta text-xl font-[650] mb-5">
+							Popular Talks
+						</h2><div
+							class="grid sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-5"
+						>
+							<a
+								target="_blank"
+								href="https://www.youtube.com/watch?v=_bmYXWCxF_Q&"
+								class="relative aspect-video rounded-lg overflow-hidden bg-gradient-to-tr from-slate-800 to-slate-700 odd:rotate-1 even:-rotate-1 hover:rotate-0 transition-transform duration-700 hover:duration-100 ease-in-out shadow-xl"
+								><Image
+									alt="Popular post 01"
+									loading="lazy"
+									width="336"
+									height="189"
+									decoding="async"
+									data-nimg="1"
+									class="absolute inset-0 w-full h-full object-cover opacity-90"
+									style="color:transparent"
+									src="/images/videos/data-mesh.webp"
+								/><div
+									class="h-full relative flex flex-col items-start justify-between before:mt-auto before:flex-1 p-5"
+								>
+									<div
+										class="flex-1 w-full flex justify-end items-end"
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="41"
+											height="41"
+											><circle
+												class="fill-white"
+												cx="20"
+												cy="20"
+												r="20"
+												fill-opacity=".88"
+											></circle><path
+												class="fill-sky-500"
+												d="m24.765 19.5-6.263-4.375a.626.626 0 0 0-1.002.5v8.75c0 .5.564.812 1.002.5l6.263-4.375a.65.65 0 0 0 0-1Z"
+											></path></svg
+										>
+									</div>
+								</div></a
+							><a
+								href="https://www.youtube.com/watch?v=GE1w8OORirA"
+								target="_blank"
+								class="relative aspect-video rounded-lg overflow-hidden bg-gradient-to-tr from-slate-800 to-slate-700 odd:rotate-1 even:-rotate-1 hover:rotate-0 transition-transform duration-700 hover:duration-100 ease-in-out shadow-xl"
+								><Image
+									alt="Popular post 02"
+									loading="lazy"
+									width="336"
+									height="189"
+									decoding="async"
+									data-nimg="1"
+									class="absolute inset-0 w-full h-full object-cover opacity-40"
+									style="color:transparent"
+									src="/images/videos/why-leaders-eat-last.webp"
+								/><div
+									class="h-full relative flex flex-col items-start justify-between before:mt-auto before:flex-1 p-5"
+								>
+									<div
+										class="flex-1 flex items-center text-lg font-aspekta text-white font-[650]"
+									>
+										Why Leaders Eat Last?
+									</div><div
+										class="flex-1 w-full flex justify-end items-end"
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="41"
+											height="41"
+											><circle
+												class="fill-white"
+												cx="20"
+												cy="20"
+												r="20"
+												fill-opacity=".88"
+											></circle><path
+												class="fill-sky-500"
+												d="m24.765 19.5-6.263-4.375a.626.626 0 0 0-1.002.5v8.75c0 .5.564.812 1.002.5l6.263-4.375a.65.65 0 0 0 0-1Z"
+											></path></svg
+										>
+									</div>
+								</div></a
+							>
+						</div>
+					</section>
+
+					<!-- Open-Source Projects -->
+					<section>
+						<h2 class="font-aspekta text-xl font-[650] mb-5">
+							Projects
+						</h2><div
+							class="grid sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-5"
+						>
+							<a
+								href="https://skillmatch.de/"
+								target="_blank"
+								class="rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 odd:-rotate-1 even:rotate-1 hover:rotate-0 transition-transform duration-700 hover:duration-100 ease-in-out p-5"
+								><div class="flex flex-col h-full">
+									<div class="grow">
+										<div
+											class="h-10 w-10 flex items-center justify-center border border-slate-200 dark:border-slate-700 rounded-full mb-2"
+										>
+											<Image
+												alt="SkillMatch"
+												loading="lazy"
+												width="32"
+												height="32"
+												decoding="async"
+												data-nimg="1"
+												class="overflow-hidden rounded-2xl"
+												style="color:transparent"
+												src="/images/logos/skillmatch.svg"
+											/>
+										</div><div
+											class="text-lg font-aspekta font-[650] mb-1"
+										>
+											Skill Match
+										</div><p
+											class="text-sm text-slate-500 dark:text-slate-400 mb-2"
+										>
+											Finde und buche Experten, Coaches
+											und Trainer basierend auf Skills
+										</p>
+									</div><div
+										class="text-sky-500 flex justify-end"
+									>
+										<svg
+											class="fill-current"
+											xmlns="http://www.w3.org/2000/svg"
+											width="14"
+											height="12"
+											><path
+												d="M9.586 5 6.293 1.707 7.707.293 13.414 6l-5.707 5.707-1.414-1.414L9.586 7H0V5h9.586Z"
+											></path></svg>
+									</div>
+								</div></a
+							><a
+								href="https://github.com/sesigl/go-project-ddd-template"
+								target="_blank"
+								class="rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 odd:-rotate-1 even:rotate-1 hover:rotate-0 transition-transform duration-700 hover:duration-100 ease-in-out p-5"
+								><div class="flex flex-col h-full">
+									<div class="grow">
+										<div
+											class="h-10 w-10 flex items-center justify-center border border-slate-200 dark:border-slate-700 rounded-full mb-2"
+										>
+											<Image
+												alt="DDD Template for GoLang projects"
+												loading="lazy"
+												width="40"
+												height="40"
+												decoding="async"
+												data-nimg="1"
+												style="color:transparent"
+												src="/images/logos/ddd_template_go_v2.png"
+											/>
+										</div><div
+											class="text-lg font-aspekta font-[650] mb-1"
+										>
+											DDD Template for GoLang projects
+										</div><p
+											class="text-sm text-slate-500 dark:text-slate-400 mb-2"
+										>
+											Domain Driven Design (DDD) template
+											for Golang to properly organize a
+											project with many useful tools set
+											up.
+										</p>
+									</div><div
+										class="text-sky-500 flex justify-end"
+									>
+										<svg
+											class="fill-current"
+											xmlns="http://www.w3.org/2000/svg"
+											width="14"
+											height="12"
+											><path
+												d="M9.586 5 6.293 1.707 7.707.293 13.414 6l-5.707 5.707-1.414-1.414L9.586 7H0V5h9.586Z"
+											></path></svg>
+									</div>
+								</div></a>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+
+		<!-- Right sidebar -->
+		<aside class="md:w-[240px] lg:w-[300px] shrink-0">
+			<div class="space-y-6">
+				<!-- Newsletter widget -->
+				<WidgetNewsletter />
+
+				<!-- E-Book widget -->
+				<WidgetBook />
+			</div>
+		</aside>
+	</div>
+</Layout>

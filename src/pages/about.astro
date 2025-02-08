@@ -1,0 +1,502 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+	active="About"
+	title="About Me"
+	description="Lorem ipsum dolor sit amet"
+	pubDate={new Date("August 08 2021")}
+	heroImage="/blog-placeholder-about.jpg"
+>
+	<div
+		class="grow md:flex space-y-8 md:space-y-0 md:space-x-8 pt-12 md:pt-16 pb-16 md:pb-20"
+	>
+		<div class="grow">
+			<div class="max-w-[700px]">
+				<section>
+					<h1 class="h1 font-aspekta mb-5">
+						Hi. I'm Sebastian <span
+							class="inline-flex relative text-sky-500 before:absolute before:inset-0 before:bg-sky-200 dark:before:bg-sky-500 before:opacity-30 before:-z-10 before:-rotate-2 before:translate-y-1/4"
+							>@sesigl</span
+						> Sigl 🤟
+					</h1><Image
+						alt="About"
+						loading="lazy"
+						width="692"
+						height="390"
+						decoding="async"
+						data-nimg="1"
+						class="w-full"
+						src="/images/about_v3.png"
+						style="color: transparent;"
+					/><div class="text-slate-500 dark:text-slate-400 space-y-8">
+						<div class="space-y-4">
+							<h2
+								class="h3 font-aspekta text-slate-800 dark:text-slate-100"
+							>
+								Short Bio
+							</h2><p>
+								I am a seasoned software engineer with over 18
+								years of experience across various domains. In
+								recent years, my focus has been on high-load
+								server-side projects, data- and
+								machine-learning-driven applications, and
+								platform development, where I love tinkering
+								with infrastructure, containers, and Cloud
+								Native technologies.
+							</p><p>
+								While there isn't a Wikipedia page about me
+								(sorry folks!), a media bio is available below.
+							</p>
+						</div><div class="space-y-4">
+							<h2
+								class="h3 font-aspekta text-slate-800 dark:text-slate-100"
+							>
+								Career
+							</h2><p>
+								As a Staff Engineer at Adevinta, I have the
+								honor of supporting multiple teams dedicated to
+								delivering the best possible content based on
+								first and third-party data. My primary focus is
+								to support teams providing users with
+								personalized content maximizing relevancy and
+								revenue. I am privileged to empower multiple
+								teams in <a
+									class="font-medium text-sky-500 hover:underline"
+									href="https://www.kleinanzeigen.de/"
+									target="_blank">Kleinanzeigen</a
+								> one of the largest and most renowned classifieds
+								market in the world. Together, we aim to set new
+								standards in user experience and drive impactful
+								innovations within the industry.
+							</p><p>
+								As a result of the integration of various
+								classifieds enterprises under <a
+									class="font-medium text-sky-500 hover:underline"
+									href="https://www.adevinta.com"
+									target="_blank">Adevinta</a
+								>, we have emerged as the preeminent global
+								leader in facilitating environmentally-conscious
+								transactions of second-hand goods.
+							</p><p>
+								Technology is my driving force, and I firmly
+								believe that anyone with a passion for it can
+								learn to code. As a fervent advocate of this
+								ideology, my heart lies in <a
+									class="font-medium text-sky-500 hover:underline"
+									href="https://twitter.com/sesigl"
+									target="_blank">content creation</a
+								>. It affords me the opportunity to connect with
+								like-minded individuals, stay up-to-date with
+								the latest industry trends, and witness the
+								growth of other tech enthusiasts - often younger
+								generations - as they embark on their journey in
+								this dynamic field. I am deeply inspired by the
+								idea that we all stand on the shoulders of
+								giants, and take great pride in observing the
+								exponential expansion of our community.
+							</p>
+						</div><div class="space-y-4">
+							<h2
+								class="h3 font-aspekta text-slate-800 dark:text-slate-100"
+							>
+								Experience
+							</h2><ul class="-my-2">
+								<li class="relative py-2">
+									<div class="flex items-start mb-1">
+										<div
+											class="absolute left-0 h-full w-px bg-slate-200 dark:bg-slate-800 self-start ml-[28px] -translate-x-1/2 translate-y-3"
+											aria-hidden="true"
+										>
+										</div><div
+											class="absolute left-0 h-14 w-14 flex items-center justify-center border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 bg-white dark:bg-slate-900 rounded-full"
+										>
+											<Image
+												alt="Adevinta"
+												loading="lazy"
+												width="16"
+												height="16"
+												decoding="async"
+												data-nimg="1"
+												src="/images/logos/adevinta.png"
+												style="color: transparent;"
+											/>
+										</div><div class="pl-20 space-y-1">
+											<div
+												class="text-xs text-slate-500 uppercase"
+											>
+												Dec 2022 <span
+													class="text-slate-400 dark:text-slate-600"
+													>·</span
+												> Present
+											</div><div
+												class="font-aspekta font-[650] text-slate-800 dark:text-slate-100"
+											>
+												MTS 2, Software Engineer
+											</div><div
+												class="text-sm font-medium text-slate-800 dark:text-slate-100"
+											>
+												Adevinta
+											</div><div
+												class="text-sm text-slate-500 dark:text-slate-400"
+											>
+												As a Staff Engineer at Adevinta,
+												I am responsible for creating an
+												exceptional search experience
+												for advertising in Germany,
+												seamlessly integrated into
+												Kleinanzeigen, the largest
+												German marketplace, with
+												millions of monthly active
+												users. Beyond delivering
+												state-of-the-art solutions using
+												the latest technologies, I also
+												lead cross-team initiatives and
+												empower multiple teams to
+												succeed. I am committed to
+												fostering a strong engineering
+												culture within our advertising
+												department, ensuring that our
+												approach meets and exceeds the
+												needs of our users while driving
+												innovation and collaboration
+												across the organization.
+											</div>
+										</div>
+									</div>
+								</li><li class="relative py-2">
+									<div class="flex items-start mb-1">
+										<div
+											class="absolute left-0 h-full w-px bg-slate-200 dark:bg-slate-800 self-start ml-[28px] -translate-x-1/2 translate-y-3"
+											aria-hidden="true"
+										>
+										</div><div
+											class="absolute left-0 h-14 w-14 flex items-center justify-center border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 bg-white dark:bg-slate-900 rounded-full"
+										>
+											<Image
+												alt="eBay"
+												loading="lazy"
+												width="32"
+												height="32"
+												decoding="async"
+												data-nimg="1"
+												src="/images/logos/ebay.png"
+												style="color: transparent;"
+											/>
+										</div><div class="pl-20 space-y-1">
+											<div
+												class="text-xs text-slate-500 uppercase"
+											>
+												Oct 2018 <span
+													class="text-slate-400 dark:text-slate-600"
+													>·</span
+												> Dec 2022
+											</div><div
+												class="font-aspekta font-[650] text-slate-800 dark:text-slate-100"
+											>
+												Classifieds Senior Full-Stack
+												Engineer | Tech Lead Advertising
+											</div><div
+												class="text-sm font-medium text-slate-800 dark:text-slate-100"
+											>
+												eBay
+											</div><div
+												class="text-sm text-slate-500 dark:text-slate-400"
+											>
+												As a senior Full-Stack Engineer
+												and later as a tech-lead for
+												advertising, I had the privilege
+												of leading a talented team in
+												the development of a
+												cutting-edge global advertising
+												configuration management system.
+												With scalability and flexibility
+												at the forefront of our
+												approach, our system empowered
+												yield experts to optimize
+												revenue while maintaining
+												maximum control.
+											</div>
+										</div>
+									</div>
+								</li><li class="relative py-2">
+									<div class="flex items-start mb-1">
+										<div
+											class="absolute left-0 h-full w-px bg-slate-200 dark:bg-slate-800 self-start ml-[28px] -translate-x-1/2 translate-y-3"
+											aria-hidden="true"
+										>
+										</div><div
+											class="absolute left-0 h-14 w-14 flex items-center justify-center border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 bg-white dark:bg-slate-900 rounded-full"
+										>
+											<Image
+												alt="Mister Spex"
+												loading="lazy"
+												width="32"
+												height="32"
+												decoding="async"
+												data-nimg="1"
+												src="/images/logos/mister-spex.png"
+												style="color: transparent;"
+											/>
+										</div><div class="pl-20 space-y-1">
+											<div
+												class="text-xs text-slate-500 uppercase"
+											>
+												Oct 2016 <span
+													class="text-slate-400 dark:text-slate-600"
+													>·</span
+												> Sep 2018
+											</div><div
+												class="font-aspekta font-[650] text-slate-800 dark:text-slate-100"
+											>
+												Senior Full-Stack Engineer
+											</div><div
+												class="text-sm font-medium text-slate-800 dark:text-slate-100"
+											>
+												MisterSpex
+											</div><div
+												class="text-sm text-slate-500 dark:text-slate-400"
+											>
+												As a Senior Full-Stack Engineer,
+												I had the privilege of leading a
+												team that spearheaded the
+												evolution of essential features
+												in our system. One of our most
+												noteworthy accomplishments was
+												the creation of an innovative
+												augmented reality application
+												that enabled our customers to
+												virtually try on glasses. This
+												technology played a pivotal role
+												in transforming our primarily
+												brick and mortar business into a
+												digital-first enterprise.
+											</div>
+										</div>
+									</div>
+								</li><li class="relative py-2">
+									<div class="flex items-start mb-1">
+										<div
+											class="absolute left-0 h-full w-px bg-slate-200 dark:bg-slate-800 self-start ml-[28px] -translate-x-1/2 translate-y-3"
+											aria-hidden="true"
+										>
+										</div><div
+											class="absolute left-0 h-14 w-14 flex items-center justify-center border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 bg-white dark:bg-slate-900 rounded-full"
+										>
+											<Image
+												alt="Sopra Steria"
+												loading="lazy"
+												width="32"
+												height="32"
+												decoding="async"
+												data-nimg="1"
+												src="/images/logos/sopra-steria.png"
+												style="color: transparent;"
+											/>
+										</div><div class="pl-20 space-y-1">
+											<div
+												class="text-xs text-slate-500 uppercase"
+											>
+												Oct 2014 <span
+													class="text-slate-400 dark:text-slate-600"
+													>·</span
+												> Sep 2016
+											</div><div
+												class="font-aspekta font-[650] text-slate-800 dark:text-slate-100"
+											>
+												Mid-Level Backend Engineer
+											</div><div
+												class="text-sm font-medium text-slate-800 dark:text-slate-100"
+											>
+												Sopra Steria
+											</div><div
+												class="text-sm text-slate-500 dark:text-slate-400"
+											>
+												As a Mid-Level Full-Stack
+												Engineer, I had the opportunity
+												to modernize a Java-Swing
+												Application. With great
+												attention to detail, I focused
+												on extracting both frontend and
+												backend components, resulting in
+												a significant improvement in
+												backend performance and frontend
+												user-experience. Through
+												advocating for a test-first
+												mentality, I ensured that the
+												components were not only
+												successfully extracted from a
+												big monolith but were also
+												easier to change and caused
+												fewer defects.
+											</div>
+										</div>
+									</div>
+								</li><li class="relative py-2">
+									<div class="flex items-start mb-1">
+										<div
+											class="absolute left-0 h-14 w-14 flex items-center justify-center border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 bg-white dark:bg-slate-900 rounded-full"
+										>
+											<Image
+												alt="Freelance"
+												loading="lazy"
+												width="32"
+												height="32"
+												decoding="async"
+												data-nimg="1"
+												src="/images/logos/freelance.png"
+												style="color: transparent;"
+											/>
+										</div><div class="pl-20 space-y-1">
+											<div
+												class="text-xs text-slate-500 uppercase"
+											>
+												Oct 2005 <span
+													class="text-slate-400 dark:text-slate-600"
+													>·</span
+												> Sep 2014
+											</div><div
+												class="font-aspekta font-[650] text-slate-800 dark:text-slate-100"
+											>
+												High School, Computer Science
+												Master &amp; Freelancer
+											</div><div
+												class="text-sm font-medium text-slate-800 dark:text-slate-100"
+											>
+												Self-Employed
+											</div><div
+												class="text-sm text-slate-500 dark:text-slate-400"
+											>
+												From my teenage years onwards,
+												coding has been my passion. At
+												the age of 17, I took on the
+												ambitious project of creating a
+												Facebook clone for Turkey - a
+												significant accomplishment that
+												marked the beginning of my
+												journey as a developer. Since
+												then, I have continued to hone
+												my skills by working for various
+												companies on a contractual
+												basis, all while pursuing my
+												education.
+											</div>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div><div class="space-y-4">
+							<h2
+								class="h3 font-aspekta text-slate-800 dark:text-slate-100"
+							>
+								Let's Connect
+							</h2><p>
+								I'm excited to connect with others via <a
+									class="font-medium text-sky-500 hover:underline"
+									href="mailto:support@sebastiansigl.com"
+									>email</a
+								> and <a
+									class="font-medium text-sky-500 hover:underline"
+									target="_blank"
+									href="https://x.com/sesigl">𝕏</a
+								> to chat about projects and ideas. Currently, I'm
+								not taking on freelance projects, but I am open to
+								hearing about potential opportunities, discussing
+								them with you and then potentially collaborating
+								if it's a good fit.
+							</p>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div><aside class="md:w-[240px] lg:w-[300px] shrink-0">
+			<div class="space-y-6">
+				<div
+					class="rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 odd:rotate-1 even:-rotate-1 p-5"
+				>
+					<div class="text-center mb-1">
+						<div class="inline-flex -space-x-3 -ml-0.5">
+							<Image
+								alt="Avatar 01"
+								loading="lazy"
+								width="24"
+								height="24"
+								decoding="async"
+								data-nimg="1"
+								class="rounded-full border-2 border-white dark:border-slate-800 box-content"
+								src="/images/avatar-01.jpg"
+								style="color: transparent;"
+							/><Image
+								alt="Avatar 02"
+								loading="lazy"
+								width="24"
+								height="24"
+								decoding="async"
+								data-nimg="1"
+								class="rounded-full border-2 border-white dark:border-slate-800 box-content"
+								src="/images/avatar-02.jpg"
+								style="color: transparent;"
+							/><Image
+								alt="Avatar 03"
+								loading="lazy"
+								width="24"
+								height="24"
+								decoding="async"
+								data-nimg="1"
+								class="rounded-full border-2 border-white dark:border-slate-800 box-content"
+								src="/images/avatar-03.jpg"
+								style="color: transparent;"
+							/><Image
+								alt="Avatar 04"
+								loading="lazy"
+								width="24"
+								height="24"
+								decoding="async"
+								data-nimg="1"
+								class="rounded-full border-2 border-white dark:border-slate-800 box-content"
+								src="/images/avatar-04.jpg"
+								style="color: transparent;"
+							/><Image
+								alt="Avatar 05"
+								loading="lazy"
+								width="24"
+								height="24"
+								decoding="async"
+								data-nimg="1"
+								class="rounded-full border-2 border-white dark:border-slate-800 box-content"
+								src="/images/avatar-05.jpg"
+								style="color: transparent;"
+							/>
+						</div>
+					</div><div class="text-center mb-8">
+						<div class="font-aspekta font-[650] mb-1">
+							Never miss an update!
+						</div><p
+							class="text-sm text-slate-500 dark:text-slate-400"
+						>
+							Subscribe and join 100K+ developers.
+						</p>
+					</div><div>
+						<form action="#">
+							<div class="mb-2">
+								<label class="sr-only" for="newsletter"
+									>Your email…</label
+								><input
+									id="newsletter"
+									type="email"
+									class="form-input py-1 w-full"
+									placeholder="Your email…"
+									value=""
+								/>
+							</div><button
+								class="btn-sm w-full text-slate-100 bg-sky-500 hover:bg-sky-600"
+								type="submit">Subscribe</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</aside>
+	</div>
+</Layout>
