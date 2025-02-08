@@ -18,8 +18,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GH_TOKEN_CUSTOM }}
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       - name: npm Install
