@@ -1,26 +1,39 @@
-<h1>Personal Website</h1>
-This is the source code for my personal website, built using Next.js 13 with the new app directory structure. The website is designed using a template from <a href="https://cruip.com/" target="_new">Cruip</a>, which must be purchased separately.
-<h2>Installation</h2>
-To run the project locally, you must have Node.js and npm installed on your computer.
-<ol><li>Clone the repository:</li></ol>
+# Personal Portfolio Website
 
-```shell
-git clone https://github.com/your-username/your-personal-website.git
-``` 
+A personal website built using Astro and the DevSpace design from Cruip (licensed for personal use). 
+It includes features like in-memory search (Fuse.js), testing with Vite and Testcontainers, 
+serverless Postgres via Drizzle (Neon), and secure newsletter management powered by AWS SES.
 
-<ol start="2"><li>Install dependencies:</li></ol>
+## Features
+- ✅ [Astro](https://astro.build/) with MDX support
+- ✅ [Tailwind CSS](https://tailwindcss.com/) for modern styling
+- ✅ [Fuse.js](https://fusejs.io/) for in-memory search
+- ✅ [Neon Database](https://neon.tech/) for serverless Postgres
+- ✅ [Drizzle ORM](https://orm.drizzle.team/) data access
+- ✅ [Date-fns](https://date-fns.org/) for date utilities
+- ✅ Seamless React components courtesy of [React](https://react.dev/) and [React DOM](https://react.dev/)
+- ✅ [Testcontainers](https://www.testcontainers.org/) and [Vite](https://vitejs.dev/) for testing
+- ✅ [AWS SES](https://aws.amazon.com/ses/) triaged newsletter management
+- ✅ [React Share](https://github.com/nygardk/react-share) for quick social integrations
+- ✅ [Github Actions](https://github.com/features/actions) for CI/CD. Just going with vercel wont give you what you need (e.g. running testcontainers). GitHub Actions is the way to go for a deployment independent  and powerful CI/CD pipeline.
 
-```shell
-npm install
-``` 
+## Getting Started
+1. Clone this repo.
+2. Install dependencies: `npm install`.
+3. Run locally: `npm run dev`.
+4. Build for production: `npm run build`.
 
-<ol start="3"><li>Start the development server:</li></ol>
+## Testing
+- Run unit tests: `npm test`.
+- Integration tests with Testcontainers.
 
-```shell
-npm run dev
-```
+### Env Variables
+Astro comes with a built-in support for environment variables, which provides environment-specific resolultions on import. This comes with the caveat that tests fail when using `import.meta.env` in the test environment. To work around this, there is a `.env.test` which contains fake values for the test environment.
 
-<ol start="4"><li>Open <a href="http://localhost:3000" target="_new">http://localhost:3000</a> in your web browser to view the website.</li></ol><h2>License</h2>
-The source code for this project is licensed under the MIT License. However, the website template from Cruip must be purchased separately and is not included in this license.
-<h2>Contact</h2>
-If you have any questions or feedback, please feel free to reach out to me. You find ways of contact on <a href="https://www.sebastiansigl.com" target="_new">sebastiansigl.com</a>.
+## License
+The design is licensed for personal usage only, while the code is open for general use. 
+Please respect the design license terms.
+
+## Acknowledgments
+If you find this project useful, a backlink to [https://www.sebastiansigl.com](https://www.sebastiansigl.com) 
+or a small coffee donation (via my social links) is always appreciated.

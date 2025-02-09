@@ -12,6 +12,7 @@ export default class RequestResponseFakeFactory {
       status: vitest.fn().mockImplementation(() => response),
       json: vitest.fn().mockImplementation(() => response),
       send: vitest.fn().mockImplementation(() => response),
+      write: vitest.fn().mockImplementation(() => response),
     } as unknown as NextApiResponse;
 
     return { request, response };
@@ -22,9 +23,16 @@ export default class RequestResponseFakeFactory {
     response: NextApiResponse;
   } {
     const { request, response } = this.get();
-
     request.body = body;
+    return { request, response };
+  }
 
+  getWithQuery(query: Record<string, any>): {
+    request: NextApiRequest;
+    response: NextApiResponse;
+  } {
+    const { request, response } = this.get();
+    request.query = query;
     return { request, response };
   }
 }

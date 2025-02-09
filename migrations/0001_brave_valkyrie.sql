@@ -1,0 +1,1 @@
+ALTER TABLE "users" ALTER COLUMN "creationDate" SET NOT NULL;

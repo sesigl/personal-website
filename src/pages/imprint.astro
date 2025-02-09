@@ -1,0 +1,119 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout active="Unknown">
+    <div
+        class="grow md:flex space-y-8 md:space-y-0 md:space-x-8 pt-12 md:pt-16 pb-16 md:pb-20"
+    >
+        <div class="grow">
+            <div class="max-w-[700px]">
+                <section>
+                    <h1 class="h1 font-aspekta mb-5">Imprint</h1><div
+                        class="text-slate-500 dark:text-slate-400 space-y-8"
+                    >
+                        <div class="space-y-4">
+                            <p>Published at 3.3.2023</p><p>
+                                The responsible person/entity within the meaning
+                                of § 5 of the Telemedia Act
+                                (Telemediengesetz,TMG) for the webpage
+                                sebastiansigl.com is:
+                            </p><p>
+                                Sebastian Sigl, Roquettestr. 34, 01157 Dresden,
+                                support [at] sebastiansigl.com
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div><aside class="md:w-[240px] lg:w-[300px] shrink-0">
+            <div class="space-y-6">
+                <div
+                    class="rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 odd:rotate-1 even:-rotate-1 p-5"
+                >
+                    <div class="text-center mb-1">
+                        <div class="inline-flex -space-x-3 -ml-0.5">
+                            <Image
+                                alt="Avatar 01"
+                                loading="lazy"
+                                width="24"
+                                height="24"
+                                decoding="async"
+                                data-nimg="1"
+                                class="rounded-full border-2 border-white dark:border-slate-800 box-content"
+                                src="/images/avatar-01.jpg"
+                                style="color: transparent;"
+                            /><Image
+                                alt="Avatar 02"
+                                loading="lazy"
+                                width="24"
+                                height="24"
+                                decoding="async"
+                                data-nimg="1"
+                                class="rounded-full border-2 border-white dark:border-slate-800 box-content"
+                                src="/images/avatar-02.jpg"
+                                style="color: transparent;"
+                            /><Image
+                                alt="Avatar 03"
+                                loading="lazy"
+                                width="24"
+                                height="24"
+                                decoding="async"
+                                data-nimg="1"
+                                class="rounded-full border-2 border-white dark:border-slate-800 box-content"
+                                src="/images/avatar-03.jpg"
+                                style="color: transparent;"
+                            /><Image
+                                alt="Avatar 04"
+                                loading="lazy"
+                                width="24"
+                                height="24"
+                                decoding="async"
+                                data-nimg="1"
+                                class="rounded-full border-2 border-white dark:border-slate-800 box-content"
+                                src="/images/avatar-04.jpg"
+                                style="color: transparent;"
+                            /><Image
+                                alt="Avatar 05"
+                                loading="lazy"
+                                width="24"
+                                height="24"
+                                decoding="async"
+                                data-nimg="1"
+                                class="rounded-full border-2 border-white dark:border-slate-800 box-content"
+                                src="/images/avatar-05.jpg"
+                                style="color: transparent;"
+                            />
+                        </div>
+                    </div><div class="text-center mb-8">
+                        <div class="font-aspekta font-[650] mb-1">
+                            Never miss an update!
+                        </div><p
+                            class="text-sm text-slate-500 dark:text-slate-400"
+                        >
+                            Subscribe and join 100K+ developers.
+                        </p>
+                    </div><div>
+                        <form action="#">
+                            <div class="mb-2">
+                                <label class="sr-only" for="newsletter"
+                                    >Your email…</label
+                                ><input
+                                    id="newsletter"
+                                    type="email"
+                                    class="form-input py-1 w-full"
+                                    placeholder="Your email…"
+                                    value=""
+                                />
+                            </div><button
+                                class="btn-sm w-full text-slate-100 bg-sky-500 hover:bg-sky-600"
+                                type="submit">Subscribe</button
+                            >
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</Layout>

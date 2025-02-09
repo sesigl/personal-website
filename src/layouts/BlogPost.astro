@@ -1,0 +1,72 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import FormattedDate from "../components/FormattedDate.astro";
+import BackButton from "../components/post/BackButton.astro";
+import PostDate from "../components/post/PostDate.astro";
+import ShareButtons from "../components/post/ShareButtons.astro";
+import Layout from "./Layout.astro";
+import { BASE_URL } from "../consts";
+import WidgetNewsletter from "../components/WidgetNewsletter.astro";
+import WidgetPosts from "../components/WidgetPosts.astro";
+
+type Props = CollectionEntry<"blog">;
+
+const { data, id } = Astro.props;
+
+const { Content } = await render({
+	...Astro.props,
+	id: id,
+	collection: "blog",
+	data: data,
+});
+---
+
+<Layout active="Unknown" title={data.title} description={data.description} previewImage={data.heroImage}>
+	<div
+		class="grow md:flex space-y-8 md:space-y-0 md:space-x-8 pt-12 md:pt-16 pb-16 md:pb-20"
+	>
+		{/* Middle area */}
+		<div class="grow">
+			<div class="max-w-[700px]">
+				{/* Back */}
+				<BackButton />
+
+				<article>
+					{/* Post header */}
+					<header>
+						<div class="flex items-center justify-between mb-1">
+							{/* Post date */}
+							<div class="text-xs text-slate-500 uppercase">
+								<span class="text-sky-500">—</span>{" "}
+								<PostDate date={data.pubDate} />{" "}
+								<span class="text-slate-400 dark:text-slate-600"
+									>·</span
+								>{" "}
+								10 Min read
+							</div>
+							<ShareButtons
+								url={`${BASE_URL}/posts/${data.slug}`}
+								title={data.title}
+								summary={data.description}
+							/>
+						</div>
+						<h1 class="h1 font-aspekta mb-4">{data.title}</h1>
+					</header>
+					<div
+						class="prose text-slate-500 dark:text-slate-400 max-w-none prose-p:leading-normal prose-headings:text-slate-800 dark:prose-headings:text-slate-200 prose-a:font-medium prose-a:text-sky-500 prose-a:no-underline hover:prose-a:underline prose-strong:font-medium prose-strong:text-slate-800 dark:prose-strong:text-slate-100 prose-pre:bg-slate-800"
+					>
+						<Content />
+					</div>
+				</article>
+			</div>
+		</div>
+
+		{/* Right sidebar */}
+		<aside class="md:w-[240px] lg:w-[300px] shrink-0">
+			<div class="space-y-6">
+				<WidgetNewsletter />
+				<WidgetPosts excludedPostIds={[id]} />
+			</div>
+		</aside>
+	</div>
+</Layout>
