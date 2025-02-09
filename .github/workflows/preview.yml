@@ -18,12 +18,21 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 22
+          cache: 'npm'
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
-      - name: clean package-lock.json and node_modules
-        run: rm -r package-lock.json
-      - name: npm Install
-        run: npm install
+      - name: Install dependencies
+        run: |
+          npm install -g npm@latest
+
+          # Clean existing installation but keep lockfile
+          rm -rf node_modules
+          
+          # Use npm ci (clean install) which respects lockfile
+          npm ci
       - name: Run Tests
         run: npm run test:ci
       - name: Pull Vercel Environment Information
