@@ -21,9 +21,12 @@ if (searchQuery) {
         isCategoryOnly,
     );
 }
+
+const seoMetaTitle = `Search results for "${searchQuery}"`;
+const seoMetaDescription = `Find the most relevant blog posts and resources covering "${searchQuery}" on YourSiteName. Explore insights, guides, and tips to help you stay informed.`;
 ---
 
-<Layout>
+<Layout active="Unknown" title={seoMetaTitle}` description={seoMetaDescription}>
     <div
         class="grow md:flex space-y-8 md:space-y-0 md:space-x-8 pt-12 md:pt-16 pb-16 md:pb-20"
     >

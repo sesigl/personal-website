@@ -4,17 +4,23 @@ import BaseHead from "../components/BaseHead.astro";
 import FooterBlog from "../components/FooterBlog.astro";
 import NavigationBlog from "../components/NavigationBlog.astro";
 
-type Props = CollectionEntry<"blog">["data"] & {
+type Props = {
     active: "Home" | "About" | "Subscribe" | "Unknown";
+    title: string;
+    description: string;
+    previewImage?: string;
 };
 
-const { title, description, active } = Astro.props;
+const { title, description, active, previewImage } = Astro.props;
+
+const finalTitle = `Sebastian Sigl | ${title}`
+
 ---
 
 <!doctype html>
 <html lang="en">
     <head>
-        <BaseHead title={title} description={description} />
+        <BaseHead title={finalTitle} description={description} image={previewImage}/>
         <script is:inline>
             const htmlElement = document.querySelector("html");
 
