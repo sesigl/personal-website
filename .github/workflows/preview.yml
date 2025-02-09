@@ -21,7 +21,7 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       - name: clean package-lock.json and node_modules
-        run: rm -r package-lock.json node_modules
+        run: rm -r package-lock.json
       - name: npm Install
         run: npm install
       - name: Run Tests
