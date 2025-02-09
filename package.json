@@ -36,5 +36,8 @@
     "drizzle-kit": "0.30.4",
     "pg": "8.13.1",
     "vitest": "3.0.5"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.34.6"
   }
 }
