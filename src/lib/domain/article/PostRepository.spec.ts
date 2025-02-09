@@ -1,6 +1,37 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import PostRepository, { Post } from "./PostRepository";
-import { getCollection } from "astro:content";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import PostRepository, { type Post } from "./PostRepository";
+import type { CollectionEntry } from "astro:content";
+
+vi.mock("astro:content", () => ({
+  getCollection: vi.fn(async () => [
+    {
+      id: "mocked-id",
+      collection: "blog",
+      data: {
+        title: "Mocked Post",
+        slug: "/mocked-slug",
+        category: "tech",
+        pubDate: new Date(),
+        description: "Mocked Description",
+        heroImage: "/mocked-image",
+        updatedDate: new Date(),
+      },
+    } as CollectionEntry<"blog">,
+    {
+      id: "mocked-id-2",
+      collection: "blog",
+      data: {
+        title: "Mocked Post 2",
+        slug: "/mocked-slug-2",
+        category: "leadership",
+        pubDate: new Date(),
+        description: "Mocked Description 2",
+        heroImage: "/mocked-image-2",
+        updatedDate: new Date(),
+      },
+    } as CollectionEntry<"blog">,
+  ]),
+}));
 
 const QUERY_WITHOUT_SEACH_RESULTS = "fdsfjdfi3ojcns";
 
@@ -36,7 +67,7 @@ describe("PostRepository", () => {
   });
 
   it("finds posts by matching query", async () => {
-    const posts = await postRepository.findPostByQuery("become");
+    const posts = await postRepository.findPostByQuery("Mocked");
 
     expect(posts.length).lessThan(allPosts.length);
     expect(posts.length).greaterThan(0);

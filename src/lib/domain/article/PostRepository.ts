@@ -194,7 +194,8 @@ export default class PostRepository {
   }
 
   async findPosts(): Promise<Post[]> {
-    return Array.from(await getCollection('blog')).concat(externalPosts).sort((a, b) => {
+    const generatedBlogPosts = await getCollection('blog');
+    return Array.from(generatedBlogPosts).concat(externalPosts).sort((a, b) => {
       return a.data.pubDate > b.data.pubDate ? -1 : 1;
     });
   }
