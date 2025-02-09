@@ -4,12 +4,16 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 
 export type Database = NodePgDatabase | NeonHttpDatabase;
 
-let db: Database = drizzle(DATABASE_URL);
+let db: Database | null
 
 export function setDb(newDb: Database) {
   db = newDb;
 }
 
 export function getDb() {
+  if (!db) {
+    db = drizzle(DATABASE_URL);
+  }
+  
   return db;
 }

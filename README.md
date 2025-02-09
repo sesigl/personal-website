@@ -26,6 +26,9 @@ serverless Postgres via Drizzle (Neon), and secure newsletter management powered
 - Run unit tests: `npm test`.
 - Integration tests with Testcontainers.
 
+### Env Variables
+Astro comes with a built-in support for environment variables, which provides environment-specific resolultions on import. This comes with the caveat that tests fail when using `import.meta.env` in the test environment. To work around this, there is a `.env.test` which contains fake values for the test environment.
+
 ## License
 The design is licensed for personal usage only, while the code is open for general use. 
 Please respect the design license terms.
