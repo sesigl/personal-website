@@ -14,10 +14,10 @@ import node from '@astrojs/node';
 export default defineConfig({
     site: 'https://www.sebastiansigl.com',
     integrations: [mdx(), sitemap(), tailwind({ applyBaseStyles: false }), react()],
-    //adapter: vercel(),
-    adapter: node({
-        mode: 'standalone',
-    }),
+    adapter: vercel(),
+    //adapter: node({
+    //    mode: 'standalone',
+    //}),
     env: {
         schema: {
             DATABASE_URL: envField.string({ context: "server", access: "secret", optional: false }),

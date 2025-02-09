@@ -15,6 +15,7 @@ serverless Postgres via Drizzle (Neon), and secure newsletter management powered
 - ✅ [Testcontainers](https://www.testcontainers.org/) and [Vite](https://vitejs.dev/) for testing
 - ✅ [AWS SES](https://aws.amazon.com/ses/) triaged newsletter management
 - ✅ [React Share](https://github.com/nygardk/react-share) for quick social integrations
+- ✅ [Github Actions](https://github.com/features/actions) for CI/CD. Just going with vercel wont give you what you need (e.g. running testcontainers). GitHub Actions is the way to go for a deployment independent  and powerful CI/CD pipeline.
 
 ## Getting Started
 1. Clone this repo.
