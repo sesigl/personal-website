@@ -9,9 +9,10 @@ type Props = {
     title: string;
     description: string;
     previewImage?: string;
+    canonicalLink?: string;
 };
 
-const { title, description, active, previewImage } = Astro.props;
+const { title, description, active, previewImage, canonicalLink } = Astro.props;
 
 const finalTitle = `${title} | Sebastian Sigl`
 
@@ -20,7 +21,7 @@ const finalTitle = `${title} | Sebastian Sigl`
 <!doctype html>
 <html lang="en">
     <head>
-        <BaseHead title={finalTitle} description={description} image={previewImage}/>
+        <BaseHead title={finalTitle} description={description} image={previewImage} canonicalLink={canonicalLink} />
         <script is:inline>
             const htmlElement = document.querySelector("html");
 

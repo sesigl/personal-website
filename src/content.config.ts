@@ -13,6 +13,7 @@ const blog = defineCollection({
 		updatedDate: z.coerce.date().optional(),
 		heroImage: z.string().optional(),
 		slug: z.string(),
+		slugAlternative: z.optional(z.string()),
 		category: z.enum(['tech', 'leadership']),
 	}),
 });

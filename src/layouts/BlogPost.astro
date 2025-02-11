@@ -13,6 +13,11 @@ type Props = CollectionEntry<"blog">;
 
 const { data, id } = Astro.props;
 
+let canonicalLink: string | null = null;
+if (data.slugAlternative === id) {
+	canonicalLink = `/posts/${data.slug}`
+}
+
 const { Content } = await render({
 	...Astro.props,
 	id: id,
@@ -21,7 +26,7 @@ const { Content } = await render({
 });
 ---
 
-<Layout active="Unknown" title={data.title} description={data.description} previewImage={data.heroImage}>
+<Layout active="Unknown" title={data.title} description={data.description} previewImage={data.heroImage} canonicalLink={canonicalLink}>
 	<div
 		class="grow md:flex space-y-8 md:space-y-0 md:space-x-8 pt-12 md:pt-16 pb-16 md:pb-20"
 	>
