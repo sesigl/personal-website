@@ -1,9 +1,17 @@
 import PostgresNewsletterClient from "../infrastructure/newsletter/PostgresNewsletterClient";
 import type NewsletterClient from "../domain/newsletter/NewsletterClient";
+import Contact from "../domain/newsletter/Contact";
+import Newsletter from "../domain/newsletter/Newsletter";
+import type NewsletterSender from "../domain/newsletter/NewsletterSender";
+import AwsSesNewsletterClient from "../infrastructure/newsletter/AwsSesNewsletterClient";
 
 export default class NewsletterApplicationService {
   constructor(
-    private readonly newsletterClient: NewsletterClient = new PostgresNewsletterClient()
+    private readonly newsletterClient: NewsletterClient = new PostgresNewsletterClient(),
+    private readonly newsletterSender: NewsletterSender = new AwsSesNewsletterClient({
+      sourceEmail: "newsletter@sebastiansigl.com",
+      maxBatchSize: 50
+    })
   ) {}
 
   async addToNewsletter(email: string) {
@@ -14,7 +22,21 @@ export default class NewsletterApplicationService {
     await this.newsletterClient.deleteEmailFromNewsletter(unsubscribeKey);
   }
 
-  async sendNewsletter(html: string, unsubscribeKeyPlaceholder: string) {
-    throw new Error("Method not implemented.");
+  async sendNewsletter(subject: string, htmlTemplate: string, unsubscribeKeyPlaceholder: string) {
+    // let contacts = await this.newsletterClient.findAllContacts() 
+
+    const contacts = [
+      new Contact("akrillo89@gmail.com", "1234"),
+    ]
+
+    const recipients = contacts.map((contact: Contact) => ({
+      email: contact.email,
+      placeholders: {
+        [unsubscribeKeyPlaceholder]: contact.unsubscribeKey
+      }
+    }));
+
+    const newsletter = new Newsletter(subject, htmlTemplate, recipients);
+    await this.newsletterSender.sendEmails(newsletter);
   }
 }

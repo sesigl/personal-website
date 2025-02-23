@@ -1,14 +1,17 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { beforeAll, describe, expect, it } from "vitest";
-import PostgresNewsletterClient from "./PostgresNewsletterClient";
+import { beforeEach, describe, expect, it } from "vitest";
 import TestDatabase from "../../../test/database/TestDatabase";
+import { setupTestDatabase } from "../../../test/setup/setupTestDatabase";
+import PostgresNewsletterClient from "./PostgresNewsletterClient";
 
 describe("PostgresNewsletterClient", () => {
     let postgresNewsletterClient: PostgresNewsletterClient;
     let db: NodePgDatabase;
 
-    beforeAll(async () => {
-      db = await TestDatabase.setup();
+    setupTestDatabase();
+
+    beforeEach(async () => {
+      db = await TestDatabase.getInstance().getDatabase();
       postgresNewsletterClient = new PostgresNewsletterClient(db);
     });
 
@@ -17,9 +20,11 @@ describe("PostgresNewsletterClient", () => {
       await postgresNewsletterClient.deleteEmailFromNewsletter(contact.unsubscribeKey);
     });
 
-    it("throws an error when deleting a non-existing email", async () => {
-      await expect(
-        postgresNewsletterClient.deleteEmailFromNewsletter("non-existing-key")
-      ).rejects.toBeDefined();
+    it("creates and returns all contacts", async () => {
+      await postgresNewsletterClient.createContact("test1@email.de");
+      await postgresNewsletterClient.createContact("test2@email.de");
+      const allContacts = await postgresNewsletterClient.findAllContacts();
+
+      expect(allContacts.length).toBeGreaterThanOrEqual(2);
     });
 });

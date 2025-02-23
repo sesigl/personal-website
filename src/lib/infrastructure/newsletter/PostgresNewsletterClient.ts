@@ -8,6 +8,11 @@ export default class PostgresNewsletterClient implements NewsletterClient {
   constructor(
     private readonly db: Database = getDb()
   ) {}
+  
+  async findAllContacts(): Promise<Contact[]> {
+    const contacts = await this.db.select().from(usersTable).execute();
+    return contacts.map((contact: { email: string; unsubscribeKey: string; }) => new Contact(contact.email, contact.unsubscribeKey));
+  }
 
   async deleteEmailFromNewsletter(unsubscribeKey: string): Promise<void> {
     const result = await this.db

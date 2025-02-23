@@ -1,23 +1,35 @@
-import EmailBuilder, { createYooptaEmailEditor } from '@yoopta/email-builder';
 import type { YooptaEmailEditor, YooptaEmailEditorOptions } from '@yoopta/email-builder';
-import { useEffect, useMemo, useState } from 'react';
-import type { YooptaContentValue } from '@yoopta/editor';
-import { BASE_URL, SOCIAL_LINKS } from '../../consts';
+import EmailBuilder, { createYooptaEmailEditor } from '@yoopta/email-builder';
+import { actions } from 'astro:actions';
 import { getImage } from 'astro:assets';
-
+import { useEffect, useState } from 'react';
+import { BASE_URL, SOCIAL_LINKS } from '../../consts';
+import facebookImage from '../../images/newsletter/social_facebook.png';
+import linkedInImage from '../../images/newsletter/social_linkedin.png';
+import xImage from '../../images/newsletter/social_x.png';
 
 
 function sendNewsletter(newsletterEmailHtml: string) {
-  console.log(newsletterEmailHtml)
+  actions.sendNewsletter({
+    subject: (document.querySelector('.js-newsletter-subject') as HTMLInputElement).value,
+    html: newsletterEmailHtml,
+    unsubscribeKeyPlaceholder: 'unsubscribeKey'
+  }).then(() => {
+    alert('Newsletter sent!');
+  }
+  ).catch((error) => {
+    console.error(error);
+    alert('Something went wrong');
+  }
+  );
 }
 
 // Define your email template options
 async function getYooptaEmailEditorOptions(): Promise<YooptaEmailEditorOptions> {
 
-  const linkedInImage = (await getImage({ src: `/images/newsletter/social_linkedin.png`, width: 32, height: 32 })).src
-  const xImage = (await getImage({ src: `/images/newsletter/social_x.png`, width: 32, height: 32 })).src
-  const facebookImage = (await getImage({ src: `/images/newsletter/social_facebook.png`, width: 32, height: 32 })).src
-
+  const linkedInImageSrc = (await getImage({ src: linkedInImage, width: 32, height: 32 })).src
+  const xImageSrc = (await getImage({ src: xImage, width: 32, height: 32 })).src
+  const facebookImageSrc = (await getImage({ src: facebookImage, width: 32, height: 32 })).src
 
   const yooptaEmailEditorOptions: YooptaEmailEditorOptions = {
     template: {
@@ -80,7 +92,7 @@ async function getYooptaEmailEditorOptions(): Promise<YooptaEmailEditorOptions> 
                             <table width="100%" style="table-layout:fixed;width:100%">
                               <tr><td style="font-size:0px;line-height:0px;padding-bottom:5px;padding-top:5px">
                                 <a href="${SOCIAL_LINKS.x}" style="color:#b91c1c;text-decoration:none" target="_blank">
-                                  <img src="${xImage}" width="32" border="0" style="display:block;width:100%">
+                                  <img src="${xImageSrc}" width="32" border="0" style="display:block;width:100%">
                                 </a>
                               </td>
                             </table>
@@ -88,7 +100,7 @@ async function getYooptaEmailEditorOptions(): Promise<YooptaEmailEditorOptions> 
                             <table width="100%" style="table-layout:fixed;width:100%">
                               <tr><td style="font-size:0px;line-height:0px;padding-bottom:5px;padding-top:5px">
                                 <a href="${SOCIAL_LINKS.facebook}" style="color:#b91c1c;text-decoration:none" target="_blank">
-                                  <img src="${facebookImage}" width="32" border="0" style="display:block;width:100%">
+                                  <img src="${facebookImageSrc}" width="32" border="0" style="display:block;width:100%">
                                 </a>
                               </td>
                             </table>
@@ -96,7 +108,7 @@ async function getYooptaEmailEditorOptions(): Promise<YooptaEmailEditorOptions> 
                             <table width="100%" style="table-layout:fixed;width:100%">
                               <tr><td style="font-size:0px;line-height:0px;padding-bottom:5px;padding-top:5px">
                                 <a href="${SOCIAL_LINKS.linkedIn}" style="color:#b91c1c;text-decoration:none" target="_blank">
-                                  <img src="${linkedInImage}" width="32" border="0" style="display:block;width:100%">
+                                  <img src="${linkedInImageSrc}" width="32" border="0" style="display:block;width:100%">
                                 </a>
                               </td></tr>
                             </table>
@@ -117,7 +129,7 @@ async function getYooptaEmailEditorOptions(): Promise<YooptaEmailEditorOptions> 
         <table width="100%">
           <tr><td valign="top">
             <div>
-              <p style="margin:0"><a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/imprint`}">Imprint</a> | Unsubscribe</p>
+              <p style="margin:0"><a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/imprint`}">Imprint</a> | <a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/newsletter/unsubscribe/{{unsubscribeKey}}`}">Unsubscribe</a></p>
             </div>
           </td></tr>
           <tr><td></td></tr>
@@ -150,7 +162,7 @@ export default function EmailBuilderExample() {
 
 
 
-  const [value, setValue] = useState<YooptaContentValue>({
+  const [value, setValue] = useState<any>({
     "0cd766b5-80bd-4da0-9d3f-96d4299eec7f": {
       "id": "0cd766b5-80bd-4da0-9d3f-96d4299eec7f",
       "type": "HeadingOne",
@@ -510,7 +522,8 @@ export default function EmailBuilderExample() {
             onChange={setValue}
           />
           <div>
-            <button onClick={() => sendNewsletter(editor.getEmail(value, editorOptions.template))}>
+            <input type="text" placeholder="Newsletter Subject" className="js-newsletter-subject" />
+            <button onClick={() =>sendNewsletter(editor.getEmail(value, editorOptions.template))}>
               Send
             </button>
           </div>

@@ -6,9 +6,9 @@ import {
 } from "@aws-sdk/client-ses";
 import type NewsletterSender from "../../domain/newsletter/NewsletterSender";
 import Newsletter from "../../domain/newsletter/Newsletter";
+import { AWS_ACCESS_KEY_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY } from "astro:env/server";
 
 interface SesConfig {
-  region: string;
   sourceEmail: string;
   maxBatchSize: number;
 }
@@ -33,7 +33,12 @@ export default class AwsSesNewsletterClient implements NewsletterSender {
       this.config = {
           ...config
       };
-      this.sesClient = new SESClient({ region: this.config.region });
+      this.sesClient = new SESClient({ 
+        region: AWS_REGION, 
+        credentials: {
+        accessKeyId: AWS_ACCESS_KEY_ID,
+        secretAccessKey: AWS_SECRET_ACCESS_KEY
+      } });
   }
 
   async sendEmails(newsletter: Newsletter): Promise<void> {

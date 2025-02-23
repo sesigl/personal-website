@@ -3,7 +3,9 @@ import { getViteConfig } from 'astro/config';
 
 export default getViteConfig({
   test: {
-    setupFiles: [],
+    setupFiles: [
+      'src/test/setup/setupTestDatabase.ts',
+    ],
     hookTimeout: 120000,
   },
   

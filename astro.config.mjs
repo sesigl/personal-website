@@ -22,7 +22,10 @@ export default defineConfig({
         schema: {
             DATABASE_URL: envField.string({ context: "server", access: "secret", optional: false }),
             USER_SECRET_KEY: envField.string({ context: "server", access: "secret", optional: false }),
-            ADMIN_PASSWORD: envField.string({ context: "server", access: "secret", optional: false })
+            ADMIN_PASSWORD: envField.string({ context: "server", access: "secret", optional: false }),
+            AWS_ACCESS_KEY_ID: envField.string({ context: "server", access: "secret", optional: false }),
+            AWS_SECRET_ACCESS_KEY: envField.string({ context: "server", access: "secret", optional: false }),
+            AWS_REGION: envField.string({ context: "server", access: "secret", optional: false }),
         }
     }
 });
