@@ -1,8 +1,3 @@
-/**
- * Notes:
- * - edge cases (validation)
- */
-
 import { expect, it, describe } from "vitest";
 import Newsletter from "./Newsletter";
 
