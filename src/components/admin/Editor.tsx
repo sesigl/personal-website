@@ -10,7 +10,7 @@ import xImage from '../../images/newsletter/social_x.png';
 
 
 function sendNewsletter(newsletterEmailHtml: string) {
-  actions.sendNewsletter({
+  actions.admin.sendNewsletter({
     subject: (document.querySelector('.js-newsletter-subject') as HTMLInputElement).value,
     html: newsletterEmailHtml,
     unsubscribeKeyPlaceholder: 'unsubscribeKey'

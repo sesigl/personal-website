@@ -23,18 +23,21 @@ export const server = {
         }
     }),
 
-    sendNewsletter: defineAction({
-        input: z.object({
-            subject: z.string(),
-            html: z.string(),
-            unsubscribeKeyPlaceholder: z.string(),
-        }),
-        handler: async (input) => {
-            try {
-                return await sendNewsletter(input.subject, input.html, input.unsubscribeKeyPlaceholder);
-            } catch (error) {
-                console.error(error);
+    
+    admin: {
+        sendNewsletter: defineAction({
+            input: z.object({
+                subject: z.string(),
+                html: z.string(),
+                unsubscribeKeyPlaceholder: z.string(),
+            }),
+            handler: async (input) => {
+                try {
+                    return await sendNewsletter(input.subject, input.html, input.unsubscribeKeyPlaceholder);
+                } catch (error) {
+                    console.error(error);
+                }
             }
-        }
-    })
+        })
+    }
 }
