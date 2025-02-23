@@ -1,9 +1,7 @@
 import { beforeEach, describe, it, expect, vi } from 'vitest';
 
-// Define mockSend outside the vi.mock factory
 const mockSend = vi.fn();
 
-// Mock the AWS SES client
 vi.mock('@aws-sdk/client-ses', () => {
   // Use a factory function to ensure no top-level variable usage inside vi.mock
   class MockSESClient {
@@ -26,7 +24,6 @@ vi.mock('@aws-sdk/client-ses', () => {
   };
 });
 
-// Now import after mocks
 import AwsSesNewsletterClient from './AwsSesNewsletterClient';
 import Newsletter from '../../domain/newsletter/Newsletter';
 
@@ -39,7 +36,7 @@ describe('AwsSesNewsletterClient', () => {
 
   beforeEach(() => {
     mockSend.mockClear();
-    mockSend.mockResolvedValue({}); // Reset to default resolved value
+    mockSend.mockResolvedValue({});
   });
 
   it('should send newsletter email with correct template and recipients', async () => {
@@ -92,7 +89,6 @@ describe('AwsSesNewsletterClient', () => {
   });
 
   it('should handle errors during template creation', async () => {
-    // Arrange
     const client = new AwsSesNewsletterClient(config);
     const newsletter = new Newsletter(
       'Test Subject',
