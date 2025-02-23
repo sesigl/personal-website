@@ -8,5 +8,5 @@ export default getViteConfig({
     ],
     hookTimeout: 120000,
   },
-  
+  threads: false, // Run tests sequentially to avoid testcontainer issues
 });
