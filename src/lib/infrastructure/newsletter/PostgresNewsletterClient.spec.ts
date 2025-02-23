@@ -13,13 +13,13 @@ describe("PostgresNewsletterClient", () => {
     });
 
     it("creates and deletes an email", async () => {
-      await postgresNewsletterClient.createContact("test@email.de");
-      await postgresNewsletterClient.deleteEmailFromNewsletter("test@email.de");
+      const contact = await postgresNewsletterClient.createContact("test@email.de");
+      await postgresNewsletterClient.deleteEmailFromNewsletter(contact.unsubscribeKey);
     });
 
     it("throws an error when deleting a non-existing email", async () => {
       await expect(
-        postgresNewsletterClient.deleteEmailFromNewsletter("non-existing")
+        postgresNewsletterClient.deleteEmailFromNewsletter("non-existing-key")
       ).rejects.toBeDefined();
     });
 });

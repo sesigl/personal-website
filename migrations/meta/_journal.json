@@ -15,6 +15,20 @@
       "when": 1736094191410,
       "tag": "0001_brave_valkyrie",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1739723525768,
+      "tag": "0002_slippery_donald_blake",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1739724662796,
+      "tag": "0003_small_supernaut",
+      "breakpoints": true
     }
   ]
 }

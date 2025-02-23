@@ -1,3 +1,3 @@
 export default class User {
-  constructor(readonly email: string, readonly secretToken: string) {}
+  constructor(readonly email: string, readonly unsubscribeKey: string) {}
 }

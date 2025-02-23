@@ -10,7 +10,11 @@ export default class NewsletterApplicationService {
     return await this.newsletterClient.createContact(email);
   }
 
-  async removeFromNewsletter(email: string) {
-    await this.newsletterClient.deleteEmailFromNewsletter(email);
+  async removeFromNewsletter(unsubscribeKey: string) {
+    await this.newsletterClient.deleteEmailFromNewsletter(unsubscribeKey);
+  }
+
+  async sendNewsletter(html: string, unsubscribeKeyPlaceholder: string) {
+    throw new Error("Method not implemented.");
   }
 }

@@ -15,18 +15,26 @@ describe("PostgresUserRepository", () => {
       userRepository = new PostgresUserRepository(db, "test-secret");
     });
 
-    it("finds user by email", async () => {
-      const testEmail = `test-${randomUUID()}@example.com`;
+    it("generates different unsubscribe keys per user", async () => {
+      const testEmail1 = `test-${randomUUID()}@example.com`;
       await db.insert(usersTable).values({
-        email: testEmail,
+        email: testEmail1,
         creationDate: new Date().toISOString(),
       });
 
-      const user = await userRepository.findByEmail(testEmail);
+      const testEmail2 = `test-${randomUUID()}@example.com`;
+      await db.insert(usersTable).values({
+        email: testEmail2,
+        creationDate: new Date().toISOString(),
+      });
 
-      assertNotNull(user);
-      expect(user.email).toBe(testEmail);
-      expect(user.secretToken).toBeDefined();
+      const user1 = await userRepository.findByEmail(testEmail1);
+      const user2 = await userRepository.findByEmail(testEmail2);
+
+      assertNotNull(user1);
+      expect(user1.email).toBe(testEmail1);
+      expect(user1.unsubscribeKey).toBeDefined();
+      expect(user1.unsubscribeKey).not.toBe(user2?.unsubscribeKey);
     });
 
     it("a user secret is always the same", async () => {
@@ -39,7 +47,7 @@ describe("PostgresUserRepository", () => {
       const user = await userRepository.findByEmail(testEmail);
       const user2 = await userRepository.findByEmail(testEmail);
 
-      expect(user!!.secretToken).toBe(user2!!.secretToken);
+      expect(user!!.unsubscribeKey).toBe(user2!!.unsubscribeKey);
     });
 
     it("returns null for non-existing user", async () => {
