@@ -16,7 +16,7 @@ export default class Newsletter {
   }
 
   private validate() {
-    const pattern = /{{\s*([\w\d-]+)\s*}}/g;
+    const pattern = /{{\s*([\w-]+)\s*}}/g;
     const requiredPlaceholders = new Set<string>();
     let match;
     while ((match = pattern.exec(this.htmlTemplate)) !== null) {

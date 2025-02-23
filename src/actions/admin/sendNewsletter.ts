@@ -1,5 +1,4 @@
 import NewsletterApplicationService from "../../lib/application/NewsletterApplicationService";
-import UserApplicationService from "../../lib/application/UserApplicationService";
 
 const newsletterApplicationService = new NewsletterApplicationService();
 
