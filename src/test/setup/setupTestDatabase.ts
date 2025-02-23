@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, beforeEach } from "vitest";
+import { afterAll, beforeAll } from "vitest";
 import TestDatabase from "../database/TestDatabase";
 
 export function setupTestDatabase() {

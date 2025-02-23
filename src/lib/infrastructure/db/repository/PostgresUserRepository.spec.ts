@@ -50,7 +50,7 @@ describe("PostgresUserRepository", () => {
     const user = await userRepository.findByEmail(testEmail);
     const user2 = await userRepository.findByEmail(testEmail);
 
-    expect(user!!.unsubscribeKey).toBe(user2!!.unsubscribeKey);
+    expect(user?.unsubscribeKey).toBe(user2?.unsubscribeKey);
   });
 
   it("returns null for non-existing user", async () => {
