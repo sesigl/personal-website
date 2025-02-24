@@ -44,6 +44,7 @@ describe('AwsSesNewsletterClient', () => {
     const client = new AwsSesNewsletterClient(config);
     const newsletter = new Newsletter(
       'Test Newsletter',
+      'preview text',
       '<p>Hello {{name}}!</p>',
       [{
         email: 'test@example.com',
@@ -92,6 +93,7 @@ describe('AwsSesNewsletterClient', () => {
     const client = new AwsSesNewsletterClient(config);
     const newsletter = new Newsletter(
       'Test Subject',
+      'preview text', 
       '<p>Hello {{name}}!</p>',
       [{
         email: 'test@example.com',

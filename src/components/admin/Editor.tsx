@@ -1,35 +1,60 @@
 import type { YooptaEmailEditor, YooptaEmailEditorOptions } from '@yoopta/email-builder';
 import EmailBuilder, { createYooptaEmailEditor } from '@yoopta/email-builder';
 import { actions } from 'astro:actions';
-import { getImage } from 'astro:assets';
 import { useEffect, useState } from 'react';
-import { BASE_URL, SOCIAL_LINKS } from '../../consts';
-import facebookImage from '../../images/newsletter/social_facebook.png';
-import linkedInImage from '../../images/newsletter/social_linkedin.png';
-import xImage from '../../images/newsletter/social_x.png';
 
+import newsletterFooter from './newsletterFooter';
+import newsletterTemplateDefault from './newsletterTemplateDefault';
 
-function sendNewsletter(newsletterEmailHtml: string) {
+// Constants for recommended lengths
+const SUBJECT_LENGTH = {
+  min: 20,
+  max: 60,
+  recommended: 40
+};
+
+const PREVIEW_LENGTH = {
+  min: 40,
+  max: 120,
+  recommended: 80
+};
+
+interface CharacterCountProps {
+  current: number;
+  min: number;
+  max: number;
+  recommended: number;
+}
+
+function CharacterCount({ current, min, max, recommended }: CharacterCountProps) {
+  const isRecommended = current >= min && current <= max;
+  return (
+    <span style={{ color: isRecommended ? '#22c55e' : '#ef4444' }}>
+      {current}/{recommended}
+    </span>
+  );
+}
+
+function sendNewsletter(newsletterEmailHtml: string, subject: string, previewHeadline: string, isTest: boolean = false) {
   actions.admin.sendNewsletter({
-    subject: (document.querySelector('.js-newsletter-subject') as HTMLInputElement).value,
+    subject,
+    previewHeadline,
     html: newsletterEmailHtml,
-    unsubscribeKeyPlaceholder: 'unsubscribeKey'
+    unsubscribeKeyPlaceholder: 'unsubscribeKey',
+    test: isTest
   }).then(() => {
-    alert('Newsletter sent!');
+    alert(isTest ? 'Test email sent!' : 'Newsletter sent!');
   }
   ).catch((error) => {
     console.error(error);
     alert('Something went wrong');
-  }
-  );
+  });
 }
 
 // Define your email template options
 async function getYooptaEmailEditorOptions(): Promise<YooptaEmailEditorOptions> {
 
-  const linkedInImageSrc = (await getImage({ src: linkedInImage, width: 32, height: 32 })).src
-  const xImageSrc = (await getImage({ src: xImage, width: 32, height: 32 })).src
-  const facebookImageSrc = (await getImage({ src: facebookImage, width: 32, height: 32 })).src
+  const newsletterFooterContent = await newsletterFooter();
 
   const yooptaEmailEditorOptions: YooptaEmailEditorOptions = {
     template: {
@@ -72,86 +97,38 @@ async function getYooptaEmailEditorOptions(): Promise<YooptaEmailEditorOptions> 
           },
         },
       },
-      customTemplate: (content) => `${content}
-    <style>
-      * { font-family: Inconsolata,Arial,sans-serif; }
-      button { border: 2px solid #000 !important; border-radius: 0 !important; }
-    </style>
-    <table width="100%" align="center" style="table-layout:fixed;width:100%">
-      <tr><td>
-        <table width="100%">
-          <tr><th width="100%" valign="top" style="font-weight:normal">
-            <table width="600" align="center" style="table-layout:fixed;width:600px">
-              <tr><td valign="top">
-                <table width="100%">
-                  <tr><td style="display:inline-block">
-                    <table width="600" style="table-layout:fixed;width:600px">
-                      <tr><td style="padding-left:241px;padding-right:241px;padding-top:40px">
-                        <table width="100%">
-                          <tr><th style="font-weight:normal">
-                            <table width="100%" style="table-layout:fixed;width:100%">
-                              <tr><td style="font-size:0px;line-height:0px;padding-bottom:5px;padding-top:5px">
-                                <a href="${SOCIAL_LINKS.x}" style="color:#b91c1c;text-decoration:none" target="_blank">
-                                  <img src="${xImageSrc}" width="32" border="0" style="display:block;width:100%">
-                                </a>
-                              </td>
-                            </table>
-                          </th><th width="" style="font-weight:normal">
-                            <table width="100%" style="table-layout:fixed;width:100%">
-                              <tr><td style="font-size:0px;line-height:0px;padding-bottom:5px;padding-top:5px">
-                                <a href="${SOCIAL_LINKS.facebook}" style="color:#b91c1c;text-decoration:none" target="_blank">
-                                  <img src="${facebookImageSrc}" width="32" border="0" style="display:block;width:100%">
-                                </a>
-                              </td>
-                            </table>
-                          </th><th width="" style="font-weight:normal">
-                            <table width="100%" style="table-layout:fixed;width:100%">
-                              <tr><td style="font-size:0px;line-height:0px;padding-bottom:5px;padding-top:5px">
-                                <a href="${SOCIAL_LINKS.linkedIn}" style="color:#b91c1c;text-decoration:none" target="_blank">
-                                  <img src="${linkedInImageSrc}" width="32" border="0" style="display:block;width:100%">
-                                </a>
-                              </td></tr>
-                            </table>
-                          </th></tr>
-                        </table>
-                      </td></tr>
-                    </table>
-                  </td></tr>
-                </table>
-              </td></tr>
-            </table>
-          </th></tr>
-        </table>
-      </td></tr>
-    </table>
-    <table width="100%" align="center" style="table-layout:fixed;width:100%">
-      <tr><td style="padding-bottom:35px;padding-left:10px;padding-right:10px;padding-top:40px">
-        <table width="100%">
-          <tr><td valign="top">
-            <div>
-              <p style="margin:0"><a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/imprint`}">Imprint</a> | <a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/newsletter/unsubscribe/{{unsubscribeKey}}`}">Unsubscribe</a></p>
-            </div>
-          </td></tr>
-          <tr><td></td></tr>
-          <tr><td align="left" valign="top" style="">
-            <div>
-              © ${new Date().getFullYear()} Sebastian Sigl. All rights reserved.
-            </div>
-          </td></tr>
-        </table>
-      </td></tr>
-    </table>
-    `
+      customTemplate: (content) => `${content}${newsletterFooterContent}`
     },
   };
 
   return yooptaEmailEditorOptions;
 }
 
+const STORAGE_KEYS = {
+  EDITOR_CONTENT: 'newsletter-editor-content',
+  SUBJECT: 'newsletter-subject',
+  PREVIEW: 'newsletter-preview'
+} as const;
+
 export default function EmailBuilderExample() {
   // Initialize the editor
   const [editor, setEditor] = useState<YooptaEmailEditor | null>(null);
   const [editorOptions, setEditorOptions] = useState<YooptaEmailEditorOptions | null>(null);
+  const [subject, setSubject] = useState(() => 
+    localStorage.getItem(STORAGE_KEYS.SUBJECT) || ''
+  );
+  const [previewHeadline, setPreviewHeadline] = useState(() => 
+    localStorage.getItem(STORAGE_KEYS.PREVIEW) || ''
+  );
+
+  // Update localStorage when form fields change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.SUBJECT, subject);
+  }, [subject]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.PREVIEW, previewHeadline);
+  }, [previewHeadline]);
 
   useEffect(() => {
     getYooptaEmailEditorOptions().then((yooptaEmailEditorOptions) => {
@@ -160,357 +137,71 @@ export default function EmailBuilderExample() {
     });
   }, []);
 
+  // Initialize value from localStorage or use default
+  const [value, setValue] = useState<any>(() => {
+    const savedContent = localStorage.getItem(STORAGE_KEYS.EDITOR_CONTENT);
+    return savedContent ? JSON.parse(savedContent) : newsletterTemplateDefault;
+  });
 
+  // Update localStorage when editor content changes
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.EDITOR_CONTENT, JSON.stringify(value));
+  }, [value]);
 
-  const [value, setValue] = useState<any>({
-    "0cd766b5-80bd-4da0-9d3f-96d4299eec7f": {
-      "id": "0cd766b5-80bd-4da0-9d3f-96d4299eec7f",
-      "type": "HeadingOne",
-      "meta": {
-        "align": "center",
-        "depth": 0,
-        "order": 0
-      },
-      "value": [
-        {
-          "id": "5ae08fe5-dd24-4694-8232-56682a1b9e9d",
-          "type": "heading-one",
-          "props": {
-            "nodeType": "block"
-          },
-          "children": [
-            {
-              "text": "THE "
-            },
-            {
-              "text": "NEWS",
-              "underline": true
-            }
-          ]
+  const resetForm = () => {
+    localStorage.removeItem(STORAGE_KEYS.SUBJECT);
+    localStorage.removeItem(STORAGE_KEYS.PREVIEW);
+    localStorage.removeItem(STORAGE_KEYS.EDITOR_CONTENT);
+
+    window.location.reload();
+  };
+
+  const handleSendNewsletter = async (isTest: boolean = false) => {
+    if (editor && editorOptions) {
+      try {
+        await sendNewsletter(getEmailContent(), subject, previewHeadline, isTest);
+        if (!isTest) {
+          resetForm();
         }
-      ]
-    },
-    "c4c2400b-f9ca-48a5-8157-4f31017da76c": {
-      "id": "c4c2400b-f9ca-48a5-8157-4f31017da76c",
-      "type": "Divider",
-      "meta": {
-        "depth": 0,
-        "order": 1
-      },
-      "value": [
-        {
-          "id": "0511807a-2279-4e12-96f9-d7e26bafe027",
-          "type": "divider",
-          "props": {
-            "nodeType": "void",
-            "theme": "solid",
-            "color": "#EFEFEE"
-          },
-          "children": [
-            {
-              "text": ""
-            }
-          ]
-        }
-      ]
-    },
-    "314b8869-6f78-4c49-b0ea-389bdb656cb8": {
-      "id": "314b8869-6f78-4c49-b0ea-389bdb656cb8",
-      "type": "HeadingTwo",
-      "meta": {
-        "align": "center",
-        "depth": 0,
-        "order": 2
-      },
-      "value": [
-        {
-          "id": "56fc10e9-55a0-4214-9685-f1a7c703e2cd",
-          "type": "heading-two",
-          "props": {
-            "nodeType": "block"
-          },
-          "children": [
-            {
-              "text": "TOP ARTICLES OF "
-            },
-            {
-              "text": "THE WEEK",
-              "underline": true
-            }
-          ]
-        }
-      ]
-    },
-    "05088f8e-3cdd-44cc-adf1-dc8367640cd3": {
-      "id": "05088f8e-3cdd-44cc-adf1-dc8367640cd3",
-      "type": "Image",
-      "meta": {
-        "depth": 0,
-        "order": 3
-      },
-      "value": [
-        {
-          "id": "f4f70b49-dc45-42e6-a921-7921e2dd86f4",
-          "type": "image",
-          "props": {
-            "src": "https://www.sebastiansigl.com/images/posts/empowered-execution-in-large-organizations/empowered-execution-in-large-organizations.webp",
-            "alt": null,
-            "srcSet": null,
-            "bgColor": null,
-            "fit": "cover",
-            "sizes": {
-              "width": 596,
-              "height": 499
-            },
-            "nodeType": "void"
-          },
-          "children": [
-            {
-              "text": ""
-            }
-          ]
-        }
-      ]
-    },
-    "9bb40f9b-31e6-45b5-8b9b-dd239bf59605": {
-      "id": "9bb40f9b-31e6-45b5-8b9b-dd239bf59605",
-      "type": "HeadingThree",
-      "meta": {
-        "align": "center",
-        "depth": 0,
-        "order": 4
-      },
-      "value": [
-        {
-          "id": "b1c265b4-2331-421a-8b96-9023dd948efe",
-          "type": "heading-three",
-          "props": {
-            "nodeType": "block"
-          },
-          "children": [
-            {
-              "text": "High-Performing Teams Focus On These 4 Areas to Remain Successful"
-            }
-          ]
-        }
-      ]
-    },
-    "4831a1ac-714d-48ca-b8ee-dc38c9ff21bc": {
-      "id": "4831a1ac-714d-48ca-b8ee-dc38c9ff21bc",
-      "type": "Button",
-      "meta": {
-        "align": "center",
-        "depth": 0,
-        "order": 5
-      },
-      "value": [
-        {
-          "id": "f856e72b-1a54-4733-b412-63cdb8baced9",
-          "type": "button",
-          "props": {
-            "href": "",
-            "color": "#fff",
-            "backgroundColor": "#000",
-            "variant": "destructive",
-            "size": "default"
-          },
-          "children": [
-            {
-              "text": "READ ARTICLE"
-            }
-          ]
-        }
-      ]
-    },
-    "f4985e26-1a16-4c92-bd7a-b6829f742b8c": {
-      "id": "f4985e26-1a16-4c92-bd7a-b6829f742b8c",
-      "type": "HeadingThree",
-      "meta": {
-        "depth": 0,
-        "order": 7
-      },
-      "value": [
-        {
-          "id": "e48e4163-3632-4933-972a-8e6312ac9d23",
-          "type": "heading-three",
-          "props": {
-            "nodeType": "block"
-          },
-          "children": [
-            {
-              "text": "Worms should definitely be banned from cherries"
-            }
-          ]
-        }
-      ]
-    },
-    "e2d6c67d-c1c1-4321-9513-71001d797de2": {
-      "id": "e2d6c67d-c1c1-4321-9513-71001d797de2",
-      "type": "Paragraph",
-      "value": [
-        {
-          "id": "81be5573-e59c-4580-b423-49008f981d12",
-          "type": "paragraph",
-          "children": [
-            {
-              "text": ""
-            }
-          ]
-        }
-      ],
-      "meta": {
-        "align": "left",
-        "depth": 0,
-        "order": 6
-      }
-    },
-    "36af19bb-329a-4edd-bdf5-2b64e033f4fa": {
-      "id": "36af19bb-329a-4edd-bdf5-2b64e033f4fa",
-      "type": "Paragraph",
-      "value": [
-        {
-          "id": "2d9e2ee6-cdb2-4ab1-a7bd-ac1323e02f65",
-          "type": "paragraph",
-          "children": [
-            {
-              "text": "Hi there !"
-            }
-          ]
-        }
-      ],
-      "meta": {
-        "align": "left",
-        "depth": 0,
-        "order": 8
-      }
-    },
-    "c119dd4b-5813-4ef5-b2ed-413468001d2c": {
-      "id": "c119dd4b-5813-4ef5-b2ed-413468001d2c",
-      "type": "Paragraph",
-      "value": [
-        {
-          "id": "185a3f94-e9e2-4847-b8df-6fcaa85bf70c",
-          "type": "paragraph",
-          "children": [
-            {
-              "text": "It’s been a while since you’ve heard from me, but I’m still here—alive and kicking, better than ever! Life has been full of exciting changes and challenges, both personally and professionally, and I thought it was time to share a bit about what’s been going on."
-            }
-          ]
-        }
-      ],
-      "meta": {
-        "align": "left",
-        "depth": 0,
-        "order": 9
-      }
-    },
-    "5f2dabb6-952d-4a05-95a3-28004e889956": {
-      "id": "5f2dabb6-952d-4a05-95a3-28004e889956",
-      "type": "HeadingThree",
-      "meta": {
-        "depth": 0,
-        "order": 10
-      },
-      "value": [
-        {
-          "id": "17770ea1-078b-40cc-863c-f0143ba4cb78",
-          "type": "heading-three",
-          "props": {
-            "nodeType": "block"
-          },
-          "children": [
-            {
-              "text": "👀 Rediscovering the World Through New Eyes "
-            }
-          ]
-        }
-      ]
-    },
-    "1771841b-8630-401a-ae3f-b2b8989feec8": {
-      "id": "1771841b-8630-401a-ae3f-b2b8989feec8",
-      "type": "Paragraph",
-      "value": [
-        {
-          "id": "8b8ed9a7-034f-40a9-950f-11164debccf1",
-          "type": "paragraph",
-          "children": [
-            {
-              "text": "These days, a lot of my free time is spent with my 2-year-old son. Exploring the world through his eyes has been an incredible experience—there’s so much to learn from a child's curiosity and sense of wonder. It’s been grounding and inspiring in ways I didn’t expect!"
-            }
-          ]
-        }
-      ],
-      "meta": {
-        "align": "left",
-        "depth": 0,
-        "order": 11
-      }
-    },
-    "6ce92e74-ee65-42fc-b318-3c8c98d9f985": {
-      "id": "6ce92e74-ee65-42fc-b318-3c8c98d9f985",
-      "type": "Divider",
-      "meta": {
-        "depth": 0,
-        "order": 13
-      },
-      "value": [
-        {
-          "id": "600f2b70-5438-4c46-9660-29a70449c99a",
-          "type": "divider",
-          "props": {
-            "nodeType": "void",
-            "theme": "solid",
-            "color": "#EFEFEE"
-          },
-          "children": [
-            {
-              "text": ""
-            }
-          ]
-        }
-      ]
-    },
-    "2746b39e-e945-4816-889c-f5a9d3c7ca51": {
-      "id": "2746b39e-e945-4816-889c-f5a9d3c7ca51",
-      "type": "Paragraph",
-      "value": [
-        {
-          "id": "9bbabb1b-2f81-4810-ac4b-6407a5e14d76",
-          "type": "paragraph",
-          "children": [
-            {
-              "text": ""
-            }
-          ]
-        }
-      ],
-      "meta": {
-        "align": "left",
-        "depth": 0,
-        "order": 12
-      }
-    },
-    "5b3fdb5f-fb03-4f3a-9c8f-e66bddc6bb3b": {
-      "id": "5b3fdb5f-fb03-4f3a-9c8f-e66bddc6bb3b",
-      "type": "Paragraph",
-      "value": [
-        {
-          "id": "ed1b24c3-df25-49eb-826d-6e069737fea5",
-          "type": "paragraph",
-          "children": [
-            {
-              "text": ""
-            }
-          ]
-        }
-      ],
-      "meta": {
-        "align": "left",
-        "depth": 0,
-        "order": 14
+      } catch (error) {
+        console.error('Failed to send newsletter:', error);
       }
     }
-  });
+  };
+
+  const logTestNewsletter = () => {
+    console.log('Test newsletter:', getEmailContent());
+  }
+
+  function getEmailContent() {
+    let emailContentFromPlugin = editor?.getEmail(value, editorOptions?.template) || "";
+
+    // Regular expression to find button tags and capture their content
+    const buttonRegex = /<button(?:\s+[^>]*)?>(.*?)<\/button>/gs;
+
+    let emailContentWithStyledDivs = emailContentFromPlugin.replace(buttonRegex, (match, buttonContent) => {
+        // Define styles for the replacement div
+        const divStyles = `margin-top: .5rem; margin-left: 0px; display: inline-flex; cursor: pointer; justify-content: center; border-radius: 0.375rem; transition: all 0.2s; border-width: 0px; background-color: #EF4444; color: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); padding: 0.5rem 1rem 0.5rem 1rem; font-size: 0.875rem;`;
+
+        // Style the <a> tag inside the button content - simplified regex for debugging
+        const styledButtonContent = buttonContent.replace(
+            /<a(?:\s+[^>]*)?(href=["'][^"']*["'])(?:\s+[^>]*)?(style="([^"]*)")(.*?)>/g, // Regex to find <a> with href AND style - SIMPLIFIED
+            (match_a_style_href, hrefAttribute, styleAttributeCapture, existingAStyle, restOfATag) => {
+                return `<a ${hrefAttribute} style="color: #fff !important; text-decoration: none !important; ${existingAStyle}" ${restOfATag}>`;
+            }
+        ).replace(
+            /<a(?:\s+[^>]*)?(href=["'][^"']*["'])(?:\s+[^>]*?)>/g, // Regex to find <a> with href but NO style - SIMPLIFIED
+            (match_a_href_no_style, hrefAttribute) => {
+                return `<a ${hrefAttribute} style="color: #fff !important; text-decoration: none !important;">`;
+            }
+        );
+
+
+        return `<div class="js-button-div" style="${divStyles}">${styledButtonContent}</div>`;
+    });
+
+    return emailContentWithStyledDivs;
+}
 
   return (
     <div>
@@ -521,17 +212,70 @@ export default function EmailBuilderExample() {
             value={value}
             onChange={setValue}
           />
-          <div>
-            <input type="text" placeholder="Newsletter Subject" className="js-newsletter-subject" />
-            <button onClick={() =>sendNewsletter(editor.getEmail(value, editorOptions.template))}>
-              Send
-            </button>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="newsletter-subject" className="block mb-2 font-medium">
+                Newsletter Subject
+              </label>
+              <input 
+                id="newsletter-subject"
+                type="text" 
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder={`Recommended ${SUBJECT_LENGTH.recommended} characters`} 
+                className="js-newsletter-subject w-full p-2 border" 
+              />
+              <CharacterCount 
+                current={subject.length}
+                {...SUBJECT_LENGTH}
+              />
+            </div>
+            <div>
+              <label htmlFor="newsletter-preview" className="block mb-2 font-medium">
+                Preview Text
+              </label>
+              <input 
+                id="newsletter-preview"
+                type="text"
+                value={previewHeadline}
+                onChange={(e) => setPreviewHeadline(e.target.value)}
+                placeholder={`Recommended ${PREVIEW_LENGTH.recommended} characters`}
+                className="js-newsletter-preview w-full p-2 border"
+              />
+              <CharacterCount 
+                current={previewHeadline.length}
+                {...PREVIEW_LENGTH}
+              />
+            </div>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => handleSendNewsletter(false)}
+                className="px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                Send
+              </button>
+              <button 
+                onClick={() => handleSendNewsletter(true)}
+                className="px-4 py-2 bg-green-500 text-white rounded"
+              >
+                Send Test
+              </button>
+              <button 
+                onClick={() => logTestNewsletter()}
+                className="px-4 py-2 bg-green-500 text-white rounded"
+              >
+                Log Test
+              </button>
+              <button 
+                onClick={resetForm}
+                className="px-4 py-2 bg-gray-500 text-white rounded"
+              >
+                Reset
+              </button>
+            </div>
           </div>
         </>
       }
-
-
-
       ----
       {JSON.stringify(value)}
     </div>

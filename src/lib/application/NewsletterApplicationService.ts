@@ -22,13 +22,15 @@ export default class NewsletterApplicationService {
     await this.newsletterClient.deleteEmailFromNewsletter(unsubscribeKey);
   }
 
-  async sendNewsletter(subject: string, htmlTemplate: string, unsubscribeKeyPlaceholder: string) {
-    // let contacts = await this.newsletterClient.findAllContacts() 
+  async sendNewsletter(subject: string, previewHeadline: string, htmlTemplate: string, unsubscribeKeyPlaceholder: string, test: boolean) {
+    let contacts = []
 
-    const contacts = [
-      new Contact("akrillo89@gmail.com", "1234"),
-    ]
-
+    if (test) {
+      contacts = (await this.newsletterClient.findAllContacts()).filter((contact: Contact) => contact.email === "akrillo89@gmail.com")
+    } else {
+      contacts = await this.newsletterClient.findAllContacts() 
+    }
+    
     const recipients = contacts.map((contact: Contact) => ({
       email: contact.email,
       placeholders: {
@@ -36,7 +38,7 @@ export default class NewsletterApplicationService {
       }
     }));
 
-    const newsletter = new Newsletter(subject, htmlTemplate, recipients);
+    const newsletter = new Newsletter(subject, previewHeadline, htmlTemplate, recipients);
     await this.newsletterSender.sendEmails(newsletter);
   }
 }
