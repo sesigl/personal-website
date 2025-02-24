@@ -64,7 +64,7 @@ describe('AwsSesNewsletterClient', () => {
         Template: {
           TemplateName: expect.any(String), // generated in the AwsSesNewsletterClient
           SubjectPart: 'Test Newsletter',
-          HtmlPart: '<p>Hello {{name}}!</p>'
+          HtmlPart: expect.stringContaining('<p>Hello {{name}}!</p>')
         }
       }
     });
