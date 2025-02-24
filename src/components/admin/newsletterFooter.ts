@@ -46,7 +46,7 @@ async function newsletterFooter() {
                             <table width="100%" style="table-layout:fixed;width:100%">
                               <tr><td style="font-size:0px;line-height:0px;padding-bottom:5px;padding-top:5px">
                                 <a href="${SOCIAL_LINKS.x}" style="color:#b91c1c;text-decoration:none" target="_blank">
-                                  <img src="${xImageSrc}" width="32" border="0" style="display:block;width:100%">
+                                  <img src="${BASE_URL + xImageSrc}" width="32" border="0" style="display:block;width:100%">
                                 </a>
                               </td>
                             </table>
@@ -54,7 +54,7 @@ async function newsletterFooter() {
                             <table width="100%" style="table-layout:fixed;width:100%">
                               <tr><td style="font-size:0px;line-height:0px;padding-bottom:5px;padding-top:5px">
                                 <a href="${SOCIAL_LINKS.facebook}" style="color:#b91c1c;text-decoration:none" target="_blank">
-                                  <img src="${facebookImageSrc}" width="32" border="0" style="display:block;width:100%">
+                                  <img src="${BASE_URL + facebookImageSrc}" width="32" border="0" style="display:block;width:100%">
                                 </a>
                               </td>
                             </table>
@@ -62,7 +62,7 @@ async function newsletterFooter() {
                             <table width="100%" style="table-layout:fixed;width:100%">
                               <tr><td style="font-size:0px;line-height:0px;padding-bottom:5px;padding-top:5px">
                                 <a href="${SOCIAL_LINKS.linkedIn}" style="color:#b91c1c;text-decoration:none" target="_blank">
-                                  <img src="${linkedInImageSrc}" width="32" border="0" style="display:block;width:100%">
+                                  <img src="${BASE_URL + linkedInImageSrc}" width="32" border="0" style="display:block;width:100%">
                                 </a>
                               </td></tr>
                             </table>
