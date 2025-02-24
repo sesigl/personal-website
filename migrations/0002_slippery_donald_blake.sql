@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "unsubscribeKey" uuid DEFAULT gen_random_uuid() NOT NULL;

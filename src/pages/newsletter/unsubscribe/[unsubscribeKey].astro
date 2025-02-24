@@ -1,0 +1,42 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import NewsletterApplicationService from "../../../lib/application/NewsletterApplicationService";
+
+
+const unsubscribeKey = Astro.params.unsubscribeKey as string;
+
+const newsletterApplicationService = new NewsletterApplicationService();
+
+try {
+    await newsletterApplicationService.removeFromNewsletter(unsubscribeKey)
+} catch (error) {
+    console.error("Error while unsubscribing: \n", error);
+}
+
+
+export const prerender = false;
+---
+<Layout active="Unknown" title="Unsubscribe">
+    <div
+    class="grow md:flex space-y-8 md:space-y-0 md:space-x-8 pt-12 md:pt-16 pb-16 md:pb-20"
+>
+    <div class="grow">
+        <div class="max-w-[700px]">
+            <section>
+                <h1 class="h1 font-aspekta mb-5">Unsubscribe Successful 👋</h1><div
+                    class="text-slate-500 dark:text-slate-400 space-y-8"
+                >
+                    <div class="space-y-4">
+                        <p>You have successfully unsubscribed from my newsletter. Thank you for your support so far! If you have any questions or feedback, feel free to reach out at 
+                            <br /><br />
+                            feedback@sebastiansigl.com
+                            <br /><br />
+                            
+                            or connect with me on my social media pages listed below. I appreciate your time and hope to hear from you again.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+</Layout>

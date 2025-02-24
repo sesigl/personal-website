@@ -26,29 +26,16 @@ export default class PostgresUserRepository implements UserRepository {
       return null;
     }
 
-    const userCreationDate = user[0].creationDate;
-
-    const userSecret = this.createUserSecretFromDate(userCreationDate);
-
-    return new User(email, userSecret);
+    return new User(email, user[0].unsubscribeKey);
   }
 
   async createUser(email: string): Promise<User> {
     const now = new Date().toISOString().split("T")[0];
-    await this.db
+    const createdUser = await this.db
       .insert(usersTable)
       .values({ email, creationDate: now })
-      .execute();
+      .returning();
 
-    const userSecret = this.createUserSecretFromDate(now);
-
-    return new User(email, userSecret);
-  }
-
-  createUserSecretFromDate(userCreationDate: string) {
-    return crypto
-      .createHash("sha256")
-      .update(userCreationDate + this.secretKey)
-      .digest("hex");
+    return new User(email, createdUser[0].unsubscribeKey);
   }
 }

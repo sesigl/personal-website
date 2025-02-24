@@ -1,90 +1,113 @@
-import AWS from "aws-sdk";
+import {
+  CreateTemplateCommand,
+  DeleteTemplateCommand,
+  SESClient,
+  SendBulkTemplatedEmailCommand
+} from "@aws-sdk/client-ses";
+import type NewsletterSender from "../../domain/newsletter/NewsletterSender";
+import Newsletter from "../../domain/newsletter/Newsletter";
+import { AWS_ACCESS_KEY_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY } from "astro:env/server";
 
-interface AwsNewsletterClientConfig {
-  region: string;
-  accessKeyId: string;
-  secretAccessKey: string;
+interface SesConfig {
   sourceEmail: string;
+  maxBatchSize: number;
 }
 
-class AwsNewsletterClient {
-  private readonly ses: AWS.SES;
-  private readonly sourceEmail: string;
+interface NewsletterTemplate {
+  name: string;
+  subject: string;
+  htmlContent: string;
+  textContent?: string;
+}
 
-  constructor({
-    region,
-    accessKeyId,
-    secretAccessKey,
-    sourceEmail,
-  }: AwsNewsletterClientConfig) {
-    if (!region || !accessKeyId || !secretAccessKey || !sourceEmail) {
-      throw new Error(
-        "Missing required parameters: region, accessKeyId, secretAccessKey, or sourceEmail."
-      );
-    }
+interface NewsletterRecipient {
+  email: string;
+  templateData: Record<string, string>;
+}
 
-    AWS.config.update({
-      region,
-      accessKeyId,
-      secretAccessKey,
-    });
-
-    this.ses = new AWS.SES();
-    this.sourceEmail = sourceEmail;
+export default class AwsSesNewsletterClient implements NewsletterSender {
+  private readonly sesClient: SESClient;
+  private readonly config: SesConfig;
+  
+  constructor(config: SesConfig) {
+      this.config = {
+          ...config
+      };
+      this.sesClient = new SESClient({ 
+        region: AWS_REGION, 
+        credentials: {
+        accessKeyId: AWS_ACCESS_KEY_ID,
+        secretAccessKey: AWS_SECRET_ACCESS_KEY
+      } });
   }
 
-  /**
-   * Sends an HTML email using AWS SES.
-   * @param recipientEmail - The recipient's email address.
-   * @param subject - The subject of the email.
-   * @param htmlContent - The complete HTML as a string (with inlined CSS, etc.).
-   * @returns The SES Message ID on success.
-   */
-  async sendEmail(
-    recipientEmail: string,
-    senderName: string,
-    subject: string,
-    htmlContent: string
-  ): Promise<string> {
-    if (!recipientEmail || !subject || !htmlContent) {
-      throw new Error(
-        "Missing required parameters: recipientEmail, subject, or htmlContent."
-      );
-    }
-
-    const fullFromAddress = `${senderName} <${this.sourceEmail}>`;
-
-    const params = {
-      Source: fullFromAddress,
-      Destination: {
-        ToAddresses: [recipientEmail],
-      },
-      Message: {
-        Subject: {
-          Data: subject,
-        },
-        Body: {
-          Html: {
-            Data: htmlContent,
-          },
-          // Optional: Provide a simple text fallback
-          Text: {
-            Data:
-              "Hello! Your email client does not support HTML. " +
-              "Please view this email in a modern email client to see the full content.",
-          },
-        },
-      },
-    };
-
+  async sendEmails(newsletter: Newsletter): Promise<void> {
+    const templateName = `newsletter-${Date.now()}`;
+    let templateCreated = false;
     try {
-      const result = await this.ses.sendEmail(params).promise();
-      return result.MessageId;
-    } catch (error) {
-      console.error("Error sending email:", error);
-      throw new Error("Failed to send email.");
+      await this.createTemplate({
+        name: templateName,
+        subject: newsletter.getSubject(),
+        htmlContent: newsletter.getHtmlTemplate(),
+        textContent: newsletter.getHtmlTemplate().replace(/<[^>]*>/g, "")
+      });
+      templateCreated = true;
+
+      const recipients = newsletter.getRecipients();
+      await this.sendBulkEmails(templateName, recipients);
+    } finally {
+      if (templateCreated) {
+        await this.deleteTemplate(templateName);
+      }
     }
   }
-}
 
-export default AwsNewsletterClient;
+  private async createTemplate(template: NewsletterTemplate): Promise<void> {
+      const command = new CreateTemplateCommand({
+          Template: {
+              TemplateName: template.name,
+              SubjectPart: template.subject,
+              HtmlPart: template.htmlContent,
+              TextPart: template.textContent
+          }
+      });
+
+      try {
+          await this.sesClient.send(command);
+      } catch (error) {
+          throw new Error(`Failed to create email template: ${(error as Error).message}`);
+      }
+  }
+
+  private async deleteTemplate(templateName: string): Promise<void> {
+      try {
+          await this.sesClient.send(new DeleteTemplateCommand({
+              TemplateName: templateName
+          }));
+      } catch (error) {
+          console.warn(`Failed to delete template ${templateName}:`, error);
+      }
+  }
+
+  private async sendBulkEmails(templateName: string, recipients: NewsletterRecipient[]): Promise<void> {
+      for (let i = 0; i < recipients.length; i += this.config.maxBatchSize) {
+          const chunk = recipients.slice(i, i + this.config.maxBatchSize);
+          const command = new SendBulkTemplatedEmailCommand({
+              Source: this.config.sourceEmail,
+              Template: templateName,
+              DefaultTemplateData: JSON.stringify({}),
+              Destinations: chunk.map(recipient => ({
+                  Destination: { ToAddresses: [recipient.email] },
+                  ReplacementTemplateData: JSON.stringify(recipient.templateData)
+              }))
+          });
+
+          try {
+              await this.sesClient.send(command);
+          } catch (error) {
+            console.error('Failed to send email batch:', error);
+              throw new Error(`Failed to send email batch (${i / this.config.maxBatchSize + 1}): ${(error as Error).message}`);
+          }
+      }
+  }
+}

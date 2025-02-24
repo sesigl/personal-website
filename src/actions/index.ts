@@ -1,6 +1,7 @@
 import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 import { subscribeToNewsletter } from './subscribeToNewsletter';
+import { sendNewsletter } from './admin/sendNewsletter';
 
 export const server = {
     subscribeToNewsletter: defineAction({
@@ -20,5 +21,25 @@ export const server = {
                 }
             }
         }
-    })
+    }),
+
+    
+    admin: {
+        sendNewsletter: defineAction({
+            input: z.object({
+                subject: z.string(),
+                previewHeadline: z.string(),
+                html: z.string(),
+                unsubscribeKeyPlaceholder: z.string(),
+                test: z.boolean(),
+            }),
+            handler: async (input) => {
+                try {
+                    return await sendNewsletter(input.subject, input.previewHeadline, input.html, input.unsubscribeKeyPlaceholder, input.test);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        })
+    }
 }

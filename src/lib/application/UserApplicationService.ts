@@ -1,5 +1,5 @@
 import User from "../domain/user/User";
-import UserRepository from "../domain/user/UserRepository";
+import type UserRepository from "../domain/user/UserRepository";
 import PostgresUserRepository from "../infrastructure/db/repository/PostgresUserRepository";
 
 export default class UserApplicationService {

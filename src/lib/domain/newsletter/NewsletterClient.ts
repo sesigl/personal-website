@@ -1,4 +1,7 @@
+import type Contact from "./Contact";
+
 export default interface NewsletterClient {
-  deleteEmailFromNewsletter(email: string): Promise<void>;
-  createContact(email: string): Promise<void>;
+  findAllContacts(): Promise<Contact[]>;
+  deleteEmailFromNewsletter(unsubscribeKey: string): Promise<void>;
+  createContact(email: string): Promise<Contact>;
 }
