@@ -14,7 +14,9 @@ import node from '@astrojs/node';
 export default defineConfig({
     site: 'https://www.sebastiansigl.com',
     integrations: [mdx(), sitemap(), tailwind({ applyBaseStyles: false }), react()],
-    adapter: vercel(),
+    adapter: vercel({
+        imageService: true,
+    }),
     //adapter: node({
     //    mode: 'standalone',
     //}),
