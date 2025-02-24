@@ -4,9 +4,9 @@ import { ADMIN_PASSWORD } from "astro:env/server";
 export const onRequest = defineMiddleware((context, next) => {
 
     if (
-        !context.request.url.includes("/admin/") // pages
-        && !context.request.url.includes("/admin.") // api
+        !context.request.url.includes("/admin")
     ) {
+        console.log("Public route", context.request.url);
         return next();
     }
 
