@@ -74,6 +74,7 @@ export default class AwsSesNewsletterClient implements NewsletterSender {
 
       try {
           await this.sesClient.send(command);
+          console.log(`Created email template: ${template.name}`);
       } catch (error) {
           throw new Error(`Failed to create email template: ${(error as Error).message}`);
       }
@@ -84,12 +85,14 @@ export default class AwsSesNewsletterClient implements NewsletterSender {
           await this.sesClient.send(new DeleteTemplateCommand({
               TemplateName: templateName
           }));
+          console.log(`Deleted template ${templateName}`);
       } catch (error) {
           console.warn(`Failed to delete template ${templateName}:`, error);
       }
   }
 
   private async sendBulkEmails(templateName: string, recipients: NewsletterRecipient[]): Promise<void> {
+      console.log(`Sending email to ${recipients.length} recipients...`);
       for (let i = 0; i < recipients.length; i += this.config.maxBatchSize) {
           const chunk = recipients.slice(i, i + this.config.maxBatchSize);
           const command = new SendBulkTemplatedEmailCommand({
@@ -104,6 +107,7 @@ export default class AwsSesNewsletterClient implements NewsletterSender {
 
           try {
               await this.sesClient.send(command);
+              console.log(`Sent email batch (${i / this.config.maxBatchSize + 1})`);
           } catch (error) {
             console.error('Failed to send email batch:', error);
               throw new Error(`Failed to send email batch (${i / this.config.maxBatchSize + 1}): ${(error as Error).message}`);
