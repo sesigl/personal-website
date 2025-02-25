@@ -41,6 +41,6 @@ export default class NewsletterApplicationService {
     console.log("Sending newsletter to", recipients.length, "recipients");
 
     const newsletter = new Newsletter(subject, previewHeadline, htmlTemplate, recipients);
-    await this.newsletterSender.sendEmails(newsletter);
+    return await this.newsletterSender.sendEmails(newsletter);
   }
 }

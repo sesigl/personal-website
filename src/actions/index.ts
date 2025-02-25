@@ -35,6 +35,7 @@ export const server = {
             }),
             handler: async (input) => {
                 try {
+                    console.log('Sending newsletter');
                     return await sendNewsletter(input.subject, input.previewHeadline, input.html, input.unsubscribeKeyPlaceholder, input.test);
                 } catch (error) {
                     console.error(error);
