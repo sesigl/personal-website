@@ -89,7 +89,7 @@ const newsletterTemplateDefault = {
           "id": "f4f70b49-dc45-42e6-a921-7921e2dd86f4",
           "type": "image",
           "props": {
-            "src": "https://www.sebastiansigl.com/images/posts/empowered-execution-in-large-organizations/empowered-execution-in-large-organizations.webp",
+            "src": "https://www.sebastiansigl.com/src/images/blog/posts/empowered-execution-in-large-organizations/empowered-execution-in-large-organizations.webp",
             "alt": null,
             "srcSet": null,
             "bgColor": null,

@@ -14,6 +14,8 @@ const blog = defineCollection({
 		heroImage: z.string().optional(),
 		slug: z.string(),
 		slugAlternative: z.optional(z.string()),
+		readingTimeInMinutes: z.optional(z.number()),
+		spotifyLink: z.optional(z.string()),
 		category: z.enum(['tech', 'leadership']),
 	}),
 });

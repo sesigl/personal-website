@@ -1,7 +1,7 @@
 ---
 title: "Event Sourcing Simplified: Mastering Real-World Event Processing in Your Application"
 pubDate: "2024-02-01"
-heroImage: "/images/posts/event-sourcing-simplified.png"
+heroImage: "/src/images/blog/posts/event-sourcing-simplified.png"
 description: "A guide to processing real-world events in applications, with practical steps, strategies, and real-world examples. Elevate your system's resilience and adaptability."
 category: "tech"
 slug: "event-sourcing-simplified"
@@ -11,7 +11,7 @@ In the digital world, data is the cornerstone of systems. Mastering the handling
 events in applications can significantly elevate both business operations and developer
 capabilities.
 
-![Event Sourcing Banner](/images/posts/event-sourcing-simplified.png)
+![Event Sourcing Banner](/src/images/blog/posts/event-sourcing-simplified.png)
 
 
 Enter Event Sourcing - an architectural pattern that revolutionizes data management and brings a
@@ -71,7 +71,7 @@ Event Sourcing is based on a few key pillars:
 In Event Sourcing, the architecture revolves around three essential elements: Commands, Entities,
 and Events.
 
-![Command Entity Event Relationship](/images/posts/event-sourcing/command_entity_event_infographic.png)
+![Command Entity Event Relationship](/src/images/blog/posts/event-sourcing/command_entity_event_infographic.png)
 
 Each plays a vital role in the data lifecycle, so let's examine them individually. While going
 through the basic components, we will look at examples for each component, so you see how everything
@@ -237,7 +237,7 @@ In this section, we'll explore projections in Event Sourcing and how they enable
 optimized read operations. Projections are a crucial component in event-sourced systems, offering
 flexible and efficient data presentation for various needs.
 
-![Event Sourcing Components](/images/posts/event-sourcing/event-sourcing-components-infographic.png)
+![Event Sourcing Components](/src/images/blog/posts/event-sourcing/event-sourcing-components-infographic.png)
 
 The image above illustrates the relationship between the various elements of Event Sourcing:
 commands, entities, events, storage, queries, and projections.

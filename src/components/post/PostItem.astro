@@ -8,6 +8,10 @@ interface Props extends Post {
 }
 
 const props = Astro.props as Props;
+
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/images/**/*.{jpeg,jpg,png,gif,webp}')
+const heroImagePath = props.data.heroImage
+if (!heroImagePath || !images[heroImagePath]) throw new Error(`"${heroImagePath}" does not exist in glob: "src/images/**/*.{jpeg,jpg,png,gif}"`);
 ---
 
 <article class="py-5 border-b border-slate-100 dark:border-slate-800">
