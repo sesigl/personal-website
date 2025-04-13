@@ -18,7 +18,7 @@ if (!heroImagePath || !images[heroImagePath]) throw new Error(`"${heroImagePath}
     <div class="flex items-start">
         <Image
             class="rounded w-16 h-16 sm:w-[88px] sm:h-[88px] object-cover mr-6"
-            src={props.data.heroImage!!}
+            src={heroImagePath!!}
             width={88}
             height={88}
             alt={props.data.title}
