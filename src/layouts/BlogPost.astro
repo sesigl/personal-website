@@ -61,7 +61,13 @@ const { Content } = await render({
 							{
 								data.spotifyLink && 
 								<a href={data.spotifyLink} target="_blank">
-									<Image src={SpotifyImageSvg.src} width={25} height={25} alt={"Spotify Podcast"} class="rounded-lg inline-flex m-1" />
+										<Image 
+											src={SpotifyImageSvg.src} 
+											width={25} 
+											height={25}
+											alt={"Spotify Podcast"} 
+											class="inline-flex m-1 !bg-transparent border-none" 
+										/>
 								</a>
 							}
 							

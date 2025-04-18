@@ -17,9 +17,9 @@ if (!heroImagePath || !images[heroImagePath]) throw new Error(`"${heroImagePath}
 <article class="py-5 border-b border-slate-100 dark:border-slate-800">
     <div class="flex items-start">
         <Image
-            class="rounded w-16 h-16 sm:w-[88px] sm:h-[88px] object-cover mr-6"
+            class="rounded w-16 h-16 sm:w-[120px] sm:min-w-[120px] sm:h-[88px] object-cover mr-6"
             src={images[heroImagePath]()}
-            width={88}
+            width={120}
             height={88}
             alt={props.data.title}
         />
