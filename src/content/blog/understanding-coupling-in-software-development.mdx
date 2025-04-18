@@ -1,13 +1,13 @@
 ---
 title: "Understanding Coupling in Software Development"
 pubDate: "2024-05-24"
-heroImage: "/images/posts/understand-coupling/2-devs-in-front-of-a-whiteboard.png"
+heroImage: "/src/images/blog/posts/understand-coupling/2-devs-in-front-of-a-whiteboard.png"
 description: "Explores the concept of coupling in software development, its various forms, practical implications, and strategies to balance coupling and decoupling for better system architecture and maintainability."
 category: "tech"
 slug: "understanding-coupling-in-software-development"
 ---
 
-![Post](/images/posts/understand-coupling/2-devs-in-front-of-a-whiteboard.png)
+![Post](/src/images/blog/posts/understand-coupling/2-devs-in-front-of-a-whiteboard.png)
 
 In software development, there's a popular saying that "complexity kills."
 
@@ -169,7 +169,7 @@ operations.
 A significant risk with tight coupling is the cascade effect, where a change in one module necessitates further changes
 in other related modules.
 
-![Cascade effect of coupling](/images/posts/understand-coupling/cascading-effects.webp)
+![Cascade effect of coupling](/src/images/blog/posts/understand-coupling/cascading-effects.webp)
 
 Consider a shared utility library used across various services. If a core utility function
 like formatDate is modified (e.g., changing the date format), every service using this function must be updated
@@ -202,7 +202,7 @@ Tight coupling can provide rapid development by directly connecting components o
 However, this comes at the cost of increased maintenance, as any modification can require changes throughout the
 entire system. Hence, reducing coupling between components is critical for maintaining flexibility and ease of maintenance.
 
-![Cost and effects of coupling](/images/posts/understand-coupling/effort-coupling.png)
+![Cost and effects of coupling](/src/images/blog/posts/understand-coupling/effort-coupling.png)
 
 Initially, the effort required to achieve significant coupling reduction is relatively low, generating substantial value. This phase
 often involves straightforward refactoring and restructuring, which can significantly improve code quality and system

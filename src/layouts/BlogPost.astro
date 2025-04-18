@@ -8,6 +8,8 @@ import Layout from "./Layout.astro";
 import { BASE_URL } from "../consts";
 import WidgetNewsletter from "../components/WidgetNewsletter.astro";
 import WidgetPosts from "../components/WidgetPosts.astro";
+import SpotifyImageSvg from "../../src/images/social/spotify.svg";
+import { Image } from "astro:assets";
 
 type Props = CollectionEntry<"blog">;
 
@@ -47,7 +49,7 @@ const { Content } = await render({
 								<span class="text-slate-400 dark:text-slate-600"
 									>·</span
 								>{" "}
-								10 Min read
+								{data.readingTimeInMinutes ?? 10} Min read
 							</div>
 							<ShareButtons
 								url={`${BASE_URL}/posts/${data.slug}`}
@@ -55,7 +57,21 @@ const { Content } = await render({
 								summary={data.description}
 							/>
 						</div>
-						<h1 class="h1 font-aspekta mb-4">{data.title}</h1>
+						<h1 class="h1 font-aspekta mb-4">{data.title}
+							{
+								data.spotifyLink && 
+								<a href={data.spotifyLink} target="_blank">
+										<Image 
+											src={SpotifyImageSvg.src} 
+											width={25} 
+											height={25}
+											alt={"Spotify Podcast"} 
+											class="inline-flex m-1 !bg-transparent border-none" 
+										/>
+								</a>
+							}
+							
+						</h1>
 					</header>
 					<div
 						class="prose text-slate-500 dark:text-slate-400 max-w-none prose-p:leading-normal prose-headings:text-slate-800 dark:prose-headings:text-slate-200 prose-a:font-medium prose-a:text-sky-500 prose-a:no-underline hover:prose-a:underline prose-strong:font-medium prose-strong:text-slate-800 dark:prose-strong:text-slate-100 prose-pre:bg-slate-800"
