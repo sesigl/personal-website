@@ -11,13 +11,17 @@ interface Props {
 	canonicalLink?: string;
 }
 
-const { title, description, image = "/images/about_v3.png", canonicalLink } = Astro.props;
+const { title, description, image = "/src/images/about_v3.png", canonicalLink } = Astro.props;
 
 const canonicalURL = canonicalLink ? canonicalLink : new URL(Astro.url.pathname, Astro.site);
 
-const socialImage = (await getImage({src: image, width: 1024})).src
-const socialImageFullPath = new URL(socialImage, Astro.url);
 
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/images/**/*.{jpeg,jpg,png,gif,webp}')
+const heroImagePath = image
+if (!heroImagePath || !images[heroImagePath]) throw new Error(`"${heroImagePath}" does not exist in glob: "src/images/**/*.{jpeg,jpg,png,gif}"`);
+const heroImagePathResolved = (images[heroImagePath]())
+
+const socialImageFullPath = (await getImage({src: heroImagePathResolved, width: 1024})).src
 ---
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
