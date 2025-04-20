@@ -15,7 +15,8 @@ const { title, description, image = "/images/about_v3.png", canonicalLink } = As
 
 const canonicalURL = canonicalLink ? canonicalLink : new URL(Astro.url.pathname, Astro.site);
 
-let socialImage = new URL(image, Astro.url);
+const socialImage = (await getImage({src: image, width: 1024})).src
+const socialImageFullPath = new URL(socialImage, Astro.url);
 
 ---
 <link rel="sitemap" href="/sitemap-index.xml" />
@@ -48,11 +49,11 @@ let socialImage = new URL(image, Astro.url);
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={socialImage} />
+<meta property="og:image" content={socialImageFullPath} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={socialImage} />
+<meta property="twitter:image" content={socialImageFullPath} />
