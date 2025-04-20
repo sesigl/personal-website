@@ -16,9 +16,6 @@ const { title, description, image = "/images/about_v3.png", canonicalLink } = As
 const canonicalURL = canonicalLink ? canonicalLink : new URL(Astro.url.pathname, Astro.site);
 
 let socialImage = new URL(image, Astro.url);
-if (image) {
-    socialImage = new URL((await getImage({src: image, width: 800})).src, Astro.url);
-}
 
 ---
 <link rel="sitemap" href="/sitemap-index.xml" />
