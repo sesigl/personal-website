@@ -21,7 +21,9 @@ const heroImagePath = image
 if (!heroImagePath || !images[heroImagePath]) throw new Error(`"${heroImagePath}" does not exist in glob: "src/images/**/*.{jpeg,jpg,png,gif}"`);
 const heroImagePathResolved = (images[heroImagePath]())
 
-const socialImageFullPath = (await getImage({src: heroImagePathResolved, width: 1024})).src
+const socialImage = (await getImage({src: heroImagePathResolved, width: 1024})).src
+const socialImageFullPath = new URL(socialImage, Astro.url);
+
 ---
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
