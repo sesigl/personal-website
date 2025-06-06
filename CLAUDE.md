@@ -10,8 +10,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run preview` - Preview production build
 
 ### Testing
-- `npm test` - Run unit tests with Vitest
-- `npm run test:ci` - Run tests in CI mode
+- `npm test` - Run unit tests with Vitest in watch mode (interactive)
+- `npm run test:ci` - Run tests in CI mode (non-interactive, single run)
+- **Important**: Use `npm run test:ci` for verification steps in development to avoid watch mode
 - Tests use Testcontainers for integration testing with PostgreSQL
 - Tests run sequentially (threads: false) to avoid testcontainer conflicts
 - Test setup includes database initialization via `src/test/setup/setupTestDatabase.ts`

@@ -1,0 +1,1 @@
+- refactor: follow clean code principles, replace comments that can be replaced by private methods, and remove unnecessary comments. If exracting a class or something else is needed, do it.
