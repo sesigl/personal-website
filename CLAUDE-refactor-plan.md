@@ -1,2 +1,0 @@
-- refactor: PostgresNewsletterClient is rather a repository about Contacts. rename it to PostgresContactsRepository and update other ependencies and code usages as well to ensure there is no confusion.
-- refactor: the newsletter application service has far too much logic. Following DDD principles, extract the logic into a domain class or service and ensure that the application service is thin and only orchestrates the calls to the domain service.

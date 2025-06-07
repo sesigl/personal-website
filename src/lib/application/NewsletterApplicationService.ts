@@ -1,4 +1,4 @@
-import PostgresNewsletterClient from "../infrastructure/newsletter/PostgresNewsletterClient";
+import PostgresContactsRepository from "../infrastructure/newsletter/PostgresContactsRepository";
 import type NewsletterClient from "../domain/newsletter/NewsletterClient";
 import Contact from "../domain/newsletter/Contact";
 import Newsletter from "../domain/newsletter/Newsletter";
@@ -19,7 +19,7 @@ export interface NewsletterSendResult {
 
 export default class NewsletterApplicationService {
   constructor(
-    private readonly newsletterClient: NewsletterClient = new PostgresNewsletterClient(),
+    private readonly newsletterClient: NewsletterClient = new PostgresContactsRepository(),
     private readonly newsletterSender: NewsletterSender = new AwsSesNewsletterClient({
       sourceEmail: "newsletter@sebastiansigl.com",
       maxBatchSize: 50

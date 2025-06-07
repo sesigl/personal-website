@@ -2,7 +2,7 @@ import { beforeEach, describe, it, expect, vi } from 'vitest';
 import NewsletterApplicationService from './NewsletterApplicationService';
 import NewsletterFakeSender from '../../test/fake/newsletterClient/NewsletterFakeSender';
 import PostgresNewsletterRepository from '../infrastructure/newsletter/PostgresNewsletterRepository';
-import PostgresNewsletterClient from '../infrastructure/newsletter/PostgresNewsletterClient';
+import PostgresContactsRepository from '../infrastructure/newsletter/PostgresContactsRepository';
 import { setupTestDatabase } from '../../test/testDatabase';
 import { emailDeliveriesTable, newsletterCampaignsTable, usersTable } from '../../test/setup/testTables';
 import type { Database } from '../infrastructure/db';
@@ -11,7 +11,7 @@ describe('NewsletterApplicationService', () => {
   let service: NewsletterApplicationService;
   let fakeSender: NewsletterFakeSender;
   let newsletterRepository: PostgresNewsletterRepository;
-  let newsletterClient: PostgresNewsletterClient;
+  let newsletterClient: PostgresContactsRepository;
   let db: Database;
 
   const { getDb } = setupTestDatabase(emailDeliveriesTable, newsletterCampaignsTable, usersTable);
@@ -22,7 +22,7 @@ describe('NewsletterApplicationService', () => {
     // Setup test dependencies
     fakeSender = new NewsletterFakeSender();
     newsletterRepository = new PostgresNewsletterRepository(db);
-    newsletterClient = new PostgresNewsletterClient(db);
+    newsletterClient = new PostgresContactsRepository(db);
     
     // Create service with test dependencies
     service = new NewsletterApplicationService(
