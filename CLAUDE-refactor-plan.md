@@ -1,1 +1,3 @@
 - refactor: follow clean code principles, replace comments that can be replaced by private methods, and remove unnecessary comments. If exracting a class or something else is needed, do it.
+- reafctor: cleanup tests, ensure there is a single way to get a database test instance that is cleaned up after each test, and ensure that the tests are readable and maintainable. Reduce duplicated code.
+- improve: sometimes tests that use docker container do not succeed, or get stuck. Think deeply, research best practices, and fix current issues. run tests 10 times to ensure they are stable.

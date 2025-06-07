@@ -29,6 +29,13 @@
       "when": 1739724662796,
       "tag": "0003_small_supernaut",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1749232490281,
+      "tag": "0004_perfect_mercury",
+      "breakpoints": true
     }
   ]
 }

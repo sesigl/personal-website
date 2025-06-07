@@ -1,62 +1,42 @@
-import { expect, it, describe, beforeEach, vi } from "vitest";
+import { expect, it, describe, beforeEach, afterEach, beforeAll, afterAll } from "vitest";
 import Newsletter from "./Newsletter";
 import PostgresNewsletterRepository from "../../infrastructure/newsletter/PostgresNewsletterRepository";
-
-// Mock the database dependency
-const mockDb = {
-  select: vi.fn(),
-  insert: vi.fn(),
-  update: vi.fn(),
-  delete: vi.fn(),
-  $client: { end: vi.fn() }
-} as any;
+import TestDatabase from "../../../test/database/TestDatabase";
+import { setupTestDatabase } from "../../../test/setup/setupTestDatabase";
+import type { Database } from "../../infrastructure/db";
+import { emailDeliveriesTable, newsletterCampaignsTable } from "../../infrastructure/db/schema";
 
 describe("NewsletterRepository", () => {
   let repository: PostgresNewsletterRepository;
+  let db: Database;
 
-  beforeEach(() => {
-    repository = new PostgresNewsletterRepository(mockDb);
+  beforeAll(() => {
+    setupTestDatabase();
   });
 
-  describe("repository interface", () => {
-    it("should implement repository interface correctly", () => {
-      expect(repository.findByTitle).toBeDefined();
-      expect(repository.save).toBeDefined();
-      expect(repository.update).toBeDefined();
-    });
+  beforeEach(async () => {
+    const testDatabase = TestDatabase.getInstance();
+    db = await testDatabase.getDatabase();
+    repository = new PostgresNewsletterRepository(db);
+  });
 
+  afterEach(async () => {
+    // Clean up test data using Drizzle ORM
+    await db.delete(emailDeliveriesTable);
+    await db.delete(newsletterCampaignsTable);
+  });
+
+  afterAll(async () => {
+    const testDatabase = TestDatabase.getInstance();
+    await testDatabase.teardown();
+  });
+
+  describe("repository functionality", () => {
     it("should return null for non-existent campaign", async () => {
       const result = await repository.findByTitle("non-existent");
       expect(result).toBeNull();
     });
 
-    it("should throw error for save until migration is complete", async () => {
-      const newsletter = Newsletter.createCampaign(
-        "test-campaign",
-        "Test Subject",
-        "Preview",
-        "<p>Content</p>",
-        [{ email: "test@example.com", placeholders: {} }]
-      );
-
-      await expect(repository.save(newsletter)).rejects.toThrow("Database tables not yet created");
-    });
-
-    it("should throw error for update until migration is complete", async () => {
-      const newsletter = Newsletter.createCampaign(
-        "test-campaign",
-        "Test Subject", 
-        "Preview",
-        "<p>Content</p>",
-        [{ email: "test@example.com", placeholders: {} }]
-      );
-
-      await expect(repository.update(newsletter)).rejects.toThrow("Database tables not yet created");
-    });
-  });
-
-  // These tests will be enabled after Phase 1.3 (Database Migration)
-  describe.skip("full repository functionality (after migration)", () => {
     it("should save and retrieve newsletter campaign by title", async () => {
       const newsletter = Newsletter.createCampaign(
         "test-campaign-2024",
@@ -128,6 +108,64 @@ describe("NewsletterRepository", () => {
       const nextBatch = retrieved!.getNextBatch(10);
       expect(nextBatch).toHaveLength(1);
       expect(nextBatch[0].email).toBe("user2@example.com");
+    });
+
+    it("should handle duplicate campaign titles", async () => {
+      const newsletter1 = Newsletter.createCampaign(
+        "duplicate-test",
+        "First Campaign",
+        "Preview",
+        "<p>Content 1</p>",
+        [{ email: "user1@example.com", placeholders: {} }]
+      );
+
+      await repository.save(newsletter1);
+
+      const newsletter2 = Newsletter.createCampaign(
+        "duplicate-test",
+        "Second Campaign",
+        "Preview",
+        "<p>Content 2</p>",
+        [{ email: "user2@example.com", placeholders: {} }]
+      );
+
+      // Should throw error due to unique constraint
+      await expect(repository.save(newsletter2)).rejects.toThrow();
+    });
+
+    it("should preserve email delivery states when retrieving", async () => {
+      const newsletter = Newsletter.createCampaign(
+        "delivery-state-test",
+        "Delivery State Test",
+        "Preview",
+        "<p>Hello {{name}}</p>",
+        [
+          { email: "user1@example.com", placeholders: { name: "User1" } },
+          { email: "user2@example.com", placeholders: { name: "User2" } },
+          { email: "user3@example.com", placeholders: { name: "User3" } }
+        ]
+      );
+
+      await repository.save(newsletter);
+
+      // Process partial batch
+      newsletter.processBatch([
+        { email: "user1@example.com", success: true },
+        { email: "user2@example.com", success: false, error: "SMTP error" }
+      ]);
+
+      await repository.update(newsletter);
+
+      // Retrieve and verify state preservation
+      const retrieved = await repository.findByTitle("delivery-state-test");
+      expect(retrieved!.getStatus()).toBe("failed");
+      expect(retrieved!.getProgressPercentage()).toBe(33); // 1 out of 3 successful
+
+      const deliveries = retrieved!.getEmailDeliveries();
+      expect(deliveries.find(d => d.recipientEmail === "user1@example.com")?.status).toBe("sent");
+      expect(deliveries.find(d => d.recipientEmail === "user2@example.com")?.status).toBe("failed");
+      expect(deliveries.find(d => d.recipientEmail === "user2@example.com")?.errorMessage).toBe("SMTP error");
+      expect(deliveries.find(d => d.recipientEmail === "user3@example.com")?.status).toBe("pending");
     });
   });
 });

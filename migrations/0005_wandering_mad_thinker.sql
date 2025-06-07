@@ -1,0 +1,1 @@
+ALTER TABLE "email_deliveries" DROP COLUMN "unsubscribe_key";

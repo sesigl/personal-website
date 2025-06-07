@@ -44,8 +44,15 @@ export default class Newsletter {
   }
 
   static createCampaign(title: string, subject: string, previewText: string, htmlTemplate: string, recipients: RecipientData[]): Newsletter {
+    // Domain validation - Newsletter aggregate enforces its own business rules
     if (!title || title.trim() === '') {
       throw new Error('Campaign title cannot be empty');
+    }
+    if (!subject || subject.trim() === '') {
+      throw new Error('Campaign subject cannot be empty');
+    }
+    if (!htmlTemplate || htmlTemplate.trim() === '') {
+      throw new Error('Campaign HTML template cannot be empty');
     }
     return new Newsletter(subject, previewText, htmlTemplate, recipients, title);
   }
