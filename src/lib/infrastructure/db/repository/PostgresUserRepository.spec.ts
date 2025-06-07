@@ -1,20 +1,19 @@
 import { randomUUID } from "crypto";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { beforeEach, describe, expect, it } from "vitest";
 import { assertNotNull } from "../../../../test/assert/anyAssertions";
-import TestDatabase from "../../../../test/database/TestDatabase";
-import { setupTestDatabase } from "../../../../test/setup/setupTestDatabase";
-import { usersTable } from "../schema";
+import { setupTestDatabase } from "../../../../test/testDatabase";
+import { usersTable } from "../../../../test/setup/testTables";
+import type { Database } from "../index";
 import PostgresUserRepository from "./PostgresUserRepository";
 
 describe("PostgresUserRepository", () => {
   let userRepository: PostgresUserRepository;
-  let db: NodePgDatabase;
+  let db: Database;
 
-  setupTestDatabase();
+  const { getDb } = setupTestDatabase(usersTable);
 
-  beforeEach(async () => {
-    db = await TestDatabase.getInstance().getDatabase();
+  beforeEach(() => {
+    db = getDb();
     userRepository = new PostgresUserRepository(db, "test-secret");
   });
 

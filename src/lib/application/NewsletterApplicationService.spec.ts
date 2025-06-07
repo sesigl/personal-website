@@ -1,11 +1,10 @@
-import { beforeEach, beforeAll, afterEach, describe, it, expect, vi } from 'vitest';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
 import NewsletterApplicationService from './NewsletterApplicationService';
 import NewsletterFakeSender from '../../test/fake/newsletterClient/NewsletterFakeSender';
 import PostgresNewsletterRepository from '../infrastructure/newsletter/PostgresNewsletterRepository';
 import PostgresNewsletterClient from '../infrastructure/newsletter/PostgresNewsletterClient';
-import Contact from '../domain/newsletter/Contact';
-import { setupTestDatabase } from '../../test/setup/setupTestDatabase';
-import TestDatabase from '../../test/database/TestDatabase';
+import { setupTestDatabase } from '../../test/testDatabase';
+import { emailDeliveriesTable, newsletterCampaignsTable, usersTable } from '../../test/setup/testTables';
 import type { Database } from '../infrastructure/db';
 
 describe('NewsletterApplicationService', () => {
@@ -15,13 +14,10 @@ describe('NewsletterApplicationService', () => {
   let newsletterClient: PostgresNewsletterClient;
   let db: Database;
 
-  beforeAll(() => {
-    setupTestDatabase();
-  });
+  const { getDb } = setupTestDatabase(emailDeliveriesTable, newsletterCampaignsTable, usersTable);
 
   beforeEach(async () => {
-    const testDatabase = TestDatabase.getInstance();
-    db = await testDatabase.getDatabase();
+    db = getDb();
     
     // Setup test dependencies
     fakeSender = new NewsletterFakeSender();
@@ -39,20 +35,6 @@ describe('NewsletterApplicationService', () => {
     await newsletterClient.createContact('user1@example.com');
     await newsletterClient.createContact('user2@example.com');
     await newsletterClient.createContact('akrillo89@gmail.com'); // Test user
-  });
-
-  afterEach(async () => {
-    // Clean up test data
-    try {
-      if (db) {
-        const { emailDeliveriesTable, newsletterCampaignsTable, usersTable } = await import('../infrastructure/db/schema');
-        await db.delete(emailDeliveriesTable);
-        await db.delete(newsletterCampaignsTable);
-        await db.delete(usersTable);
-      }
-    } catch (error) {
-      console.warn('Cleanup warning:', error);
-    }
   });
 
   describe('Transparent Resume Logic', () => {
@@ -166,7 +148,6 @@ describe('NewsletterApplicationService', () => {
 
     it('should handle campaign with no recipients gracefully', async () => {
       // Clear all contacts
-      const { usersTable } = await import('../infrastructure/db/schema');
       await db.delete(usersTable);
 
       const result = await service.sendNewsletter(

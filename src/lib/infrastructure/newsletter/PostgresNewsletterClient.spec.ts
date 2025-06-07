@@ -1,17 +1,17 @@
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { beforeEach, describe, expect, it } from "vitest";
-import TestDatabase from "../../../test/database/TestDatabase";
-import { setupTestDatabase } from "../../../test/setup/setupTestDatabase";
+import { setupTestDatabase } from "../../../test/testDatabase";
+import { usersTable } from "../../../test/setup/testTables";
+import type { Database } from "../db";
 import PostgresNewsletterClient from "./PostgresNewsletterClient";
 
 describe("PostgresNewsletterClient", () => {
     let postgresNewsletterClient: PostgresNewsletterClient;
-    let db: NodePgDatabase;
+    let db: Database;
 
-    setupTestDatabase();
+    const { getDb } = setupTestDatabase(usersTable);
 
-    beforeEach(async () => {
-      db = await TestDatabase.getInstance().getDatabase();
+    beforeEach(() => {
+      db = getDb();
       postgresNewsletterClient = new PostgresNewsletterClient(db);
     });
 

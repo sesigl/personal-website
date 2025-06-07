@@ -1,46 +1,19 @@
-import { expect, it, describe, beforeEach, afterEach, beforeAll, afterAll } from "vitest";
+import { expect, it, describe, beforeEach } from "vitest";
 import Newsletter from "./Newsletter";
 import PostgresNewsletterRepository from "../../infrastructure/newsletter/PostgresNewsletterRepository";
-import TestDatabase from "../../../test/database/TestDatabase";
-import { setupTestDatabase } from "../../../test/setup/setupTestDatabase";
+import { setupTestDatabase } from "../../../test/testDatabase";
+import { emailDeliveriesTable, newsletterCampaignsTable } from "../../../test/setup/testTables";
 import type { Database } from "../../infrastructure/db";
-import { emailDeliveriesTable, newsletterCampaignsTable } from "../../infrastructure/db/schema";
 
 describe("NewsletterRepository", () => {
   let repository: PostgresNewsletterRepository;
   let db: Database;
 
-  beforeAll(() => {
-    setupTestDatabase();
-  });
+  const { getDb } = setupTestDatabase(emailDeliveriesTable, newsletterCampaignsTable);
 
-  beforeEach(async () => {
-    const testDatabase = TestDatabase.getInstance();
-    db = await testDatabase.getDatabase();
+  beforeEach(() => {
+    db = getDb();
     repository = new PostgresNewsletterRepository(db);
-  });
-
-  afterEach(async () => {
-    // Clean up test data using simple delete queries with error handling
-    try {
-      if (db) {
-        await db.delete(emailDeliveriesTable);
-        await db.delete(newsletterCampaignsTable);
-      }
-    } catch (error) {
-      console.warn('Cleanup warning:', error);
-      // Continue - don't fail test due to cleanup issues
-    }
-  });
-
-  afterAll(async () => {
-    try {
-      const testDatabase = TestDatabase.getInstance();
-      await testDatabase.teardown();
-    } catch (error) {
-      console.warn('Teardown warning:', error);
-      // Don't fail - this is cleanup
-    }
   });
 
   describe("repository functionality", () => {
