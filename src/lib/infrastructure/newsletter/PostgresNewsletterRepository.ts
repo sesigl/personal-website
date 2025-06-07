@@ -1,7 +1,8 @@
 import type NewsletterRepository from "../../domain/newsletter/NewsletterRepository";
-import Newsletter from "../../domain/newsletter/Newsletter";
+import Newsletter, { UNSUBSCRIBE_KEY_PLACEHOLDER } from "../../domain/newsletter/Newsletter";
+import Contact from "../../domain/newsletter/Contact";
 import { type Database, getDb } from "../db";
-import { newsletterCampaignsTable, emailDeliveriesTable } from "../db/schema";
+import { newsletterCampaignsTable, emailDeliveriesTable, usersTable } from "../db/schema";
 import { eq } from "drizzle-orm";
 
 export default class PostgresNewsletterRepository implements NewsletterRepository {
@@ -18,25 +19,31 @@ export default class PostgresNewsletterRepository implements NewsletterRepositor
 
     const campaign = campaigns[0];
 
-    // Get email deliveries for this campaign
-    const deliveries = await this.db.select()
+    // Get email deliveries for this campaign and join with users to get unsubscribe keys
+    const deliveries = await this.db.select({
+      recipientEmail: emailDeliveriesTable.recipientEmail,
+      status: emailDeliveriesTable.status,
+      sentAt: emailDeliveriesTable.sentAt,
+      errorMessage: emailDeliveriesTable.errorMessage,
+      unsubscribeKey: usersTable.unsubscribeKey
+    })
       .from(emailDeliveriesTable)
+      .leftJoin(usersTable, eq(emailDeliveriesTable.recipientEmail, usersTable.email))
       .where(eq(emailDeliveriesTable.campaignId, campaign.id));
 
-    // Reconstruct recipients data from deliveries
-    // Since we don't store placeholder data, we need to extract placeholders from the template
-    const recipients = deliveries.map(delivery => ({
-      email: delivery.recipientEmail,
-      placeholders: this.extractPlaceholdersForEmail(campaign.htmlContent, delivery.recipientEmail)
-    }));
+    // Reconstruct Contact objects from deliveries
+    const contacts = deliveries.map(delivery => 
+      new Contact(delivery.recipientEmail, delivery.unsubscribeKey || 'missing-key')
+    );
 
-    // Create newsletter instance using static constructor (validates title internally)
-    const newsletter = Newsletter.createCampaign(
+    // Create newsletter instance using the Contact-based factory
+    const newsletter = Newsletter.create(
       campaign.title,
       campaign.subject,
       campaign.previewText || "",
       campaign.htmlContent,
-      recipients
+      contacts,
+      UNSUBSCRIBE_KEY_PLACEHOLDER
     );
 
     // Restore the newsletter state by processing completed deliveries
@@ -119,22 +126,4 @@ export default class PostgresNewsletterRepository implements NewsletterRepositor
     return newsletter.getEmailDeliveries().filter(d => d.status === 'sent').length;
   }
 
-  private extractPlaceholdersForEmail(htmlTemplate: string, email: string): Record<string, string> {
-    // Extract all placeholders from the template
-    const pattern = /{{\s*([\w-]+)\s*}}/g;
-    const placeholders: Record<string, string> = {};
-    let match;
-    
-    while ((match = pattern.exec(htmlTemplate)) !== null) {
-      const placeholderName = match[1];
-      // For reconstruction, we provide default values based on email or generic defaults
-      if (placeholderName === 'name') {
-        placeholders[placeholderName] = email.split('@')[0]; // Use email prefix as name
-      } else {
-        placeholders[placeholderName] = `default-${placeholderName}`; // Generic default
-      }
-    }
-    
-    return placeholders;
-  }
 }

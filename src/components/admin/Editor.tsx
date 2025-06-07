@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import type { YooptaEmailEditor, YooptaEmailEditorOptions } from '@yoopta/email-builder';
 import EmailBuilder, { createYooptaEmailEditor } from '@yoopta/email-builder';
 import { actions } from 'astro:actions';

@@ -3,6 +3,7 @@ import facebookImage from '../../images/newsletter/social_facebook.png';
 import linkedInImage from '../../images/newsletter/social_linkedin.png';
 import xImage from '../../images/newsletter/social_x.png';
 import { BASE_URL, SOCIAL_LINKS } from '../../consts';
+import { UNSUBSCRIBE_KEY_PLACEHOLDER } from '../../lib/domain/newsletter/Newsletter';
 
 async function newsletterFooter() {
 
@@ -83,7 +84,7 @@ async function newsletterFooter() {
         <table width="100%">
           <tr><td valign="top">
             <div>
-              <p style="margin:0"><a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/imprint`}">Imprint</a> | <a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/newsletter/unsubscribe/{{unsubscribeKey}}`}">Unsubscribe</a></p>
+              <p style="margin:0"><a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/imprint`}">Imprint</a> | <a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/newsletter/unsubscribe/{{${UNSUBSCRIBE_KEY_PLACEHOLDER}}}`}">Unsubscribe</a></p>
             </div>
           </td></tr>
           <tr><td></td></tr>

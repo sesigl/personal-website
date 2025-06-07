@@ -1,7 +1,11 @@
+import Contact from './Contact';
+
 interface RecipientData {
   email: string;
   placeholders: Record<string, string>;
 }
+
+export const UNSUBSCRIBE_KEY_PLACEHOLDER = 'unsubscribeKey';
 
 export type NewsletterStatus = 'pending' | 'in_progress' | 'completed' | 'failed';
 
@@ -43,7 +47,16 @@ export default class Newsletter {
     this.initializeEmailDeliveries();
   }
 
-  static createCampaign(title: string, subject: string, previewText: string, htmlTemplate: string, recipients: RecipientData[]): Newsletter {
+  static create(
+    title: string,
+    subject: string,
+    previewText: string,
+    htmlTemplate: string,
+    contacts: Contact[],
+    unsubscribeKeyPlaceholder: string,
+    testMode: boolean = false,
+    testEmail: string = "test@example.com"
+  ): Newsletter {
     // Domain validation - Newsletter aggregate enforces its own business rules
     if (!title || title.trim() === '') {
       throw new Error('Campaign title cannot be empty');
@@ -54,6 +67,20 @@ export default class Newsletter {
     if (!htmlTemplate || htmlTemplate.trim() === '') {
       throw new Error('Campaign HTML template cannot be empty');
     }
+
+    let filteredContacts = contacts;
+    
+    if (testMode) {
+      filteredContacts = contacts.filter(contact => contact.email === testEmail);
+    }
+
+    const recipients = filteredContacts.map(contact => ({
+      email: contact.email,
+      placeholders: {
+        [unsubscribeKeyPlaceholder]: contact.unsubscribeKey
+      }
+    }));
+
     return new Newsletter(subject, previewText, htmlTemplate, recipients, title);
   }
 
@@ -217,5 +244,29 @@ export default class Newsletter {
         delivery.sentAt = undefined;
       }
     });
+  }
+
+  isEmpty(): boolean {
+    return this.recipients.length === 0;
+  }
+
+  prepareForResume(): void {
+    if (this.status === 'failed') {
+      this.resetFailedToPending();
+      // Reset status to pending so the campaign can be retried
+      this.status = 'pending';
+    }
+  }
+
+  hasPendingDeliveries(): boolean {
+    return this.emailDeliveries.some(d => d.status === 'pending');
+  }
+
+  shouldStopProcessing(): boolean {
+    return this.status === 'failed' || this.status === 'completed';
+  }
+
+  getSuccessfulDeliveryCount(): number {
+    return this.emailDeliveries.filter(d => d.status === 'sent').length;
   }
 }

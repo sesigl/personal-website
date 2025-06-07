@@ -34,7 +34,7 @@ describe('NewsletterApplicationService', () => {
     // Setup test contacts
     await newsletterClient.createContact('user1@example.com');
     await newsletterClient.createContact('user2@example.com');
-    await newsletterClient.createContact('akrillo89@gmail.com'); // Test user
+    await newsletterClient.createContact('test@example.com'); // Test user
   });
 
   describe('Transparent Resume Logic', () => {
@@ -44,7 +44,6 @@ describe('NewsletterApplicationService', () => {
         'Weekly Update',
         'Preview text',
         '<h1>Hello {{unsubscribeKey}}</h1>',
-        'unsubscribeKey',
         false // production mode
       );
 
@@ -69,7 +68,6 @@ describe('NewsletterApplicationService', () => {
         'Resume Test',
         'Preview',
         '<p>Content {{unsubscribeKey}}</p>',
-        'unsubscribeKey',
         false
       );
 
@@ -87,7 +85,6 @@ describe('NewsletterApplicationService', () => {
         'Resume Test',
         'Preview',
         '<p>Content {{unsubscribeKey}}</p>',
-        'unsubscribeKey',
         false
       );
 
@@ -107,7 +104,6 @@ describe('NewsletterApplicationService', () => {
         'Test Newsletter',
         'Test preview',
         '<h1>Test {{unsubscribeKey}}</h1>',
-        'unsubscribeKey',
         true // test mode
       );
 
@@ -118,7 +114,7 @@ describe('NewsletterApplicationService', () => {
       const newsletter = await newsletterRepository.findByTitle('test-campaign-2024');
       const deliveries = newsletter!.getEmailDeliveries();
       expect(deliveries).toHaveLength(1);
-      expect(deliveries[0].recipientEmail).toBe('akrillo89@gmail.com');
+      expect(deliveries[0].recipientEmail).toBe('test@example.com');
     });
 
     it('should handle batch processing with proper logging', async () => {
@@ -129,7 +125,6 @@ describe('NewsletterApplicationService', () => {
         'Batch Test',
         'Preview',
         '<p>Content {{unsubscribeKey}}</p>',
-        'unsubscribeKey',
         false
       );
 
@@ -140,7 +135,7 @@ describe('NewsletterApplicationService', () => {
         expect.stringContaining('Starting newsletter campaign')
       );
       expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('recipients')
+        expect.stringContaining('Processing batch of')
       );
 
       consoleSpy.mockRestore();
@@ -155,7 +150,6 @@ describe('NewsletterApplicationService', () => {
         'Empty Test',
         'Preview',
         '<p>Content</p>',
-        'unsubscribeKey',
         false
       );
 
@@ -171,7 +165,6 @@ describe('NewsletterApplicationService', () => {
         'First Campaign',
         'Preview',
         '<p>Content 1</p>',
-        'unsubscribeKey',
         false
       );
 
@@ -181,7 +174,6 @@ describe('NewsletterApplicationService', () => {
         'Second Campaign', // Different subject
         'Different Preview',
         '<p>Content 2</p>',
-        'unsubscribeKey',
         false
       );
 
@@ -203,7 +195,6 @@ describe('NewsletterApplicationService', () => {
         'Progress Test',
         'Preview',
         '<p>Content {{unsubscribeKey}}</p>',
-        'unsubscribeKey',
         false
       );
 

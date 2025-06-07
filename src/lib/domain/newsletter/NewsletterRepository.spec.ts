@@ -4,6 +4,7 @@ import PostgresNewsletterRepository from "../../infrastructure/newsletter/Postgr
 import { setupTestDatabase } from "../../../test/testDatabase";
 import { emailDeliveriesTable, newsletterCampaignsTable } from "../../../test/setup/testTables";
 import type { Database } from "../../infrastructure/db";
+import { testContacts, createTestContacts } from "../../../test/fixtures/contactFixtures";
 
 describe("NewsletterRepository", () => {
   let repository: PostgresNewsletterRepository;
@@ -23,15 +24,14 @@ describe("NewsletterRepository", () => {
     });
 
     it("should save and retrieve newsletter campaign by title", async () => {
-      const newsletter = Newsletter.createCampaign(
+      const contacts = [testContacts.user1, testContacts.user2];
+      const newsletter = Newsletter.create(
         "test-campaign-2024",
         "Test Subject",
         "Preview text",
-        "<h1>Hello {{name}}</h1>",
-        [
-          { email: "user1@example.com", placeholders: { name: "User1" } },
-          { email: "user2@example.com", placeholders: { name: "User2" } }
-        ]
+        "<h1>Hello {{unsubscribeKey}}</h1>",
+        contacts,
+        "unsubscribeKey"
       );
 
       await repository.save(newsletter);
@@ -46,18 +46,20 @@ describe("NewsletterRepository", () => {
     });
 
     it("should update campaign status and progress", async () => {
-      const newsletter = Newsletter.createCampaign(
+      const contacts = [testContacts.user1];
+      const newsletter = Newsletter.create(
         "update-test",
         "Update Test",
         "Preview",
         "<p>Content</p>",
-        [{ email: "user@example.com", placeholders: {} }]
+        contacts,
+        "unsubscribeKey"
       );
 
       await repository.save(newsletter);
 
       newsletter.processBatch([
-        { email: "user@example.com", success: true }
+        { email: testContacts.user1.email, success: true }
       ]);
 
       await repository.update(newsletter);
@@ -68,21 +70,20 @@ describe("NewsletterRepository", () => {
     });
 
     it("should support resume workflow", async () => {
-      const newsletter = Newsletter.createCampaign(
+      const contacts = [testContacts.user1, testContacts.user2];
+      const newsletter = Newsletter.create(
         "resume-test",
         "Resume Test",
         "Preview",
         "<p>Content</p>",
-        [
-          { email: "user1@example.com", placeholders: {} },
-          { email: "user2@example.com", placeholders: {} }
-        ]
+        contacts,
+        "unsubscribeKey"
       );
 
       await repository.save(newsletter);
 
       newsletter.processBatch([
-        { email: "user1@example.com", success: false, error: "Network error" }
+        { email: testContacts.user1.email, success: false, error: "Network error" }
       ]);
 
       await repository.update(newsletter);
@@ -92,26 +93,30 @@ describe("NewsletterRepository", () => {
       
       const nextBatch = retrieved!.getNextBatch(10);
       expect(nextBatch).toHaveLength(1);
-      expect(nextBatch[0].email).toBe("user2@example.com");
+      expect(nextBatch[0].email).toBe(testContacts.user2.email);
     });
 
     it("should handle duplicate campaign titles", async () => {
-      const newsletter1 = Newsletter.createCampaign(
+      const contacts1 = [testContacts.user1];
+      const newsletter1 = Newsletter.create(
         "duplicate-test",
         "First Campaign",
         "Preview",
         "<p>Content 1</p>",
-        [{ email: "user1@example.com", placeholders: {} }]
+        contacts1,
+        "unsubscribeKey"
       );
 
       await repository.save(newsletter1);
 
-      const newsletter2 = Newsletter.createCampaign(
+      const contacts2 = [testContacts.user2];
+      const newsletter2 = Newsletter.create(
         "duplicate-test",
         "Second Campaign",
         "Preview",
         "<p>Content 2</p>",
-        [{ email: "user2@example.com", placeholders: {} }]
+        contacts2,
+        "unsubscribeKey"
       );
 
       // Should throw error due to unique constraint
@@ -119,24 +124,22 @@ describe("NewsletterRepository", () => {
     });
 
     it("should preserve email delivery states when retrieving", async () => {
-      const newsletter = Newsletter.createCampaign(
+      const contacts = createTestContacts(3);
+      const newsletter = Newsletter.create(
         "delivery-state-test",
         "Delivery State Test",
         "Preview",
-        "<p>Hello {{name}}</p>",
-        [
-          { email: "user1@example.com", placeholders: { name: "User1" } },
-          { email: "user2@example.com", placeholders: { name: "User2" } },
-          { email: "user3@example.com", placeholders: { name: "User3" } }
-        ]
+        "<p>Hello {{unsubscribeKey}}</p>",
+        contacts,
+        "unsubscribeKey"
       );
 
       await repository.save(newsletter);
 
       // Process partial batch
       newsletter.processBatch([
-        { email: "user1@example.com", success: true },
-        { email: "user2@example.com", success: false, error: "SMTP error" }
+        { email: contacts[0].email, success: true },
+        { email: contacts[1].email, success: false, error: "SMTP error" }
       ]);
 
       await repository.update(newsletter);
@@ -147,10 +150,10 @@ describe("NewsletterRepository", () => {
       expect(retrieved!.getProgressPercentage()).toBe(33); // 1 out of 3 successful
 
       const deliveries = retrieved!.getEmailDeliveries();
-      expect(deliveries.find(d => d.recipientEmail === "user1@example.com")?.status).toBe("sent");
-      expect(deliveries.find(d => d.recipientEmail === "user2@example.com")?.status).toBe("failed");
-      expect(deliveries.find(d => d.recipientEmail === "user2@example.com")?.errorMessage).toBe("SMTP error");
-      expect(deliveries.find(d => d.recipientEmail === "user3@example.com")?.status).toBe("pending");
+      expect(deliveries.find(d => d.recipientEmail === contacts[0].email)?.status).toBe("sent");
+      expect(deliveries.find(d => d.recipientEmail === contacts[1].email)?.status).toBe("failed");
+      expect(deliveries.find(d => d.recipientEmail === contacts[1].email)?.errorMessage).toBe("SMTP error");
+      expect(deliveries.find(d => d.recipientEmail === contacts[2].email)?.status).toBe("pending");
     });
   });
 });
