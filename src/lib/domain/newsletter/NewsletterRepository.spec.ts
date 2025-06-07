@@ -21,14 +21,26 @@ describe("NewsletterRepository", () => {
   });
 
   afterEach(async () => {
-    // Clean up test data using Drizzle ORM
-    await db.delete(emailDeliveriesTable);
-    await db.delete(newsletterCampaignsTable);
+    // Clean up test data using simple delete queries with error handling
+    try {
+      if (db) {
+        await db.delete(emailDeliveriesTable);
+        await db.delete(newsletterCampaignsTable);
+      }
+    } catch (error) {
+      console.warn('Cleanup warning:', error);
+      // Continue - don't fail test due to cleanup issues
+    }
   });
 
   afterAll(async () => {
-    const testDatabase = TestDatabase.getInstance();
-    await testDatabase.teardown();
+    try {
+      const testDatabase = TestDatabase.getInstance();
+      await testDatabase.teardown();
+    } catch (error) {
+      console.warn('Teardown warning:', error);
+      // Don't fail - this is cleanup
+    }
   });
 
   describe("repository functionality", () => {

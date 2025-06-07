@@ -9,6 +9,7 @@ export default class TestDatabase {
   private container: StartedPostgreSqlContainer | undefined;
   private db: NodePgDatabase | undefined;
   private pgPool: pg.Pool | undefined;
+  private setupPromise: Promise<void> | undefined;
 
   private constructor() {}
 
@@ -21,48 +22,82 @@ export default class TestDatabase {
 
   async getDatabase(): Promise<NodePgDatabase> {
     if (!this.db) {
-      await this.setup();
+      if (!this.setupPromise) {
+        this.setupPromise = this.setup();
+      }
+      await this.setupPromise;
     }
     return this.db!;
   }
 
   private async setup(): Promise<void> {
-    this.container = await new PostgreSqlContainer("postgres:alpine")
-      .withWaitStrategy(Wait.forListeningPorts())
-      .start();
+    try {
+      console.log('🐳 Starting PostgreSQL test container...');
+      
+      this.container = await new PostgreSqlContainer("postgres:15.13-bullseye")
+        .withDatabase("testdb")
+        .withUsername("testuser") 
+        .withPassword("testpass")
+        .withStartupTimeout(30000)
+        .withWaitStrategy(
+          Wait.forAll([
+            Wait.forListeningPorts(),
+            Wait.forLogMessage(/database system is ready to accept connections/, 2)
+          ])
+        )
+        .start();
 
-    // Create a connection pool
-    this.pgPool = new pg.Pool({
-      connectionString: this.container.getConnectionUri()
-    });
+      console.log(`✅ Container started on port ${this.container.getMappedPort(5432)}`);
 
-    this.db = drizzle(this.pgPool);
+      // Create connection pool with standard settings
+      this.pgPool = new pg.Pool({
+        connectionString: this.container.getConnectionUri(),
+        max: 5,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 3000,
+      });
 
-    await migrate(this.db, {
-      migrationsFolder: "./migrations",
-      migrationsTable: "migrations",
-      migrationsSchema: "public",
-    });
+      this.db = drizzle(this.pgPool);
+
+      console.log('🔄 Running database migrations...');
+      await migrate(this.db, {
+        migrationsFolder: "./migrations",
+        migrationsTable: "migrations",
+        migrationsSchema: "public",
+      });
+      console.log('✅ Database ready');
+      
+    } catch (error) {
+      console.error('❌ Database setup failed:', error);
+      await this.teardown();
+      throw error;
+    }
   }
 
   async teardown(): Promise<void> {
-    try {
-      if (this.pgPool) {
+    console.log('🧹 Cleaning up test database...');
+    
+    if (this.pgPool) {
+      try {
         await this.pgPool.end();
-        this.pgPool = undefined;
+      } catch (error) {
+        console.warn('Warning closing pool:', error);
       }
-      
-      if (this.container) {
-        await this.container.stop({
-          timeout: 5000 // 5 seconds timeout for graceful shutdown
-        });
-        this.container = undefined;
-      }
-      
-      this.db = undefined;
-    } catch (error) {
-      console.error('Error during database teardown:', error);
-      throw error;
+      this.pgPool = undefined;
     }
+
+    if (this.container) {
+      try {
+        await this.container.stop();
+      } catch (error) {
+        console.warn('Warning stopping container:', error);
+      }
+      this.container = undefined;
+    }
+
+    this.db = undefined;
+    this.setupPromise = undefined;
+    
+    console.log('✅ Cleanup complete');
   }
 }
