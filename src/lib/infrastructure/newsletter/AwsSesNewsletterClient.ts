@@ -43,15 +43,11 @@ export default class AwsSesNewsletterClient implements NewsletterSender {
   }
 
   async sendEmails(newsletter: Newsletter): Promise<void> {
-    const templateName = `newsletter-${Date.now()}`;
+    const templateName = this.generateTemplateName('newsletter');
     let templateCreated = false;
+    
     try {
-      await this.createTemplate({
-        name: templateName,
-        subject: newsletter.getSubject(),
-        htmlContent: newsletter.getHtmlTemplate(),
-        textContent: newsletter.getHtmlTemplate().replace(/<[^>]*>/g, "")
-      });
+      await this.createNewsletterTemplate(templateName, newsletter);
       templateCreated = true;
 
       const recipients = newsletter.getRecipients();
@@ -64,33 +60,17 @@ export default class AwsSesNewsletterClient implements NewsletterSender {
   }
 
   async sendBatch(recipients: { email: string; templateData: Record<string, string> }[], template: { subject: string; htmlContent: string }): Promise<BatchResult[]> {
-    if (recipients.length === 0) {
+    if (this.isEmptyRecipientList(recipients)) {
       return [];
     }
 
-    const templateName = `newsletter-batch-${Date.now()}`;
+    const templateName = this.generateTemplateName('newsletter-batch');
     let templateCreated = false;
     
     try {
-      // Create template
-      await this.createTemplate({
-        name: templateName,
-        subject: template.subject,
-        htmlContent: template.htmlContent,
-        textContent: template.htmlContent.replace(/<[^>]*>/g, "")
-      });
+      await this.createBatchTemplate(templateName, template);
       templateCreated = true;
-
-      // Process recipients in batches and collect results
-      const results: BatchResult[] = [];
-      
-      for (let i = 0; i < recipients.length; i += this.config.maxBatchSize) {
-        const chunk = recipients.slice(i, i + this.config.maxBatchSize);
-        const batchResults = await this.sendBatchChunk(templateName, chunk);
-        results.push(...batchResults);
-      }
-
-      return results;
+      return await this.processRecipientsInChunks(templateName, recipients);
     } finally {
       if (templateCreated) {
         await this.deleteTemplate(templateName);
@@ -152,7 +132,62 @@ export default class AwsSesNewsletterClient implements NewsletterSender {
   }
 
   private async sendBatchChunk(templateName: string, recipients: { email: string; templateData: Record<string, string> }[]): Promise<BatchResult[]> {
-    const command = new SendBulkTemplatedEmailCommand({
+    const command = this.createBulkEmailCommand(templateName, recipients);
+
+    try {
+      const response = await this.sesClient.send(command);
+      console.log(`Sent batch of ${recipients.length} emails`);
+      return this.processEmailResponse(response, recipients);
+    } catch (error) {
+      console.error('Failed to send email batch:', error);
+      return this.createFailedResults(recipients, (error as Error).message);
+    }
+  }
+
+  private generateTemplateName(prefix: string): string {
+    return `${prefix}-${Date.now()}`;
+  }
+
+  private async createNewsletterTemplate(templateName: string, newsletter: Newsletter): Promise<void> {
+    await this.createTemplate({
+      name: templateName,
+      subject: newsletter.getSubject(),
+      htmlContent: newsletter.getHtmlTemplate(),
+      textContent: this.stripHtmlTags(newsletter.getHtmlTemplate())
+    });
+  }
+
+  private async createBatchTemplate(templateName: string, template: { subject: string; htmlContent: string }): Promise<void> {
+    await this.createTemplate({
+      name: templateName,
+      subject: template.subject,
+      htmlContent: template.htmlContent,
+      textContent: this.stripHtmlTags(template.htmlContent)
+    });
+  }
+
+  private stripHtmlTags(html: string): string {
+    return html.replace(/<[^>]*>/g, "");
+  }
+
+  private isEmptyRecipientList(recipients: { email: string; templateData: Record<string, string> }[]): boolean {
+    return recipients.length === 0;
+  }
+
+  private async processRecipientsInChunks(templateName: string, recipients: { email: string; templateData: Record<string, string> }[]): Promise<BatchResult[]> {
+    const results: BatchResult[] = [];
+    
+    for (let i = 0; i < recipients.length; i += this.config.maxBatchSize) {
+      const chunk = recipients.slice(i, i + this.config.maxBatchSize);
+      const batchResults = await this.sendBatchChunk(templateName, chunk);
+      results.push(...batchResults);
+    }
+
+    return results;
+  }
+
+  private createBulkEmailCommand(templateName: string, recipients: { email: string; templateData: Record<string, string> }[]) {
+    return new SendBulkTemplatedEmailCommand({
       Source: this.config.sourceEmail,
       Template: templateName,
       DefaultTemplateData: JSON.stringify({}),
@@ -161,38 +196,35 @@ export default class AwsSesNewsletterClient implements NewsletterSender {
         ReplacementTemplateData: JSON.stringify(recipient.templateData)
       }))
     });
+  }
 
-    try {
-      const response = await this.sesClient.send(command);
-      console.log(`Sent batch of ${recipients.length} emails`);
-      
-      // Process individual send results
-      if (response.Status) {
-        return recipients.map((recipient, index) => {
-          const status = response.Status![index];
-          return {
-            email: recipient.email,
-            success: status.Status === 'Success',
-            error: status.Status !== 'Success' ? (status.Error || 'Unknown error') : undefined
-          };
-        });
-      } else {
-        // Fallback if no detailed status - assume all succeeded
-        return recipients.map(recipient => ({
+  private processEmailResponse(response: any, recipients: { email: string; templateData: Record<string, string> }[]): BatchResult[] {
+    if (response.Status) {
+      return recipients.map((recipient, index) => {
+        const status = response.Status![index];
+        return {
           email: recipient.email,
-          success: true
-        }));
-      }
-    } catch (error) {
-      console.error('Failed to send email batch:', error);
-      const errorMessage = (error as Error).message;
-      
-      // Return all recipients as failed
-      return recipients.map(recipient => ({
-        email: recipient.email,
-        success: false,
-        error: errorMessage
-      }));
+          success: status.Status === 'Success',
+          error: status.Status !== 'Success' ? (status.Error || 'Unknown error') : undefined
+        };
+      });
     }
+    
+    return this.createSuccessfulResults(recipients);
+  }
+
+  private createSuccessfulResults(recipients: { email: string; templateData: Record<string, string> }[]): BatchResult[] {
+    return recipients.map(recipient => ({
+      email: recipient.email,
+      success: true
+    }));
+  }
+
+  private createFailedResults(recipients: { email: string; templateData: Record<string, string> }[], errorMessage: string): BatchResult[] {
+    return recipients.map(recipient => ({
+      email: recipient.email,
+      success: false,
+      error: errorMessage
+    }));
   }
 }

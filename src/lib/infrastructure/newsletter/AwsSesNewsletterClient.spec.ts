@@ -105,7 +105,7 @@ describe('AwsSesNewsletterClient', () => {
     await expect(client.sendEmails(newsletter))
       .rejects.toThrow('Failed to create email template');
 
-    expect(mockSend).toHaveBeenCalledTimes(1);
+    expect(mockSend).toHaveBeenCalledTimes(1); // CreateTemplate fails, DeleteTemplate not called
   });
 
   describe('Batch Processing Integration', () => {
