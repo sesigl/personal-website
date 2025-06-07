@@ -107,4 +107,157 @@ describe('AwsSesNewsletterClient', () => {
 
     expect(mockSend).toHaveBeenCalledTimes(1);
   });
+
+  describe('Batch Processing Integration', () => {
+    it('should send batch of emails and return success results', async () => {
+      const client = new AwsSesNewsletterClient(config);
+      const recipients = [
+        { email: 'user1@example.com', templateData: { name: 'User1' } },
+        { email: 'user2@example.com', templateData: { name: 'User2' } }
+      ];
+      const template = {
+        subject: 'Test Subject',
+        htmlContent: '<p>Hello {{name}}!</p>'
+      };
+
+      // Mock successful AWS SES response
+      mockSend.mockResolvedValue({
+        MessageId: 'message-id',
+        Status: [
+          { Status: 'Success', MessageId: 'msg-1' },
+          { Status: 'Success', MessageId: 'msg-2' }
+        ]
+      });
+
+      const results = await client.sendBatch(recipients, template);
+
+      expect(results).toHaveLength(2);
+      expect(results[0]).toEqual({
+        email: 'user1@example.com',
+        success: true
+      });
+      expect(results[1]).toEqual({
+        email: 'user2@example.com',
+        success: true
+      });
+
+      // Should have called: CreateTemplate, SendBulkEmail, DeleteTemplate
+      expect(mockSend).toHaveBeenCalledTimes(3);
+    });
+
+    it('should handle partial batch failures and return mixed results', async () => {
+      const client = new AwsSesNewsletterClient(config);
+      const recipients = [
+        { email: 'user1@example.com', templateData: { name: 'User1' } },
+        { email: 'invalid-email', templateData: { name: 'User2' } },
+        { email: 'user3@example.com', templateData: { name: 'User3' } }
+      ];
+      const template = {
+        subject: 'Test Subject',
+        htmlContent: '<p>Hello {{name}}!</p>'
+      };
+
+      // Mock AWS SES response with partial failures
+      mockSend.mockResolvedValueOnce({}); // CreateTemplate success
+      mockSend.mockResolvedValueOnce({
+        MessageId: 'batch-message-id',
+        Status: [
+          { Status: 'Success', MessageId: 'msg-1' },
+          { Status: 'MessageRejected', MessageId: 'msg-2', Error: 'Email address not verified' },
+          { Status: 'Success', MessageId: 'msg-3' }
+        ]
+      }); // SendBulkEmail with failures
+      mockSend.mockResolvedValueOnce({}); // DeleteTemplate success
+
+      const results = await client.sendBatch(recipients, template);
+
+      expect(results).toHaveLength(3);
+      expect(results[0]).toEqual({
+        email: 'user1@example.com',
+        success: true
+      });
+      expect(results[1]).toEqual({
+        email: 'invalid-email',
+        success: false,
+        error: 'Email address not verified'
+      });
+      expect(results[2]).toEqual({
+        email: 'user3@example.com',
+        success: true
+      });
+    });
+
+    it('should handle AWS SES batch send failure gracefully', async () => {
+      const client = new AwsSesNewsletterClient(config);
+      const recipients = [
+        { email: 'user1@example.com', templateData: { name: 'User1' } }
+      ];
+      const template = {
+        subject: 'Test Subject',
+        htmlContent: '<p>Hello {{name}}!</p>'
+      };
+
+      // Mock: CreateTemplate succeeds, SendBulkEmail fails, DeleteTemplate succeeds
+      mockSend.mockResolvedValueOnce({}); // CreateTemplate
+      mockSend.mockRejectedValueOnce(new Error('AWS SES service unavailable')); // SendBulkEmail
+      mockSend.mockResolvedValueOnce({}); // DeleteTemplate
+
+      const results = await client.sendBatch(recipients, template);
+
+      expect(results).toHaveLength(1);
+      expect(results[0]).toEqual({
+        email: 'user1@example.com',
+        success: false,
+        error: 'AWS SES service unavailable'
+      });
+
+      // Should still clean up template
+      expect(mockSend).toHaveBeenCalledTimes(3);
+    });
+
+    it('should handle empty batch gracefully', async () => {
+      const client = new AwsSesNewsletterClient(config);
+      const recipients: { email: string; templateData: Record<string, string> }[] = [];
+      const template = {
+        subject: 'Test Subject',
+        htmlContent: '<p>Hello!</p>'
+      };
+
+      const results = await client.sendBatch(recipients, template);
+
+      expect(results).toHaveLength(0);
+      expect(mockSend).not.toHaveBeenCalled();
+    });
+
+    it('should respect batch size configuration', async () => {
+      const smallBatchConfig = { ...config, maxBatchSize: 2 };
+      const client = new AwsSesNewsletterClient(smallBatchConfig);
+      const recipients = [
+        { email: 'user1@example.com', templateData: { name: 'User1' } },
+        { email: 'user2@example.com', templateData: { name: 'User2' } },
+        { email: 'user3@example.com', templateData: { name: 'User3' } },
+        { email: 'user4@example.com', templateData: { name: 'User4' } }
+      ];
+      const template = {
+        subject: 'Test Subject',
+        htmlContent: '<p>Hello {{name}}!</p>'
+      };
+
+      // Mock successful responses for multiple batches
+      mockSend.mockResolvedValue({
+        Status: [
+          { Status: 'Success', MessageId: 'msg-1' },
+          { Status: 'Success', MessageId: 'msg-2' }
+        ]
+      });
+
+      const results = await client.sendBatch(recipients, template);
+
+      expect(results).toHaveLength(4);
+      expect(results.every(r => r.success)).toBe(true);
+
+      // Should call: CreateTemplate, SendBulkEmail (batch 1), SendBulkEmail (batch 2), DeleteTemplate
+      expect(mockSend).toHaveBeenCalledTimes(4);
+    });
+  });
 });
