@@ -48,7 +48,26 @@ See the jump in scope and responsibility? An agent in this context is designed t
 
 This isn't science fiction; it's the rapidly evolving reality of AI in software development.
 
-## 2. The "Why Bother?": Leverage for the Modern Engineer
+## 2. The IPEV Framework: How Agentic Development Actually Works
+
+Before diving deeper into the benefits, let's establish a mental model for how agentic coding operates. I call it the **IPEV cycle** - a framework that captures the iterative nature of working with AI agents:
+
+<center>
+<Image src={ipevCycle} alt="IPEV Cycle diagram showing the iterative process of Ideate, Plan, Execute, and Verify" width={300} />
+</center>
+
+**IPEV stands for: Ideate → Plan → Execute → Verify**
+
+* **Ideate:** Define the high-level goal and requirements. What do you want to achieve? What are the success criteria?
+* **Plan:** Break down the goal into actionable steps with verification checkpoints. How will you know each step succeeded?
+* **Execute:** Implement the plan with continuous validation. The agent performs tasks while checking its work against defined criteria.
+* **Verify:** Validate the complete result against original requirements. This includes testing, code review, and ensuring all acceptance criteria are met.
+
+This cycle repeats and refines - each iteration building on verified foundations from the previous cycle. The key insight is that verification isn't just the final step; it's woven throughout the entire process.
+
+Now, with this framework in mind, let's explore why this matters for modern engineering.
+
+## 3. The "Why Bother?": Leverage for the Modern Engineer
 
 Just as a good skip-lead (your manager's manager) empowers their managers to handle their teams effectively, freeing the skip-lead to focus on broader strategy, agentic coding offers similar leverage to engineers:
 
@@ -59,153 +78,152 @@ Just as a good skip-lead (your manager's manager) empowers their managers to han
 
 The goal isn't to replace engineers or compromise on quality. It's to elevate both productivity and reliability by building verification into the development process itself.
 
-## 3. Peeking Under the Hood: How Does This "Magic" Actually Work?
+## 4. Peeking Under the Hood: How Does This "Magic" Actually Work?
 
 It's not magic, but it *is* sophisticated. At its heart, an agentic coding system usually involves:
 
 * **The LLM Brain:** A powerful Large Language Model (like GPT-4, Claude 4, Gemini, etc.) is the core reasoning engine. It understands your instructions, generates code, makes plans, and processes feedback.
-* **The Agentic Loop with Built-in Validation (Think → Act → Observe → Verify):**
-  1. **Goal/Prompt:** You give the agent a clear, detailed task with explicit verification criteria.
-  2. **Planning (Think):** The LLM breaks the task down with verification checkpoints. "To implement that API endpoint, I need to: 1. Write failing tests that define the expected behavior, 2. Define the route, 3. Write the request handler, 4. Validate input, 5. Interact with the service layer, 6. Ensure all tests pass, 7. Run integration tests..."
-  3. **Action (Act):** The agent executes a step. This could be writing test files, implementing code, running maven, calling junit, or fetching schemas.
-  4. **Observation (Observe):** The agent ingests the result—test failures, successful builds, linter complaints, coverage reports.
-  5. **Verification (Verify):** The agent validates its work against predefined criteria before proceeding. Based on verification results, the LLM adjusts its approach. "The integration test failed because of a missing dependency injection. I need to update the configuration before proceeding."
+* **The Agentic Loop with Built-in Validation:** This follows our IPEV framework closely:
+  1. **Goal/Prompt (Ideate):** You give the agent a clear, detailed task with explicit verification criteria.
+  2. **Planning (Plan):** The LLM breaks the task down with verification checkpoints. "To implement that API endpoint, I need to: 1. Write failing tests that define the expected behavior, 2. Define the route, 3. Write the request handler..."
+  3. **Action (Execute):** The agent executes steps while continuously validating its work. This could be writing test files, implementing code, running maven, calling junit, or fetching schemas.
+  4. **Observation & Verification (Verify):** The agent ingests results—test failures, successful builds, linter complaints, coverage reports—and validates against predefined criteria before proceeding.
 * **Tool Access with Validation Capabilities:** Agents have access to testing frameworks, linters, static analysis tools, and other verification mechanisms—not just code generation tools.
 * **Context is King, Verification is Queen:** Agents maintain context about requirements, but equally important is their ability to continuously validate their work against those requirements through automated checks.
 
-The "secret sauce" is the orchestration of these components with verification built into every step of the process.
+The "secret sauce" is the orchestration of these components with verification built into every step of the IPEV process.
 
-## 4. Agentic Coding in the Wild: Some (Conceptual) Examples
+## 5. The IPEV Cycle in Action: A Real Development Journey
 
-Let's make this more concrete.
+Let's make this concrete by following a single feature through the complete IPEV cycle. Imagine you need to build a user profile image upload feature – here's how agentic coding transforms each phase:
 
-### Scenario 1: Greenfield Microservice Scaffolding
+### Phase 1: Ideate – From Concept to Requirements
 
-* **Your Goal:** "Scaffold a new Go microservice for managing 'orders' using the Gin framework, with PostgreSQL via GORM. Include basic CRUD operations, comprehensive tests, Dockerfile, and a Makefile for build/run."
-* **Agent's Potential Actions:** Create directory structure, go mod init, add dependencies, write main.go with Gin setup, define GORM models for Order and OrderItem, implement CRUD handlers with proper error handling, write unit and integration tests, generate Dockerfile and Makefile, run full test suite and build verification.
-* **Verification Strategy:** Run `go test ./...` to ensure all tests pass, execute `go build` to verify compilation, run `golint` and `go vet` for code quality, test Docker build process, validate API endpoints with integration tests.
+* **Your Goal:** "I need users to upload profile images. Transform this rough idea into a comprehensive Project Requirements Document (PRD) that can guide development."
+* **Agent's Potential Actions:** Research best practices for file uploads, analyze security considerations, define user stories, specify technical requirements, create acceptance criteria, draft API contracts, outline edge cases and error scenarios.
+* **Verification Strategy:** Review PRD for completeness against checklist (functional requirements, non-functional requirements, security considerations, user experience flows), validate that all edge cases are identified, ensure requirements are testable and measurable.
 * **Illustrative Prompt Snippet:**
 
 ```
-# Rule: New Go Microservice Scaffolding with Verification
-## Role: Expert Go Backend Developer with Testing Focus
-You are an expert Go developer specializing in microservices with Gin, GORM, and comprehensive testing strategies.
+# Rule: Transform Feature Idea into Comprehensive PRD
+## Role: Senior Product Manager & Technical Architect
+You are an expert at translating business needs into technical requirements with security and UX focus.
 
 ## Goal:
-Scaffold a production-ready microservice named 'order-service' with full verification.
+Create a comprehensive PRD for user profile image upload functionality.
 
-## Requirements:
-1. Language: Go (latest stable)
-2. Web Framework: Gin
-3. ORM: GORM with PostgreSQL driver
-4. Entities: `Order` (ID, UserID, Status, TotalAmount, CreatedAt), `OrderItem` (ID, OrderID, ProductID, Quantity, Price)
-5. API: RESTful CRUD endpoints with proper error handling
-6. Testing: Unit tests (>80% coverage), integration tests for API endpoints
-7. Build: Multi-stage Dockerfile, Makefile with verification steps
-8. Quality: golint, go vet compliance
+## Input Context:
+- Tech Stack: Python (FastAPI), React, PostgreSQL, AWS S3
+- Existing System: User authentication, basic profile management
+- User Base: 10K+ active users, mobile-first audience
 
-## Verification Process:
-1. After scaffolding, run complete test suite
-2. Verify build process (both local and Docker)
-3. Run linting and static analysis
-4. Test API endpoints with sample data
-5. Validate all Makefile targets work correctly
-
-## Output:
-- Complete project structure with passing tests
-- Verification report showing all checks passed
-- Brief architecture overview explaining design decisions
-
-## Constraints:
-- All code must pass verification before completion
-- Follow idiomatic Go practices with comprehensive error handling
-```
-
-### Scenario 2: TDD Feature Implementation from a Project Requirements Document (PRD)
-
-* **Your Goal:** "Implement feature PRD-123: 'User Profile Image Upload' using Test-Driven Development based on the attached Product Requirements Document and our existing UserProfile model."
-* **Agent's Potential Actions:** Read PRD to extract testable requirements, write comprehensive failing tests that define expected behavior (API contracts, validation rules, error scenarios), implement minimal code to make tests pass, refactor while keeping tests green, add integration tests, verify all acceptance criteria through automated tests.
-* **Verification Strategy:** Follow strict TDD Red-Green-Refactor cycle, ensure all tests pass, validate API contracts match PRD specifications, run security and performance tests for file uploads, verify error handling for edge cases.
-* **Illustrative Prompt Snippet:**
-
-```
-# Rule: TDD Feature Implementation from PRD
-## Role: Senior Full-Stack Developer with TDD Expertise
-You are an expert in Test-Driven Development with deep knowledge of API design and file upload security.
-
-## Goal:
-Implement PRD-123 using strict TDD methodology with comprehensive verification.
-
-## Context:
-- Tech Stack: Python (FastAPI), React, PostgreSQL
-- Existing Model: `UserProfile` (located at `models/user.py`)
-- Coding Standards: Follow `CONTRIBUTING.md`
-- File Storage: AWS S3 with security best practices
-
-## TDD Process (MANDATORY):
-1. **Red Phase:** Write failing tests for each requirement in the PRD
-   - API endpoint tests (happy path + edge cases)
-   - Validation tests (file type, size, permissions)
-   - Security tests (malicious uploads, unauthorized access)
-   - Integration tests (end-to-end user flows)
-2. **Green Phase:** Write minimal code to make tests pass
-3. **Refactor Phase:** Improve code quality while keeping tests green
-4. **Verify:** Ensure all PRD acceptance criteria have corresponding passing tests
+## Required PRD Sections:
+1. **Feature Overview:** Business value and user problem
+2. **User Stories:** Complete user journeys with edge cases
+3. **Functional Requirements:** Detailed feature specifications
+4. **Technical Requirements:** API contracts, file handling, storage
+5. **Security Requirements:** Validation, sanitization, access controls
+6. **Performance Requirements:** File size limits, upload speed, storage optimization
+7. **Acceptance Criteria:** Testable success conditions
+8. **Error Scenarios:** Comprehensive failure handling
 
 ## Verification Criteria:
-- All tests must pass before any code is considered complete
-- API contracts must match PRD specifications exactly
-- Security validation must handle all identified threat vectors
-- Performance tests must validate upload limits and timeouts
-- Integration tests must cover complete user workflows
-
-## Output:
-- Test files written BEFORE implementation code
-- Implementation code that makes all tests pass
-- Verification report showing TDD cycle compliance
-- Summary mapping each test to specific PRD requirements
+- All requirements must be specific and testable
+- Security considerations must address OWASP top 10
+- Performance requirements must include measurable metrics
+- User experience must be detailed for both success and failure paths
 ```
 
-### Scenario 3: Visual Testing & Responsive Component Development
+### Phase 2: Plan – Breaking Down the Execution Strategy
 
-* **Your Goal:** "Develop a new responsive 'Product Card' React component with comprehensive visual validation. It should display product image, name, price, and an 'Add to Cart' button. The card must adapt its layout for mobile, tablet, and desktop views with automated verification of design compliance."
-* **Agent's Potential Actions:** Create ProductCard.jsx with TypeScript, implement CSS modules with responsive breakpoints, add button state management with proper error handling, write comprehensive Jest/RTL unit tests, create Puppeteer visual regression tests, implement accessibility testing, generate cross-browser compatibility reports.
-* **Verification Strategy:** Run unit tests for component logic, execute visual regression tests across breakpoints, validate accessibility compliance (WCAG 2.1), test keyboard navigation, verify color contrast ratios, ensure graceful degradation for edge cases.
+* **Your Goal:** "Take the PRD and create a detailed development prompt plan with step-by-step implementation strategy."
+* **Agent's Potential Actions:** Analyze PRD requirements, break down into implementable tasks, define development sequence, specify testing strategy for each step, create verification checkpoints, identify potential blockers and mitigation strategies.
+* **Verification Strategy:** Validate that all PRD requirements are covered in the plan, ensure each step has clear deliverables and verification criteria, confirm the sequence minimizes dependencies and enables parallel work where possible.
 * **Illustrative Prompt Snippet:**
 
 ```
-# Rule: Responsive Component with Comprehensive Verification
-## Role: Senior Frontend Developer & Quality Assurance Engineer
-You are an expert React developer with extensive experience in responsive design, accessibility, and comprehensive testing strategies.
+# Rule: Create Comprehensive Development Execution Plan
+## Role: Senior Engineering Lead & DevOps Specialist
+You are an expert at breaking complex features into manageable, verifiable development steps.
 
 ## Goal:
-Create a ProductCard component with multi-layered verification ensuring production readiness.
+Transform the PRD into a detailed prompt plan with step-by-step execution strategy.
 
-## Requirements:
-1. **Component:** React functional component with TypeScript
-2. **Props:** Fully typed `product` interface with validation
-3. **Responsive:** Mobile (<768px), Tablet (<1024px), Desktop (>=1024px)
-4. **Accessibility:** WCAG 2.1 AA compliance
-5. **Testing:** Unit tests, visual regression, accessibility validation
-6. **Performance:** Optimized images, minimal re-renders
+## Input:
+- Project Requirements Document (attached)
+- Current codebase structure analysis
+- Team capacity and timeline constraints
 
-## Verification Layers:
-1. **Unit Testing:** Jest/RTL for component behavior and edge cases
-2. **Visual Regression:** Puppeteer screenshots at all breakpoints
-3. **Accessibility Testing:** Automated a11y checks and keyboard navigation
-4. **Performance Testing:** Bundle size analysis and render performance
-5. **Cross-browser Testing:** Chrome, Firefox, Safari compatibility
-6. **Design System Compliance:** Verify adherence to design tokens
+## Required Plan Sections:
+1. **Development Phases:** Logical grouping of related tasks
+2. **Task Breakdown:** Specific, actionable development steps
+3. **Testing Strategy:** Unit, integration, and end-to-end test plans
+4. **Verification Gates:** Quality checkpoints for each phase
+5. **Risk Mitigation:** Potential issues and contingency plans
+6. **Progress Tracking:** Git commit strategy and milestone definition
 
-## Output:
-- Component files with comprehensive test coverage
-- Visual regression test suite with baseline images
-- Accessibility compliance report
-- Performance analysis and optimization recommendations
-- Cross-browser compatibility verification results
+## Output Format:
+Each task must include:
+- Clear deliverable definition
+- Specific verification criteria
+- Estimated complexity
+- Dependencies and prerequisites
+- Detailed prompt for AI agent execution
+
+## Verification Criteria:
+- Every PRD requirement maps to specific implementation tasks
+- Each task has measurable completion criteria
+- Testing strategy covers all identified edge cases
+- Plan enables incremental delivery and verification
 ```
 
-## 5. Becoming an "Agent Manager": Your Key Principles for Success
+### Phase 3: Execute – Development with Continuous Verification
+
+* **Your Goal:** "Execute the first phase of the prompt plan: implement secure file upload API with comprehensive testing."
+* **Agent's Potential Actions:** Follow TDD approach from the plan, implement API endpoints with validation, create comprehensive test suites, set up file storage integration, implement security measures, create monitoring and logging, commit progress with descriptive messages.
+* **Verification Strategy:** Run complete test suite after each implementation step, validate security measures with penetration testing tools, verify API contracts match PRD specifications, ensure all commits are atomic and reversible.
+* **Illustrative Prompt Snippet:**
+
+```
+# Rule: Execute Development Phase with Built-in Verification
+## Role: Senior Full-Stack Developer with Security Focus
+You are executing Phase 1 of the approved development plan with rigorous quality gates.
+
+## Current Task: Secure File Upload API Implementation
+Based on the attached prompt plan, implement the secure file upload functionality.
+
+## Execution Requirements:
+1. **Follow TDD:** Write failing tests first, implement minimal code to pass
+2. **Security First:** Validate file types, scan for malware signatures, enforce size limits
+3. **Progressive Commits:** Make atomic commits for each logical step
+4. **Continuous Verification:** Run full test suite after each major change
+
+## Implementation Sequence (from prompt plan):
+1. Create failing API endpoint tests
+2. Implement basic upload endpoint
+3. Add file validation and security checks
+4. Integrate S3 storage with proper error handling
+5. Add monitoring and logging
+6. Verify all acceptance criteria
+
+## Verification Protocol:
+- All tests must pass before proceeding to next step
+- Security scan must show no vulnerabilities
+- API must handle all error scenarios from PRD
+- Git log must show clear progress with descriptive commits
+- Performance must meet PRD benchmarks
+
+## Progress Tracking:
+Document each step with:
+- What was implemented
+- Verification results (tests, security, performance)
+- Any deviations from plan and rationale
+- Next step readiness assessment
+```
+
+This interconnected approach shows how each phase builds on the previous one, with verification ensuring quality at every step. The agent becomes your implementation partner while you maintain architectural oversight and quality standards.
+
+## 6. Becoming an "Agent Manager": Your Key Principles for Success
 
 Thinking back to that "skip lead" analogy – managing managers effectively is different from managing ICs. Similarly, directing AI agents effectively requires a new mindset focused on verification and quality gates:
 
@@ -215,13 +233,7 @@ Thinking back to that "skip lead" analogy – managing managers effectively is d
 
 3. **Iterate and Refine with Verification Loops:** Start with well-defined, moderately complex features that have clear verification criteria. As you build confidence, expand scope while maintaining rigorous verification standards. Each iteration should include lessons learned about both requirements and verification strategies.
 
-4. **The IPEV Loop is Your Friend (Ideate-Plan-Execute-Verify):** 
-
-<center>
-<Image src={ipevCycle} alt="IPEV Cycle diagram showing the iterative process of Ideate, Plan, Execute, and Verify" width={300} />
-</center>
-
-Apply this rigorously with extra emphasis on verification:
+4. **Apply the IPEV Loop Rigorously:** Use the framework we established earlier with extra emphasis on verification:
    * **Ideate:** Clearly define *what* you want and *how you'll know it's correct*.
    * **Plan:** Ask the agent to outline both implementation and verification strategies. Review not just the approach, but the testing methodology.
    * **Execute:** Let the agent proceed with built-in verification checkpoints. Agents should validate their work continuously, not just at the end.
