@@ -204,5 +204,59 @@ describe('NewsletterApplicationService', () => {
       expect(result.status).toBe('failed');
       expect(result.hasFailures).toBe(true);
     });
+
+    it('should query newsletter progress by title', async () => {
+      // Create a campaign
+      await service.sendNewsletter(
+        'query-progress-test',
+        'Query Progress Test',
+        'Preview',
+        '<p>Content {{unsubscribeKey}}</p>',
+        false
+      );
+
+      // Query progress
+      const progress = await service.getNewsletterProgress('query-progress-test');
+
+      expect(progress).not.toBeNull();
+      expect(progress!.campaignTitle).toBe('query-progress-test');
+      expect(progress!.status).toBe('completed');
+      expect(progress!.totalRecipients).toBe(3);
+      expect(progress!.processedCount).toBe(3);
+      expect(progress!.progressPercentage).toBe(100);
+      expect(progress!.hasFailures).toBe(false);
+      expect(progress!.isNewCampaign).toBe(false);
+    });
+
+    it('should return null for non-existent campaign', async () => {
+      const progress = await service.getNewsletterProgress('non-existent-campaign');
+      expect(progress).toBeNull();
+    });
+
+    it('should track progress for partially completed campaigns', async () => {
+      // Setup to fail some emails
+      fakeSender.setShouldFailEmails(['user1@example.com']);
+
+      // Start campaign
+      const result = await service.sendNewsletter(
+        'partial-progress-test',
+        'Partial Progress Test',
+        'Preview',
+        '<p>Content {{unsubscribeKey}}</p>',
+        false
+      );
+
+      expect(result.status).toBe('failed');
+
+      // Query progress
+      const progress = await service.getNewsletterProgress('partial-progress-test');
+
+      expect(progress).not.toBeNull();
+      expect(progress!.status).toBe('failed');
+      expect(progress!.totalRecipients).toBe(3);
+      expect(progress!.processedCount).toBe(2); // 2 successful, 1 failed
+      expect(progress!.progressPercentage).toBe(67);
+      expect(progress!.hasFailures).toBe(true);
+    });
   });
 });
