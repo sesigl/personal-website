@@ -125,7 +125,7 @@ export default class NewsletterApplicationService {
       contacts,
       UNSUBSCRIBE_KEY_PLACEHOLDER,
       test,
-      "test@example.com"
+      "akrillo89@gmail.com"
     );
 
     await this.newsletterRepository.save(newsletter);

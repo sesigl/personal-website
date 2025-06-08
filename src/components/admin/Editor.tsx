@@ -202,12 +202,13 @@ export default function EmailBuilderExample() {
           isTest
         );
         
+        // Start tracking progress for both test and production sends
+        setTrackingCampaign(campaignTitle);
+        progressTracker.actions.startPolling(campaignTitle);
+        
         if (isTest) {
-          alert('Test email sent!');
+          alert('Test newsletter sending started! Progress will be shown below.');
         } else {
-          // Start tracking progress for non-test sends
-          setTrackingCampaign(campaignTitle);
-          progressTracker.actions.startPolling(campaignTitle);
           alert('Newsletter sending started! Progress will be shown below.');
         }
       } catch (error) {

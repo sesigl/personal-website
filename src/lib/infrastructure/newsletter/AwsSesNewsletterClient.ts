@@ -64,6 +64,17 @@ export default class AwsSesNewsletterClient implements NewsletterSender {
       return [];
     }
 
+    // Detect test mode: if all recipients have the same email, add delay for progress visualization
+    const isTestMode = recipients.length > 1 && recipients.every(r => r.email === recipients[0].email);
+    if (isTestMode) {
+      // Use shorter delay during automated tests, longer delay for manual browser testing
+      const isRunningTests = process.env.NODE_ENV === 'test' || process.env.VITEST === 'true';
+      const delay = isRunningTests ? 100 : 2000; // 100ms for tests, 2s for browser
+      
+      console.log(`Test mode detected: Adding delay (${delay}ms) for progress visualization...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+
     const templateName = this.generateTemplateName('newsletter-batch');
     let templateCreated = false;
     

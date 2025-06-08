@@ -34,7 +34,7 @@ describe('NewsletterApplicationService', () => {
     // Setup test contacts
     await newsletterClient.createContact('user1@example.com');
     await newsletterClient.createContact('user2@example.com');
-    await newsletterClient.createContact('test@example.com'); // Test user
+    await newsletterClient.createContact('akrillo89@gmail.com'); // Test user
   });
 
   describe('Transparent Resume Logic', () => {
@@ -114,7 +114,7 @@ describe('NewsletterApplicationService', () => {
       const newsletter = await newsletterRepository.findByTitle('test-campaign-2024');
       const deliveries = newsletter!.getEmailDeliveries();
       expect(deliveries).toHaveLength(1);
-      expect(deliveries[0].recipientEmail).toBe('test@example.com');
+      expect(deliveries[0].recipientEmail).toBe('akrillo89@gmail.com');
     });
 
     it('should handle batch processing with proper logging', async () => {
