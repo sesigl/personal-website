@@ -23,3 +23,7 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 .vercel
+
+# terraform
+.terraform
+production.tfvars

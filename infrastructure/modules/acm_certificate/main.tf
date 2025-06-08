@@ -20,6 +20,8 @@ resource "aws_acm_certificate" "certificate" {
   }
 }
 
+/*
+Not needed anymore. Plan from 2025-06 showed a diff (it tried to add it again)
 resource "aws_acm_certificate_validation" "certificate_validation" {
   #  provider = aws.us_east1
 
@@ -30,6 +32,7 @@ resource "aws_acm_certificate_validation" "certificate_validation" {
     create = "30m"
   }
 }
+*/
 
 resource "aws_route53_record" "certificate_validation_record" {
   #  provider = aws.us_east1
