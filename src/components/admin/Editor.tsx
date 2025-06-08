@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 import newsletterFooter from './newsletterFooter';
 import newsletterTemplateDefault from './newsletterTemplateDefault';
-import ProgressTracker, { useProgressTracker } from './ProgressTracker';
+import ProgressTracker from './ProgressTracker';
 
 // Constants for recommended lengths
 const SUBJECT_LENGTH = {
@@ -137,12 +137,7 @@ export default function EmailBuilderExample() {
   const [trackingCampaign, setTrackingCampaign] = useState<string>('');
   const [isCurrentCampaignTest, setIsCurrentCampaignTest] = useState<boolean>(false);
   
-  // Use the progress tracker hook
-  const progressTracker = useProgressTracker({
-    campaignTitle: trackingCampaign,
-    autoStart: false, // We'll start manually after sending
-    pollInterval: 2000
-  });
+  // Progress tracker will be handled by the component below
 
   // Update localStorage when form fields change
   useEffect(() => {
@@ -192,7 +187,6 @@ export default function EmailBuilderExample() {
       }
       
       setIsLoading(true);
-      progressTracker.actions.stopPolling(); // Stop any existing polling
       
       try {
         const result = await sendNewsletter(
@@ -206,7 +200,6 @@ export default function EmailBuilderExample() {
         // Start tracking progress for both test and production sends
         setTrackingCampaign(campaignTitle);
         setIsCurrentCampaignTest(isTest);
-        progressTracker.actions.startPolling(campaignTitle);
         
         if (isTest) {
           alert('Test newsletter sending started! Progress will be shown below.');
@@ -346,7 +339,7 @@ export default function EmailBuilderExample() {
             {trackingCampaign && (
               <ProgressTracker
                 campaignTitle={trackingCampaign}
-                autoStart={false}
+                autoStart={true}
                 pollInterval={2000}
                 testMode={isCurrentCampaignTest}
               />

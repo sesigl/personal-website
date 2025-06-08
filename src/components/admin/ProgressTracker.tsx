@@ -136,7 +136,7 @@ export function useProgressTracker({
         let progressData: ProgressData | null;
         
         if (testMode) {
-          // Simulate realistic progress
+          // In test mode, always simulate progress regardless of backend state
           simulatedProgressRef.current += 1;
           progressData = createSimulatedProgress(title, simulatedProgressRef.current);
           
