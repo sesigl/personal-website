@@ -72,7 +72,8 @@ describe('NewsletterApplicationService', () => {
       );
 
       expect(firstResult.isNewCampaign).toBe(true);
-      expect(firstResult.status).toBe('failed');
+      expect(firstResult.status).toBe('completed');
+      expect(firstResult.hasFailures).toBe(true);
       expect(firstResult.progressPercentage).toBeLessThan(100);
 
       // Reset fake sender to succeed
@@ -206,7 +207,7 @@ describe('NewsletterApplicationService', () => {
       );
 
       expect(firstResult.isNewCampaign).toBe(true);
-      expect(firstResult.status).toBe('failed');
+      expect(firstResult.status).toBe('completed');
       expect(firstResult.totalRecipients).toBe(6); // All contacts
       expect(firstResult.processedCount).toBe(4); // 4 successful, 2 failed
       expect(firstResult.hasFailures).toBe(true);
@@ -214,7 +215,7 @@ describe('NewsletterApplicationService', () => {
       // Check progress using progress tracking
       const progressAfterFirst = await service.getNewsletterProgress('integration-test-campaign');
       expect(progressAfterFirst).not.toBeNull();
-      expect(progressAfterFirst!.status).toBe('failed');
+      expect(progressAfterFirst!.status).toBe('completed');
       expect(progressAfterFirst!.processedCount).toBe(4);
       expect(progressAfterFirst!.hasFailures).toBe(true);
 
@@ -338,7 +339,7 @@ describe('NewsletterApplicationService', () => {
       expect(result.totalRecipients).toBe(3);
       expect(result.processedCount).toBe(2); // 2 successful, 1 failed
       expect(result.progressPercentage).toBe(67); // 2/3 = 66.67% rounded
-      expect(result.status).toBe('failed');
+      expect(result.status).toBe('completed');
       expect(result.hasFailures).toBe(true);
     });
 
@@ -383,17 +384,85 @@ describe('NewsletterApplicationService', () => {
         false
       );
 
-      expect(result.status).toBe('failed');
+      expect(result.status).toBe('completed');
 
       // Query progress
       const progress = await service.getNewsletterProgress('partial-progress-test');
 
       expect(progress).not.toBeNull();
-      expect(progress!.status).toBe('failed');
+      expect(progress!.status).toBe('completed');
       expect(progress!.totalRecipients).toBe(3);
       expect(progress!.processedCount).toBe(2); // 2 successful, 1 failed
       expect(progress!.progressPercentage).toBe(67);
       expect(progress!.hasFailures).toBe(true);
+    });
+
+    it('should retry failed deliveries multiple times until all succeed', async () => {
+      // Create additional contacts for this test
+      await newsletterClient.createContact('retry1@example.com');
+      await newsletterClient.createContact('retry2@example.com');
+      await newsletterClient.createContact('retry3@example.com');
+      
+      // First attempt: fail 2 out of 6 emails
+      fakeSender.setShouldFailEmails(['retry1@example.com', 'retry2@example.com']);
+      
+      const firstAttempt = await service.sendNewsletter(
+        'multiple-retry-test',
+        'Multiple Retry Test',
+        'Testing multiple retries',
+        '<h1>Content {{unsubscribeKey}}</h1>',
+        false
+      );
+
+      expect(firstAttempt.status).toBe('completed');
+      expect(firstAttempt.totalRecipients).toBe(6);
+      expect(firstAttempt.processedCount).toBe(4); // 4 successful
+      expect(firstAttempt.hasFailures).toBe(true);
+
+      // Second attempt: fix one failure (retry1), but keep the other failing
+      fakeSender.setShouldFailEmails(['retry2@example.com']);
+      fakeSender.clearLogs();
+
+      const secondAttempt = await service.sendNewsletter(
+        'multiple-retry-test',
+        'Multiple Retry Test',
+        'Testing multiple retries',
+        '<h1>Content {{unsubscribeKey}}</h1>',
+        false
+      );
+
+      expect(secondAttempt.status).toBe('completed');
+      expect(secondAttempt.processedCount).toBe(5); // 1 more successful (retry1)
+      expect(secondAttempt.hasFailures).toBe(true); // Still has failures (retry2)
+
+      // Verify only the 2 failed emails from first attempt were retried
+      const secondLogs = fakeSender.getLogs();
+      expect(secondLogs.some(log => log.includes('retry1@example.com'))).toBe(true);
+      expect(secondLogs.some(log => log.includes('retry2@example.com'))).toBe(true);
+      expect(secondLogs.some(log => log.includes('retry3@example.com'))).toBe(false); // Not part of failures
+
+      // Third attempt: fix all remaining failures
+      fakeSender.setShouldFailEmails([]);
+      fakeSender.clearLogs();
+
+      const thirdAttempt = await service.sendNewsletter(
+        'multiple-retry-test',
+        'Multiple Retry Test',
+        'Testing multiple retries',
+        '<h1>Content {{unsubscribeKey}}</h1>',
+        false
+      );
+
+      expect(thirdAttempt.status).toBe('completed');
+      expect(thirdAttempt.processedCount).toBe(6); // All successful now
+      expect(thirdAttempt.hasFailures).toBe(false);
+      expect(thirdAttempt.progressPercentage).toBe(100);
+
+      // Verify only the remaining failed email was retried
+      const thirdLogs = fakeSender.getLogs();
+      expect(thirdLogs.some(log => log.includes('retry2@example.com'))).toBe(true);
+      expect(thirdLogs.some(log => log.includes('retry1@example.com'))).toBe(false); // Already sent in second attempt
+      expect(thirdLogs.some(log => log.includes('retry3@example.com'))).toBe(false); // Never failed
     });
   });
 });
