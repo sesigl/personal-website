@@ -89,3 +89,20 @@ resource "aws_route53_record" "prod_learn_api" {
     evaluate_target_health = false
   }
 }
+
+# AWS SES MAIL FROM domain records
+resource "aws_route53_record" "ses_mail_from_mx" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "mail"
+  type    = "MX"
+  ttl     = 300
+  records = ["10 feedback-smtp.eu-central-1.amazonses.com"]
+}
+
+resource "aws_route53_record" "ses_mail_from_txt" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "mail"
+  type    = "TXT"
+  ttl     = 300
+  records = ["v=spf1 include:amazonses.com ~all"]
+}
