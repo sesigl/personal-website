@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 import newsletterFooter from './newsletterFooter';
 import newsletterTemplateDefault from './newsletterTemplateDefault';
+import ProgressTracker, { useProgressTracker } from './ProgressTracker';
 
 // Constants for recommended lengths
 const SUBJECT_LENGTH = {
@@ -42,8 +43,7 @@ function sendNewsletter(
   newsletterEmailHtml: string, 
   subject: string, 
   previewHeadline: string, 
-  isTest: boolean = false,
-  onProgress?: (progress: any) => void
+  isTest: boolean = false
 ) {
   return actions.admin.sendNewsletter({
     campaignTitle,
@@ -53,36 +53,11 @@ function sendNewsletter(
     test: isTest
   }).then((result) => {
     console.log('Newsletter send result:', result);
-    
-    // Start polling for progress if not a test
-    if (!isTest && onProgress) {
-      pollNewsletterProgress(campaignTitle, onProgress);
-    }
-    
     return result;
   }).catch((error) => {
     console.error(error);
     throw error;
   });
-}
-
-function pollNewsletterProgress(campaignTitle: string, onProgress: (progress: any) => void) {
-  const poll = () => {
-    actions.admin.getNewsletterProgress({ campaignTitle })
-      .then((progress) => {
-        onProgress(progress);
-        
-        // Continue polling if not completed
-        if (progress && progress.status !== 'completed' && progress.status !== 'failed') {
-          setTimeout(poll, 2000); // Poll every 2 seconds
-        }
-      })
-      .catch((error) => {
-        console.error('Error polling progress:', error);
-      });
-  };
-  
-  poll();
 }
 
 // Define your email template options
@@ -159,7 +134,14 @@ export default function EmailBuilderExample() {
     localStorage.getItem(STORAGE_KEYS.CAMPAIGN_TITLE) || ''
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [progress, setProgress] = useState<any>(null);
+  const [trackingCampaign, setTrackingCampaign] = useState<string>('');
+  
+  // Use the progress tracker hook
+  const progressTracker = useProgressTracker({
+    campaignTitle: trackingCampaign,
+    autoStart: false, // We'll start manually after sending
+    pollInterval: 2000
+  });
 
   // Update localStorage when form fields change
   useEffect(() => {
@@ -209,7 +191,7 @@ export default function EmailBuilderExample() {
       }
       
       setIsLoading(true);
-      setProgress(null);
+      progressTracker.actions.stopPolling(); // Stop any existing polling
       
       try {
         const result = await sendNewsletter(
@@ -217,15 +199,15 @@ export default function EmailBuilderExample() {
           getEmailContent(), 
           subject, 
           previewHeadline, 
-          isTest,
-          (progressData) => {
-            setProgress(progressData);
-          }
+          isTest
         );
         
         if (isTest) {
           alert('Test email sent!');
         } else {
+          // Start tracking progress for non-test sends
+          setTrackingCampaign(campaignTitle);
+          progressTracker.actions.startPolling(campaignTitle);
           alert('Newsletter sending started! Progress will be shown below.');
         }
       } catch (error) {
@@ -358,40 +340,12 @@ export default function EmailBuilderExample() {
             </div>
             
             {/* Progress tracking section */}
-            {progress && (
-              <div className="mt-4 p-4 border rounded bg-gray-50">
-                <h3 className="font-medium mb-2">Newsletter Progress</h3>
-                <div className="space-y-2">
-                  <div>
-                    <strong>Campaign:</strong> {progress.campaignTitle}
-                  </div>
-                  <div>
-                    <strong>Status:</strong> 
-                    <span className={`ml-2 px-2 py-1 rounded text-sm ${
-                      progress.status === 'completed' ? 'bg-green-200 text-green-800' :
-                      progress.status === 'failed' ? 'bg-red-200 text-red-800' :
-                      progress.status === 'in_progress' ? 'bg-blue-200 text-blue-800' :
-                      'bg-gray-200 text-gray-800'
-                    }`}>
-                      {progress.status}
-                    </span>
-                  </div>
-                  <div>
-                    <strong>Progress:</strong> {progress.processedCount}/{progress.totalRecipients} ({progress.progressPercentage}%)
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-blue-600 h-2 rounded-full transition-all"
-                      style={{ width: `${progress.progressPercentage}%` }}
-                    ></div>
-                  </div>
-                  {progress.hasFailures && (
-                    <div className="text-red-600">
-                      ⚠️ Some deliveries failed
-                    </div>
-                  )}
-                </div>
-              </div>
+            {trackingCampaign && (
+              <ProgressTracker
+                campaignTitle={trackingCampaign}
+                autoStart={false}
+                pollInterval={2000}
+              />
             )}
           </div>
         </>
