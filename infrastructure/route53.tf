@@ -27,7 +27,7 @@ resource "aws_route53_record" "google_verification_txt" {
     "google-site-verification=XPyaSlZabo5ucYd56L0VZd6-hFbyiQ0-lK0p3AxsxTA",
     "apple-domain=lYxPxVEiZphkzEnL",
     "v=spf1 include:icloud.com ~all",
-    "brevo-code:ad6492b82d7f0b7cf48cbe7658d06a6c"]
+  "brevo-code:ad6492b82d7f0b7cf48cbe7658d06a6c"]
 }
 
 # brevo auth

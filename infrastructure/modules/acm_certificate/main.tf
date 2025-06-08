@@ -8,7 +8,7 @@ terraform {
 }
 
 resource "aws_acm_certificate" "certificate" {
-#  provider = aws.us_east1
+  #  provider = aws.us_east1
 
   domain_name       = var.domain_name
   validation_method = "DNS"
@@ -21,7 +21,7 @@ resource "aws_acm_certificate" "certificate" {
 }
 
 resource "aws_acm_certificate_validation" "certificate_validation" {
-#  provider = aws.us_east1
+  #  provider = aws.us_east1
 
   certificate_arn         = aws_acm_certificate.certificate.arn
   validation_record_fqdns = [for record in aws_acm_certificate.certificate.domain_validation_options : record.resource_record_name]
@@ -32,7 +32,7 @@ resource "aws_acm_certificate_validation" "certificate_validation" {
 }
 
 resource "aws_route53_record" "certificate_validation_record" {
-#  provider = aws.us_east1
+  #  provider = aws.us_east1
 
   for_each = {
     for dvo in aws_acm_certificate.certificate.domain_validation_options : dvo.domain_name => {
