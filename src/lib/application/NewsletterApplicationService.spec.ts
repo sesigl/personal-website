@@ -186,6 +186,143 @@ describe('NewsletterApplicationService', () => {
     });
   });
 
+  describe('End-to-End Integration Tests', () => {
+    it('should handle complete newsletter workflow with resume and progress tracking', async () => {
+      // Create contacts for more realistic batch testing
+      await newsletterClient.createContact('user3@example.com');
+      await newsletterClient.createContact('user4@example.com');
+      await newsletterClient.createContact('user5@example.com');
+      
+      // Setup to fail some emails initially
+      fakeSender.setShouldFailEmails(['user2@example.com', 'user4@example.com']);
+      
+      // Start first campaign
+      const firstResult = await service.sendNewsletter(
+        'integration-test-campaign',
+        'Integration Test Newsletter',
+        'Testing the complete workflow',
+        '<h1>Newsletter Content {{unsubscribeKey}}</h1>',
+        false
+      );
+
+      expect(firstResult.isNewCampaign).toBe(true);
+      expect(firstResult.status).toBe('failed');
+      expect(firstResult.totalRecipients).toBe(6); // All contacts
+      expect(firstResult.processedCount).toBe(4); // 4 successful, 2 failed
+      expect(firstResult.hasFailures).toBe(true);
+
+      // Check progress using progress tracking
+      const progressAfterFirst = await service.getNewsletterProgress('integration-test-campaign');
+      expect(progressAfterFirst).not.toBeNull();
+      expect(progressAfterFirst!.status).toBe('failed');
+      expect(progressAfterFirst!.processedCount).toBe(4);
+      expect(progressAfterFirst!.hasFailures).toBe(true);
+
+      // Fix the fake sender and resume
+      fakeSender.setShouldFailEmails([]);
+      fakeSender.clearLogs();
+
+      // Resume the campaign - should only process failed emails
+      const resumeResult = await service.sendNewsletter(
+        'integration-test-campaign', // Same title
+        'Different Subject', // This should be ignored for existing campaign
+        'Different Preview',
+        '<p>Different Content</p>',
+        false
+      );
+
+      expect(resumeResult.isNewCampaign).toBe(false);
+      expect(resumeResult.status).toBe('completed');
+      expect(resumeResult.totalRecipients).toBe(6);
+      expect(resumeResult.processedCount).toBe(6); // All successful now
+      expect(resumeResult.progressPercentage).toBe(100);
+      expect(resumeResult.hasFailures).toBe(false);
+
+      // Verify progress tracking shows completion
+      const finalProgress = await service.getNewsletterProgress('integration-test-campaign');
+      expect(finalProgress!.status).toBe('completed');
+      expect(finalProgress!.processedCount).toBe(6);
+
+      // Verify only failed emails were retried
+      const logs = fakeSender.getLogs();
+      expect(logs.filter(log => log.includes('user2@example.com'))).toHaveLength(1);
+      expect(logs.filter(log => log.includes('user4@example.com'))).toHaveLength(1);
+      expect(logs.filter(log => log.includes('user1@example.com'))).toHaveLength(0); // Already sent
+    });
+
+    it('should handle large batch processing with proper batching', async () => {
+      // Create many test contacts
+      const batchSize = 15;
+      for (let i = 10; i < 10 + batchSize; i++) {
+        await newsletterClient.createContact(`user${i}@example.com`);
+      }
+
+      const result = await service.sendNewsletter(
+        'large-batch-test',
+        'Large Batch Newsletter',
+        'Testing batch processing',
+        '<p>Batch content {{unsubscribeKey}}</p>',
+        false
+      );
+
+      expect(result.status).toBe('completed');
+      expect(result.totalRecipients).toBe(batchSize + 3); // Original 3 + new batch
+      expect(result.processedCount).toBe(batchSize + 3);
+      expect(result.progressPercentage).toBe(100);
+
+      // Verify batch processing occurred
+      const logs = fakeSender.getLogs();
+      expect(logs.length).toBeGreaterThan(1); // Should have multiple batch logs
+    });
+
+    it('should maintain idempotency for duplicate campaign titles', async () => {
+      // Create initial campaign
+      const firstResult = await service.sendNewsletter(
+        'idempotency-test',
+        'First Campaign',
+        'First Preview',
+        '<h1>First Content</h1>',
+        false
+      );
+
+      expect(firstResult.isNewCampaign).toBe(true);
+      expect(firstResult.status).toBe('completed');
+
+      // Try to create campaign with same title
+      const secondResult = await service.sendNewsletter(
+        'idempotency-test',
+        'Second Campaign', // Different content
+        'Second Preview',
+        '<h1>Second Content</h1>',
+        false
+      );
+
+      expect(secondResult.isNewCampaign).toBe(false);
+      expect(secondResult.status).toBe('completed');
+
+      // Verify original content was preserved
+      const newsletter = await newsletterRepository.findByTitle('idempotency-test');
+      expect(newsletter!.getSubject()).toBe('First Campaign');
+    });
+
+    it('should handle test mode isolation correctly', async () => {
+      const testResult = await service.sendNewsletter(
+        'test-mode-campaign',
+        'Test Mode Newsletter',
+        'Testing isolation',
+        '<p>Test content {{unsubscribeKey}}</p>',
+        true // Test mode
+      );
+
+      expect(testResult.totalRecipients).toBe(1); // Only test email
+      expect(testResult.status).toBe('completed');
+
+      // Verify no progress tracking needed for test mode
+      const progress = await service.getNewsletterProgress('test-mode-campaign');
+      expect(progress!.totalRecipients).toBe(1);
+    });
+  });
+
   describe('Progress Tracking', () => {
     it('should provide accurate progress information', async () => {
       fakeSender.setShouldFailEmails(['user2@example.com']);
