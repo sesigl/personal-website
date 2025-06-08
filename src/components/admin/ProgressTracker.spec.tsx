@@ -37,7 +37,8 @@ const mockProgressData: ProgressData = {
   processedCount: 75,
   progressPercentage: 75,
   hasFailures: false,
-  campaignTitle: 'test-campaign-2024'
+  campaignTitle: 'test-campaign-2024',
+  isTest: false
 };
 
 const completedProgressData: ProgressData = {

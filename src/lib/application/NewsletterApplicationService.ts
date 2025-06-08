@@ -14,6 +14,7 @@ export interface NewsletterSendResult {
   progressPercentage: number;
   hasFailures: boolean;
   campaignTitle: string;
+  isTest: boolean;
 }
 
 export default class NewsletterApplicationService {
@@ -52,12 +53,12 @@ export default class NewsletterApplicationService {
     );
 
     if (newsletter.isEmpty()) {
-      return this.createEmptyCampaignResult(isNewCampaign, campaignTitle);
+      return this.createEmptyCampaignResult(isNewCampaign, campaignTitle, test);
     }
 
     await this.executeCampaign(newsletter, campaignTitle);
 
-    return this.createCampaignResult(newsletter, isNewCampaign, campaignTitle);
+    return this.createCampaignResult(newsletter, isNewCampaign, campaignTitle, test);
   }
 
   async getNewsletterProgress(campaignTitle: string): Promise<NewsletterSendResult | null> {
@@ -67,7 +68,11 @@ export default class NewsletterApplicationService {
       return null;
     }
 
-    return this.createCampaignResult(newsletter, false, campaignTitle);
+    // Determine if this is a test campaign by checking if it only has 1 recipient with test email
+    const deliveries = newsletter.getEmailDeliveries();
+    const isTest = deliveries.length === 1;
+
+    return this.createCampaignResult(newsletter, false, campaignTitle, isTest);
   }
 
   private async getOrCreateCampaign(
@@ -133,7 +138,7 @@ export default class NewsletterApplicationService {
   }
 
 
-  private createEmptyCampaignResult(isNewCampaign: boolean, campaignTitle: string): NewsletterSendResult {
+  private createEmptyCampaignResult(isNewCampaign: boolean, campaignTitle: string, isTest: boolean): NewsletterSendResult {
     console.log(`Campaign ${campaignTitle} has no recipients - marking as completed`);
     
     return {
@@ -143,7 +148,8 @@ export default class NewsletterApplicationService {
       processedCount: 0,
       progressPercentage: 100,
       hasFailures: false,
-      campaignTitle
+      campaignTitle,
+      isTest
     };
   }
 
@@ -182,7 +188,7 @@ export default class NewsletterApplicationService {
     }
   }
 
-  private createCampaignResult(newsletter: Newsletter, isNewCampaign: boolean, campaignTitle: string): NewsletterSendResult {
+  private createCampaignResult(newsletter: Newsletter, isNewCampaign: boolean, campaignTitle: string, isTest: boolean): NewsletterSendResult {
     const deliveries = newsletter.getEmailDeliveries();
     const hasFailures = deliveries.some(d => d.status === 'failed');
     
@@ -195,7 +201,8 @@ export default class NewsletterApplicationService {
       processedCount: newsletter.getSuccessfulDeliveryCount(),
       progressPercentage: newsletter.getProgressPercentage(),
       hasFailures,
-      campaignTitle
+      campaignTitle,
+      isTest
     };
   }
 }

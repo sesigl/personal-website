@@ -135,6 +135,7 @@ export default function EmailBuilderExample() {
   );
   const [isLoading, setIsLoading] = useState(false);
   const [trackingCampaign, setTrackingCampaign] = useState<string>('');
+  const [isCurrentCampaignTest, setIsCurrentCampaignTest] = useState<boolean>(false);
   
   // Use the progress tracker hook
   const progressTracker = useProgressTracker({
@@ -204,6 +205,7 @@ export default function EmailBuilderExample() {
         
         // Start tracking progress for both test and production sends
         setTrackingCampaign(campaignTitle);
+        setIsCurrentCampaignTest(isTest);
         progressTracker.actions.startPolling(campaignTitle);
         
         if (isTest) {
@@ -346,6 +348,7 @@ export default function EmailBuilderExample() {
                 campaignTitle={trackingCampaign}
                 autoStart={false}
                 pollInterval={2000}
+                testMode={isCurrentCampaignTest}
               />
             )}
           </div>
