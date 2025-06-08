@@ -16,6 +16,9 @@ export default defineConfig({
     integrations: [mdx(), sitemap(), tailwind({ applyBaseStyles: false }), react()],
     adapter: vercel({
         imageService: true,
+        webAnalytics: {
+            enabled: true,
+        },
     }),
     //adapter: node({
     //    mode: 'standalone',
