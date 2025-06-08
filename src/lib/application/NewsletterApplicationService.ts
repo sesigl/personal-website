@@ -21,7 +21,7 @@ export default class NewsletterApplicationService {
   constructor(
     private readonly newsletterClient: NewsletterClient = new PostgresContactsRepository(),
     private readonly newsletterSender: NewsletterSender = new AwsSesNewsletterClient({
-      sourceEmail: "newsletter@sebastiansigl.com",
+      sourceEmail: "Sebastian Sigl <newsletter@sebastiansigl.com>",
       maxBatchSize: 50
     }),
     private readonly newsletterRepository: NewsletterRepository = new PostgresNewsletterRepository()
@@ -185,6 +185,12 @@ export default class NewsletterApplicationService {
       
       await this.newsletterRepository.update(newsletter);
       console.log(`Batch completed. Progress: ${newsletter.getProgressPercentage()}%`);
+      
+      // Rate limiting: ensure we don't exceed 14 emails per second
+      // With batch size of 10, wait at least 714ms between batches (10/14 ≈ 0.714 seconds)
+      if (newsletter.hasPendingDeliveries()) {
+        await new Promise(resolve => setTimeout(resolve, 750));
+      }
     }
   }
 

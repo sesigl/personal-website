@@ -3,7 +3,7 @@ import Newsletter, { UNSUBSCRIBE_KEY_PLACEHOLDER } from "../../domain/newsletter
 import Contact from "../../domain/newsletter/Contact";
 import { type Database, getDb } from "../db";
 import { newsletterCampaignsTable, emailDeliveriesTable, usersTable } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { eq, inArray, and } from "drizzle-orm";
 
 export default class PostgresNewsletterRepository implements NewsletterRepository {
   constructor(private readonly db: Database = getDb()) {}
@@ -99,27 +99,59 @@ export default class PostgresNewsletterRepository implements NewsletterRepositor
   async update(newsletter: Newsletter): Promise<void> {
     // Newsletter aggregate validates its own state - trust the domain model
     
-    // Update campaign
-    await this.db.update(newsletterCampaignsTable)
-      .set({
-        status: newsletter.getStatus(),
-        processedCount: this.getSuccessfulDeliveryCount(newsletter),
-        startedAt: newsletter.getStartedAt(),
-        completedAt: newsletter.getCompletedAt()
-      })
-      .where(eq(newsletterCampaignsTable.title, newsletter.getTitle()!));
-
-    // Update email deliveries
-    const deliveries = newsletter.getEmailDeliveries();
-    for (const delivery of deliveries) {
-      await this.db.update(emailDeliveriesTable)
+    await this.db.transaction(async (tx) => {
+      // Update campaign
+      await tx.update(newsletterCampaignsTable)
         .set({
-          status: delivery.status,
-          sentAt: delivery.sentAt,
-          errorMessage: delivery.errorMessage
+          status: newsletter.getStatus(),
+          processedCount: this.getSuccessfulDeliveryCount(newsletter),
+          startedAt: newsletter.getStartedAt(),
+          completedAt: newsletter.getCompletedAt()
         })
-        .where(eq(emailDeliveriesTable.recipientEmail, delivery.recipientEmail));
-    }
+        .where(eq(newsletterCampaignsTable.title, newsletter.getTitle()!));
+
+      // Update email deliveries in optimized batches
+      const deliveries = newsletter.getEmailDeliveries();
+      if (deliveries.length > 0) {
+        // Get campaign ID for the WHERE clause
+        const campaigns = await tx.select({ id: newsletterCampaignsTable.id })
+          .from(newsletterCampaignsTable)
+          .where(eq(newsletterCampaignsTable.title, newsletter.getTitle()!));
+        
+        if (campaigns.length > 0) {
+          const campaignId = campaigns[0].id;
+          
+          // Group deliveries by status to minimize updates
+          const deliveriesByStatus = new Map<string, typeof deliveries>();
+          for (const delivery of deliveries) {
+            const key = `${delivery.status}-${delivery.sentAt?.toISOString() || 'null'}-${delivery.errorMessage || 'null'}`;
+            if (!deliveriesByStatus.has(key)) {
+              deliveriesByStatus.set(key, []);
+            }
+            deliveriesByStatus.get(key)!.push(delivery);
+          }
+          
+          // Update each group in a single query within the transaction
+          for (const [, groupDeliveries] of deliveriesByStatus) {
+            const emails = groupDeliveries.map(d => d.recipientEmail);
+            const firstDelivery = groupDeliveries[0];
+            
+            await tx.update(emailDeliveriesTable)
+              .set({
+                status: firstDelivery.status,
+                sentAt: firstDelivery.sentAt,
+                errorMessage: firstDelivery.errorMessage
+              })
+              .where(
+                and(
+                  eq(emailDeliveriesTable.campaignId, campaignId),
+                  inArray(emailDeliveriesTable.recipientEmail, emails)
+                )
+              );
+          }
+        }
+      }
+    });
   }
 
   private getSuccessfulDeliveryCount(newsletter: Newsletter): number {
