@@ -224,13 +224,11 @@ export default class Newsletter {
       }
     }
 
-    // Update campaign status
-    const hasFailures = results.some(r => !r.success);
+    // Update campaign status - only mark as completed when no pending deliveries remain
+    // Don't mark as failed due to individual email failures - continue processing remaining emails
     const hasPendingDeliveries = this.emailDeliveries.some(d => d.status === 'pending');
 
-    if (hasFailures) {
-      this.status = 'failed';
-    } else if (!hasPendingDeliveries) {
+    if (!hasPendingDeliveries) {
       this.status = 'completed';
       this.completedAt = new Date();
     }
@@ -251,10 +249,13 @@ export default class Newsletter {
   }
 
   prepareForResume(): void {
-    if (this.status === 'failed') {
+    // Allow resuming if there are failed deliveries, regardless of campaign status
+    const hasFailedDeliveries = this.emailDeliveries.some(d => d.status === 'failed');
+    if (hasFailedDeliveries) {
       this.resetFailedToPending();
-      // Reset status to pending so the campaign can be retried
+      // Reset status to pending so failed emails can be retried
       this.status = 'pending';
+      this.completedAt = undefined;
     }
   }
 
@@ -263,7 +264,7 @@ export default class Newsletter {
   }
 
   shouldStopProcessing(): boolean {
-    return this.status === 'failed' || this.status === 'completed';
+    return this.status === 'completed';
   }
 
   getSuccessfulDeliveryCount(): number {

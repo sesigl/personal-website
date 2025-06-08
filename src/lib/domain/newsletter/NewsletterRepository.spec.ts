@@ -89,7 +89,7 @@ describe("NewsletterRepository", () => {
       await repository.update(newsletter);
 
       const retrieved = await repository.findByTitle("resume-test");
-      expect(retrieved!.getStatus()).toBe("failed");
+      expect(retrieved!.getStatus()).toBe("in_progress");
       
       const nextBatch = retrieved!.getNextBatch(10);
       expect(nextBatch).toHaveLength(1);
@@ -146,7 +146,7 @@ describe("NewsletterRepository", () => {
 
       // Retrieve and verify state preservation
       const retrieved = await repository.findByTitle("delivery-state-test");
-      expect(retrieved!.getStatus()).toBe("failed");
+      expect(retrieved!.getStatus()).toBe("in_progress");
       expect(retrieved!.getProgressPercentage()).toBe(33); // 1 out of 3 successful
 
       const deliveries = retrieved!.getEmailDeliveries();

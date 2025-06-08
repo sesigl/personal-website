@@ -172,6 +172,21 @@ export default class NewsletterApplicationService {
           subject: newsletter.getSubject(),
           htmlContent: newsletter.getHtmlTemplate()
         });
+        
+        // Log individual email failures
+        const failedEmails = batchResults.filter(r => !r.success);
+        if (failedEmails.length > 0) {
+          console.warn(`Campaign ${campaignTitle} - ${failedEmails.length} emails failed in batch:`);
+          failedEmails.forEach(failed => {
+            console.warn(`  ❌ ${failed.email}: ${failed.error}`);
+          });
+        }
+        
+        const successfulEmails = batchResults.filter(r => r.success);
+        if (successfulEmails.length > 0) {
+          console.log(`Campaign ${campaignTitle} - ${successfulEmails.length} emails sent successfully in batch`);
+        }
+        
         newsletter.processBatch(batchResults);
       } catch (error) {
         const failedResults = nextBatch.map(recipient => ({
@@ -180,7 +195,8 @@ export default class NewsletterApplicationService {
           error: (error as Error).message
         }));
         newsletter.processBatch(failedResults);
-        console.error(`Batch failed for campaign ${campaignTitle}:`, error);
+        console.error(`Campaign ${campaignTitle} - entire batch failed:`, error);
+        console.warn(`Campaign ${campaignTitle} - ${nextBatch.length} emails marked as failed due to batch error`);
       }
       
       await this.newsletterRepository.update(newsletter);
@@ -197,14 +213,28 @@ export default class NewsletterApplicationService {
   private createCampaignResult(newsletter: Newsletter, isNewCampaign: boolean, campaignTitle: string, isTest: boolean): NewsletterSendResult {
     const deliveries = newsletter.getEmailDeliveries();
     const hasFailures = deliveries.some(d => d.status === 'failed');
+    const successCount = newsletter.getSuccessfulDeliveryCount();
+    const failureCount = deliveries.filter(d => d.status === 'failed').length;
+    const totalRecipients = newsletter.getTotalRecipients();
     
     console.log(`Campaign ${campaignTitle} finished with status: ${newsletter.getStatus()}`);
+    console.log(`Campaign ${campaignTitle} summary: ${successCount}/${totalRecipients} emails sent successfully`);
+    
+    if (hasFailures) {
+      console.warn(`Campaign ${campaignTitle} - ${failureCount} emails failed:`);
+      deliveries
+        .filter(d => d.status === 'failed')
+        .forEach(failed => {
+          console.warn(`  ❌ ${failed.recipientEmail}: ${failed.errorMessage || 'Unknown error'}`);
+        });
+      console.log(`Campaign ${campaignTitle} - You can retry the campaign to resend failed emails`);
+    }
 
     return {
       isNewCampaign,
       status: newsletter.getStatus(),
-      totalRecipients: newsletter.getTotalRecipients(),
-      processedCount: newsletter.getSuccessfulDeliveryCount(),
+      totalRecipients,
+      processedCount: successCount,
       progressPercentage: newsletter.getProgressPercentage(),
       hasFailures,
       campaignTitle,
