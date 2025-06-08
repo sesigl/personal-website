@@ -1,1 +1,1 @@
-ALTER TABLE "email_deliveries" DROP IF EXISTS COLUMN "unsubscribe_key";
+ALTER TABLE "email_deliveries" DROP COLUMN IF EXISTS "unsubscribe_key";
