@@ -197,6 +197,9 @@ describe('AwsSesNewsletterClient', () => {
         htmlContent: '<p>Hello {{name}}!</p>'
       };
 
+      // Suppress console.error during this test to avoid stderr output
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
       // Mock: CreateTemplate succeeds, SendBulkEmail fails, DeleteTemplate succeeds
       mockSend.mockResolvedValueOnce({}); // CreateTemplate
       mockSend.mockRejectedValueOnce(new Error('AWS SES service unavailable')); // SendBulkEmail
@@ -213,6 +216,9 @@ describe('AwsSesNewsletterClient', () => {
 
       // Should still clean up template
       expect(mockSend).toHaveBeenCalledTimes(3);
+
+      // Restore console.error
+      consoleErrorSpy.mockRestore();
     });
 
     it('should handle empty batch gracefully', async () => {
