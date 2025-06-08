@@ -1,0 +1,1 @@
+refactor: Extract a Progress tracking section and add tests for it as well testing all the ins and outs of the progress tracking component

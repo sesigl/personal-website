@@ -37,20 +37,52 @@ function CharacterCount({ current, min, max, recommended }: CharacterCountProps)
   );
 }
 
-function sendNewsletter(newsletterEmailHtml: string, subject: string, previewHeadline: string, isTest: boolean = false) {
-  actions.admin.sendNewsletter({
+function sendNewsletter(
+  campaignTitle: string,
+  newsletterEmailHtml: string, 
+  subject: string, 
+  previewHeadline: string, 
+  isTest: boolean = false,
+  onProgress?: (progress: any) => void
+) {
+  return actions.admin.sendNewsletter({
+    campaignTitle,
     subject,
     previewHeadline,
     html: newsletterEmailHtml,
-    unsubscribeKeyPlaceholder: 'unsubscribeKey',
     test: isTest
-  }).then(() => {
-    alert(isTest ? 'Test email sent!' : 'Newsletter sent!');
-  }
-  ).catch((error) => {
+  }).then((result) => {
+    console.log('Newsletter send result:', result);
+    
+    // Start polling for progress if not a test
+    if (!isTest && onProgress) {
+      pollNewsletterProgress(campaignTitle, onProgress);
+    }
+    
+    return result;
+  }).catch((error) => {
     console.error(error);
-    alert('Something went wrong');
+    throw error;
   });
+}
+
+function pollNewsletterProgress(campaignTitle: string, onProgress: (progress: any) => void) {
+  const poll = () => {
+    actions.admin.getNewsletterProgress({ campaignTitle })
+      .then((progress) => {
+        onProgress(progress);
+        
+        // Continue polling if not completed
+        if (progress && progress.status !== 'completed' && progress.status !== 'failed') {
+          setTimeout(poll, 2000); // Poll every 2 seconds
+        }
+      })
+      .catch((error) => {
+        console.error('Error polling progress:', error);
+      });
+  };
+  
+  poll();
 }
 
 // Define your email template options
@@ -109,7 +141,8 @@ async function getYooptaEmailEditorOptions(): Promise<YooptaEmailEditorOptions> 
 const STORAGE_KEYS = {
   EDITOR_CONTENT: 'newsletter-editor-content',
   SUBJECT: 'newsletter-subject',
-  PREVIEW: 'newsletter-preview'
+  PREVIEW: 'newsletter-preview',
+  CAMPAIGN_TITLE: 'newsletter-campaign-title'
 } as const;
 
 export default function EmailBuilderExample() {
@@ -122,6 +155,11 @@ export default function EmailBuilderExample() {
   const [previewHeadline, setPreviewHeadline] = useState(() => 
     localStorage.getItem(STORAGE_KEYS.PREVIEW) || ''
   );
+  const [campaignTitle, setCampaignTitle] = useState(() => 
+    localStorage.getItem(STORAGE_KEYS.CAMPAIGN_TITLE) || ''
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState<any>(null);
 
   // Update localStorage when form fields change
   useEffect(() => {
@@ -131,6 +169,10 @@ export default function EmailBuilderExample() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.PREVIEW, previewHeadline);
   }, [previewHeadline]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.CAMPAIGN_TITLE, campaignTitle);
+  }, [campaignTitle]);
 
   useEffect(() => {
     getYooptaEmailEditorOptions().then((yooptaEmailEditorOptions) => {
@@ -153,6 +195,7 @@ export default function EmailBuilderExample() {
   const resetForm = () => {
     localStorage.removeItem(STORAGE_KEYS.SUBJECT);
     localStorage.removeItem(STORAGE_KEYS.PREVIEW);
+    localStorage.removeItem(STORAGE_KEYS.CAMPAIGN_TITLE);
     localStorage.removeItem(STORAGE_KEYS.EDITOR_CONTENT);
 
     window.location.reload();
@@ -160,13 +203,36 @@ export default function EmailBuilderExample() {
 
   const handleSendNewsletter = async (isTest: boolean = false) => {
     if (editor && editorOptions) {
+      if (!campaignTitle.trim()) {
+        alert('Please enter a campaign title');
+        return;
+      }
+      
+      setIsLoading(true);
+      setProgress(null);
+      
       try {
-        await sendNewsletter(getEmailContent(), subject, previewHeadline, isTest);
-        if (!isTest) {
-          resetForm();
+        const result = await sendNewsletter(
+          campaignTitle,
+          getEmailContent(), 
+          subject, 
+          previewHeadline, 
+          isTest,
+          (progressData) => {
+            setProgress(progressData);
+          }
+        );
+        
+        if (isTest) {
+          alert('Test email sent!');
+        } else {
+          alert('Newsletter sending started! Progress will be shown below.');
         }
       } catch (error) {
         console.error('Failed to send newsletter:', error);
+        alert('Something went wrong');
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -216,6 +282,19 @@ export default function EmailBuilderExample() {
           />
           <div className="space-y-4">
             <div>
+              <label htmlFor="campaign-title" className="block mb-2 font-medium">
+                Campaign Title (for tracking and resume)
+              </label>
+              <input 
+                id="campaign-title"
+                type="text" 
+                value={campaignTitle}
+                onChange={(e) => setCampaignTitle(e.target.value)}
+                placeholder="e.g., weekly-update-2024-01" 
+                className="w-full p-2 border" 
+              />
+            </div>
+            <div>
               <label htmlFor="newsletter-subject" className="block mb-2 font-medium">
                 Newsletter Subject
               </label>
@@ -252,13 +331,15 @@ export default function EmailBuilderExample() {
             <div className="flex gap-2">
               <button 
                 onClick={() => handleSendNewsletter(false)}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
+                disabled={isLoading}
+                className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
               >
-                Send
+                {isLoading ? 'Sending...' : 'Send'}
               </button>
               <button 
                 onClick={() => handleSendNewsletter(true)}
-                className="px-4 py-2 bg-green-500 text-white rounded"
+                disabled={isLoading}
+                className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
               >
                 Send Test
               </button>
@@ -275,6 +356,43 @@ export default function EmailBuilderExample() {
                 Reset
               </button>
             </div>
+            
+            {/* Progress tracking section */}
+            {progress && (
+              <div className="mt-4 p-4 border rounded bg-gray-50">
+                <h3 className="font-medium mb-2">Newsletter Progress</h3>
+                <div className="space-y-2">
+                  <div>
+                    <strong>Campaign:</strong> {progress.campaignTitle}
+                  </div>
+                  <div>
+                    <strong>Status:</strong> 
+                    <span className={`ml-2 px-2 py-1 rounded text-sm ${
+                      progress.status === 'completed' ? 'bg-green-200 text-green-800' :
+                      progress.status === 'failed' ? 'bg-red-200 text-red-800' :
+                      progress.status === 'in_progress' ? 'bg-blue-200 text-blue-800' :
+                      'bg-gray-200 text-gray-800'
+                    }`}>
+                      {progress.status}
+                    </span>
+                  </div>
+                  <div>
+                    <strong>Progress:</strong> {progress.processedCount}/{progress.totalRecipients} ({progress.progressPercentage}%)
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-blue-600 h-2 rounded-full transition-all"
+                      style={{ width: `${progress.progressPercentage}%` }}
+                    ></div>
+                  </div>
+                  {progress.hasFailures && (
+                    <div className="text-red-600">
+                      ⚠️ Some deliveries failed
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </>
       }
