@@ -8,7 +8,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest",
-    "test:ci": "tsc && vitest run"
+    "test:ci": "astro sync && tsc && vitest run"
   },
   "dependencies": {
     "@astrojs/mdx": "4.2.3",
