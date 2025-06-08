@@ -2,6 +2,6 @@ import NewsletterApplicationService from "../../lib/application/NewsletterApplic
 
 const newsletterApplicationService = new NewsletterApplicationService();
 
-export async function sendNewsletter(subject: string, previewHeadline: string, html: string, unsubscribeKeyPlaceholder: string, test: boolean): Promise<void> {
-    return await newsletterApplicationService.sendNewsletter(subject, previewHeadline, html, unsubscribeKeyPlaceholder, test);
+export async function sendNewsletter(campaignTitle: string, subject: string, previewHeadline: string, html: string, test: boolean) {
+    return await newsletterApplicationService.sendNewsletter(campaignTitle, subject, previewHeadline, html, test);
 }

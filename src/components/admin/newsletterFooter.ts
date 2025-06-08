@@ -1,14 +1,11 @@
 import { getImage } from 'astro:assets';
-import facebookImage from '../../images/newsletter/social_facebook.png';
-import linkedInImage from '../../images/newsletter/social_linkedin.png';
-import xImage from '../../images/newsletter/social_x.png';
 import { BASE_URL, SOCIAL_LINKS } from '../../consts';
+import { UNSUBSCRIBE_KEY_PLACEHOLDER } from '../../lib/domain/newsletter/Newsletter';
 
 async function newsletterFooter() {
-
-    const linkedInImageSrc = (await getImage({ src: linkedInImage, width: 32, height: 32 })).src
-    const xImageSrc = (await getImage({ src: xImage, width: 32, height: 32 })).src
-    const facebookImageSrc = (await getImage({ src: facebookImage, width: 32, height: 32 })).src
+    const facebookImageSrc = '/images/newsletter/social_facebook.png';
+    const linkedInImageSrc = '/images/newsletter/social_linkedin.png';
+    const xImageSrc = '/images/newsletter/social_x.png';
 
     return `
     <style>
@@ -83,7 +80,7 @@ async function newsletterFooter() {
         <table width="100%">
           <tr><td valign="top">
             <div>
-              <p style="margin:0"><a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/imprint`}">Imprint</a> | <a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/newsletter/unsubscribe/{{unsubscribeKey}}`}">Unsubscribe</a></p>
+              <p style="margin:0"><a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/imprint`}">Imprint</a> | <a style="text-decoration: none; color: #000;" href="${`${BASE_URL}/newsletter/unsubscribe/{{${UNSUBSCRIBE_KEY_PLACEHOLDER}}}`}">Unsubscribe</a></p>
             </div>
           </td></tr>
           <tr><td></td></tr>

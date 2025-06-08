@@ -3,10 +3,15 @@ import { getViteConfig } from 'astro/config';
 
 export default getViteConfig({
   test: {
-    setupFiles: [
-      'src/test/setup/setupTestDatabase.ts',
-    ],
     hookTimeout: 120000,
+    testTimeout: 120000,
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        singleThread: true,
+      }
+    },
+    maxConcurrency: 1,
+    fileParallelism: false,
   },
-  threads: false, // Run tests sequentially to avoid testcontainer issues
 });

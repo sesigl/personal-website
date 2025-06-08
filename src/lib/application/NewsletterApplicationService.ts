@@ -1,17 +1,30 @@
-import PostgresNewsletterClient from "../infrastructure/newsletter/PostgresNewsletterClient";
+import PostgresContactsRepository from "../infrastructure/newsletter/PostgresContactsRepository";
 import type NewsletterClient from "../domain/newsletter/NewsletterClient";
-import Contact from "../domain/newsletter/Contact";
-import Newsletter from "../domain/newsletter/Newsletter";
+import Newsletter, { UNSUBSCRIBE_KEY_PLACEHOLDER } from "../domain/newsletter/Newsletter";
 import type NewsletterSender from "../domain/newsletter/NewsletterSender";
 import AwsSesNewsletterClient from "../infrastructure/newsletter/AwsSesNewsletterClient";
+import type NewsletterRepository from "../domain/newsletter/NewsletterRepository";
+import PostgresNewsletterRepository from "../infrastructure/newsletter/PostgresNewsletterRepository";
+
+export interface NewsletterSendResult {
+  isNewCampaign: boolean;
+  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  totalRecipients: number;
+  processedCount: number;
+  progressPercentage: number;
+  hasFailures: boolean;
+  campaignTitle: string;
+  isTest: boolean;
+}
 
 export default class NewsletterApplicationService {
   constructor(
-    private readonly newsletterClient: NewsletterClient = new PostgresNewsletterClient(),
+    private readonly newsletterClient: NewsletterClient = new PostgresContactsRepository(),
     private readonly newsletterSender: NewsletterSender = new AwsSesNewsletterClient({
-      sourceEmail: "newsletter@sebastiansigl.com",
+      sourceEmail: "Sebastian Sigl <newsletter@sebastiansigl.com>",
       maxBatchSize: 50
-    })
+    }),
+    private readonly newsletterRepository: NewsletterRepository = new PostgresNewsletterRepository()
   ) {}
 
   async addToNewsletter(email: string) {
@@ -22,25 +35,180 @@ export default class NewsletterApplicationService {
     await this.newsletterClient.deleteEmailFromNewsletter(unsubscribeKey);
   }
 
-  async sendNewsletter(subject: string, previewHeadline: string, htmlTemplate: string, unsubscribeKeyPlaceholder: string, test: boolean) {
-    let contacts = []
+  async sendNewsletter(
+    campaignTitle: string,
+    subject: string,
+    previewText: string,
+    htmlTemplate: string,
+    test: boolean
+  ): Promise<NewsletterSendResult> {
+    console.log(`Starting newsletter campaign: ${campaignTitle}`);
 
-    if (test) {
-      contacts = (await this.newsletterClient.findAllContacts()).filter((contact: Contact) => contact.email === "akrillo89@gmail.com")
-    } else {
-      contacts = await this.newsletterClient.findAllContacts() 
+    const { newsletter, isNewCampaign } = await this.getOrCreateCampaign(
+      campaignTitle,
+      subject,
+      previewText,
+      htmlTemplate,
+      test
+    );
+
+    if (newsletter.isEmpty()) {
+      return this.createEmptyCampaignResult(isNewCampaign, campaignTitle, test);
     }
+
+    await this.executeCampaign(newsletter, campaignTitle);
+
+    return this.createCampaignResult(newsletter, isNewCampaign, campaignTitle, test);
+  }
+
+  async getNewsletterProgress(campaignTitle: string): Promise<NewsletterSendResult | null> {
+    const newsletter = await this.newsletterRepository.findByTitle(campaignTitle);
     
-    const recipients = contacts.map((contact: Contact) => ({
-      email: contact.email,
-      placeholders: {
-        [unsubscribeKeyPlaceholder]: contact.unsubscribeKey
+    if (!newsletter) {
+      return null;
+    }
+
+    // Determine if this is a test campaign by checking if it only has 1 recipient with test email
+    const deliveries = newsletter.getEmailDeliveries();
+    const isTest = deliveries.length === 1;
+
+    return this.createCampaignResult(newsletter, false, campaignTitle, isTest);
+  }
+
+  private async getOrCreateCampaign(
+    campaignTitle: string,
+    subject: string,
+    previewText: string,
+    htmlTemplate: string,
+    test: boolean
+  ): Promise<{ newsletter: Newsletter; isNewCampaign: boolean }> {
+    const existingNewsletter = await this.newsletterRepository.findByTitle(campaignTitle);
+    
+    if (existingNewsletter) {
+      await this.resumeExistingCampaign(existingNewsletter, campaignTitle);
+      return { newsletter: existingNewsletter, isNewCampaign: false };
+    }
+
+    const newNewsletter = await this.createNewCampaign(
+      campaignTitle,
+      subject,
+      previewText,
+      htmlTemplate,
+      test
+    );
+    
+    return { newsletter: newNewsletter, isNewCampaign: true };
+  }
+
+  private async resumeExistingCampaign(newsletter: Newsletter, campaignTitle: string): Promise<void> {
+    console.log(`Resuming existing campaign: ${campaignTitle} (Status: ${newsletter.getStatus()})`);
+    
+    const originalStatus = newsletter.getStatus();
+    newsletter.prepareForResume();
+    
+    // Update newsletter if status changed during resume preparation
+    if (newsletter.getStatus() !== originalStatus) {
+      await this.newsletterRepository.update(newsletter);
+    }
+  }
+
+  private async createNewCampaign(
+    campaignTitle: string,
+    subject: string,
+    previewText: string,
+    htmlTemplate: string,
+    test: boolean
+  ): Promise<Newsletter> {
+    console.log(`Creating new campaign: ${campaignTitle}`);
+
+    const contacts = await this.newsletterClient.findAllContacts();
+    const newsletter = Newsletter.create(
+      campaignTitle,
+      subject,
+      previewText,
+      htmlTemplate,
+      contacts,
+      UNSUBSCRIBE_KEY_PLACEHOLDER,
+      test,
+      "akrillo89@gmail.com"
+    );
+
+    await this.newsletterRepository.save(newsletter);
+    return newsletter;
+  }
+
+
+  private createEmptyCampaignResult(isNewCampaign: boolean, campaignTitle: string, isTest: boolean): NewsletterSendResult {
+    console.log(`Campaign ${campaignTitle} has no recipients - marking as completed`);
+    
+    return {
+      isNewCampaign,
+      status: 'completed',
+      totalRecipients: 0,
+      processedCount: 0,
+      progressPercentage: 100,
+      hasFailures: false,
+      campaignTitle,
+      isTest
+    };
+  }
+
+  private async executeCampaign(newsletter: Newsletter, campaignTitle: string): Promise<void> {
+    console.log(`Executing campaign: ${campaignTitle}`);
+    const batchSize = 10;
+
+    while (newsletter.hasPendingDeliveries() && !newsletter.shouldStopProcessing()) {
+      const nextBatch = newsletter.getNextBatch(batchSize);
+      
+      if (nextBatch.length === 0) {
+        console.log(`Campaign ${campaignTitle} - no more pending emails to process`);
+        break;
       }
-    }));
 
-    console.log("Sending newsletter to", recipients.length, "recipients");
+      console.log(`Processing batch of ${nextBatch.length} emails for campaign ${campaignTitle}`);
+      
+      try {
+        const batchResults = await this.newsletterSender.sendBatch(nextBatch, {
+          subject: newsletter.getSubject(),
+          htmlContent: newsletter.getHtmlTemplate()
+        });
+        newsletter.processBatch(batchResults);
+      } catch (error) {
+        const failedResults = nextBatch.map(recipient => ({
+          email: recipient.email,
+          success: false,
+          error: (error as Error).message
+        }));
+        newsletter.processBatch(failedResults);
+        console.error(`Batch failed for campaign ${campaignTitle}:`, error);
+      }
+      
+      await this.newsletterRepository.update(newsletter);
+      console.log(`Batch completed. Progress: ${newsletter.getProgressPercentage()}%`);
+      
+      // Rate limiting: ensure we don't exceed 14 emails per second
+      // With batch size of 10, wait at least 714ms between batches (10/14 ≈ 0.714 seconds)
+      if (newsletter.hasPendingDeliveries()) {
+        await new Promise(resolve => setTimeout(resolve, 750));
+      }
+    }
+  }
 
-    const newsletter = new Newsletter(subject, previewHeadline, htmlTemplate, recipients);
-    return await this.newsletterSender.sendEmails(newsletter);
+  private createCampaignResult(newsletter: Newsletter, isNewCampaign: boolean, campaignTitle: string, isTest: boolean): NewsletterSendResult {
+    const deliveries = newsletter.getEmailDeliveries();
+    const hasFailures = deliveries.some(d => d.status === 'failed');
+    
+    console.log(`Campaign ${campaignTitle} finished with status: ${newsletter.getStatus()}`);
+
+    return {
+      isNewCampaign,
+      status: newsletter.getStatus(),
+      totalRecipients: newsletter.getTotalRecipients(),
+      processedCount: newsletter.getSuccessfulDeliveryCount(),
+      progressPercentage: newsletter.getProgressPercentage(),
+      hasFailures,
+      campaignTitle,
+      isTest
+    };
   }
 }

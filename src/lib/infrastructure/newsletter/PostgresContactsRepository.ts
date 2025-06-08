@@ -4,7 +4,7 @@ import type NewsletterClient from "../../domain/newsletter/NewsletterClient";
 import { type Database, getDb } from "../db";
 import Contact from "../../domain/newsletter/Contact";
 
-export default class PostgresNewsletterClient implements NewsletterClient {
+export default class PostgresContactsRepository implements NewsletterClient {
   constructor(
     private readonly db: Database = getDb()
   ) {}
