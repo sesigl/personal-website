@@ -9,6 +9,7 @@ import { BASE_URL } from "../consts";
 import WidgetNewsletter from "../components/WidgetNewsletter.astro";
 import WidgetPosts from "../components/WidgetPosts.astro";
 import SpotifyImageSvg from "../../src/images/social/spotify.svg";
+import InfographicImageSvg from "../../src/images/social/infographic.svg";
 import { Image } from "astro:assets";
 
 type Props = CollectionEntry<"blog">;
@@ -66,6 +67,19 @@ const { Content } = await render({
 											width={25} 
 											height={25}
 											alt={"Spotify Podcast"} 
+											class="inline-flex m-1 !bg-transparent border-none" 
+										/>
+								</a>
+							}
+
+							{
+								data.infographicLink && 
+								<a href={data.infographicLink} target="_blank">
+										<Image 
+											src={InfographicImageSvg.src} 
+											width={25} 
+											height={25}
+											alt={"Infographic"} 
 											class="inline-flex m-1 !bg-transparent border-none" 
 										/>
 								</a>
