@@ -23,6 +23,11 @@ export default defineConfig({
     //adapter: node({
     //    mode: 'standalone',
     //}),
+    vite: {
+        ssr: {
+            noExternal: ['astro', '@astrojs/mdx', '@astrojs/sitemap', '@astrojs/tailwind', '@astrojs/react']
+        }
+    },
     env: {
         schema: {
             DATABASE_URL: envField.string({ context: "server", access: "secret", optional: false }),
