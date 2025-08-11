@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographic: Type-Safe Python Tests in the Age of AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Animation utility classes */
+        .animate-fade-in-up {
+            opacity: 0; /* Start hidden */
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        /* Custom styles for code blocks */
+        pre code.hljs {
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            padding: 0.8rem 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white antialiased">
+
+    <div class="container mx-auto px-4 py-12 md:py-20">
+
+        <!-- Header Section -->
+        <header class="text-center mb-16 animate-fade-in-up" style="animation-delay: 100ms;">
+            <h1 class="text-4xl md:text-5xl font-bold text-cyan-400 mb-4">Type-Safe Python Tests in the Age of AI</h1>
+            <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+                While AI coding assistants boost productivity, they also amplify risks like code duplication and architectural decay. A modern testing strategy is the essential safety net.
+            </p>
+        </header>
+
+        <!-- Main Principles Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Card 1: Test the Contract -->
+            <div class="bg-gray-800 rounded-xl p-8 shadow-lg transform hover:scale-105 transition-transform duration-300 flex flex-col animate-fade-in-up" style="animation-delay: 300ms;">
+                <div class="flex items-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-cyan-400 mr-4 flex-shrink-0"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+                    <h2 class="text-2xl font-bold text-white">Test the Contract</h2>
+                </div>
+                <p class="text-gray-400 mb-4">
+                    Focus tests on the code's observable behavior, not its internal implementation.
+                </p>
+                <pre class="mt-auto"><code class="python"># service.py
+def add(a: int, b: int) -> int:
+    return a + b
+
+# test_service.py
+def test_add_positive_numbers():
+    assert add(2, 3) == 5</code></pre>
+            </div>
+
+            <!-- Card 2: Decouple with DI -->
+            <div class="bg-gray-800 rounded-xl p-8 shadow-lg transform hover:scale-105 transition-transform duration-300 flex flex-col animate-fade-in-up" style="animation-delay: 400ms;">
+                <div class="flex items-center mb-4">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-cyan-400 mr-4 flex-shrink-0"><path d="M12 1v5m0 12v5M18.36 2.64l-3.54 3.54M9.18 14.82l-3.54 3.54M21 12h-5m-7 0H2M5.64 5.64l3.54 3.54M14.82 18.36l3.54-3.54"></path><circle cx="12" cy="12" r="2"></circle></svg>
+                    <h2 class="text-2xl font-bold text-white">Decouple with DI</h2>
+                </div>
+                <p class="text-gray-400 mb-4">
+                    Use Dependency Injection to provide dependencies from the outside for easier testing.
+                </p>
+                <pre class="mt-auto"><code class="python">class Notifier: ...
+
+class OrderService:
+    def __init__(self, notifier: Notifier):
+        self._notifier = notifier
+
+    def place_order(self, order):
+        # ... logic ...
+        self._notifier.send("Order placed!")</code></pre>
+            </div>
+
+            <!-- Card 3: Honest Test Doubles -->
+            <div class="bg-gray-800 rounded-xl p-8 shadow-lg transform hover:scale-105 transition-transform duration-300 flex flex-col animate-fade-in-up" style="animation-delay: 500ms;">
+                <div class="flex items-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-cyan-400 mr-4 flex-shrink-0"><path d="M20 12L4 12"></path><path d="M20 12l-4 4"></path><path d="M20 12l-4-4"></path><path d="M4 12l4 4"></path><path d="M4 12l4-4"></path></svg>
+                    <h2 class="text-2xl font-bold text-white">Honest Test Doubles</h2>
+                </div>
+                <p class="text-gray-400 mb-4">
+                    Use fakes that honor the real object's contract to avoid silent breakages.
+                </p>
+                <pre class="mt-auto"><code class="python">class FakeNotifier(Notifier):
+    def __init__(self):
+        self.sent_messages = []
+    
+    def send(self, message: str):
+        self.sent_messages.append(message)
+
+# In test:
+notifier = FakeNotifier()
+service = OrderService(notifier)</code></pre>
+            </div>
+
+            <!-- Card 4: Static Contracts -->
+            <div class="bg-gray-800 rounded-xl p-8 shadow-lg transform hover:scale-105 transition-transform duration-300 flex flex-col animate-fade-in-up" style="animation-delay: 600ms;">
+                <div class="flex items-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-cyan-400 mr-4 flex-shrink-0"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                    <h2 class="text-2xl font-bold text-white">Static Contracts</h2>
+                </div>
+                <p class="text-gray-400 mb-4">
+                    Use `typing.Protocol` to define explicit interfaces that type checkers can enforce.
+                </p>
+                <pre class="mt-auto"><code class="python">from typing import Protocol
+
+class CanNotify(Protocol):
+    def send(self, message: str) -> None: ...
+
+# Mypy will error if send() is missing
+class EmailNotifier:
+    def send(self, message: str): ...</code></pre>
+            </div>
+
+            <!-- Card 5: Architectural Boundaries -->
+            <div class="bg-gray-800 rounded-xl p-8 shadow-lg transform hover:scale-105 transition-transform duration-300 flex flex-col md:col-span-2 lg:col-span-2 animate-fade-in-up" style="animation-delay: 700ms;">
+                <div class="flex items-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-cyan-400 mr-4 flex-shrink-0"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                    <h2 class="text-2xl font-bold text-white">Architectural Boundaries</h2>
+                </div>
+                <p class="text-gray-400 mb-4">
+                    Codify architectural rules as tests to prevent structural erosion over time.
+                </p>
+                <pre class="mt-auto"><code class="python">from pytest_arch import archrule
+
+def test_domain_is_isolated():
+    rule = (
+        archrule("Domain Layer")
+        .should_not_import("app.services")
+        .should_not_import("app.repositories")
+    )
+    rule.check("app.domain")</code></pre>
+            </div>
+        </div>
+
+        <!-- Recommended Tools Section -->
+        <section class="mt-20 animate-fade-in-up" style="animation-delay: 800ms;">
+            <h2 class="text-3xl font-bold text-center text-cyan-400 mb-8">Recommended Python Quality Stack</h2>
+            <div class="max-w-4xl mx-auto bg-gray-800 rounded-xl p-8 shadow-lg">
+                <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-4">
+                    <div class="text-center">
+                        <a href="https://pytest.org/" target="_blank" rel="noopener noreferrer" class="text-lg font-semibold hover:text-cyan-300 transition-colors duration-200">Pytest</a>
+                        <p class="text-sm text-gray-400">Test Runner</p>
+                    </div>
+                     <div class="text-center">
+                        <a href="https://docs.astral.sh/ruff/" target="_blank" rel="noopener noreferrer" class="text-lg font-semibold hover:text-cyan-300 transition-colors duration-200">Ruff</a>
+                        <p class="text-sm text-gray-400">Linter & Formatter</p>
+                    </div>
+                    <div class="text-center">
+                        <a href="http://mypy-lang.org/" target="_blank" rel="noopener noreferrer" class="text-lg font-semibold hover:text-cyan-300 transition-colors duration-200">Mypy/Pyright</a>
+                        <p class="text-sm text-gray-400">Type Checker</p>
+                    </div>
+                    <div class="text-center">
+                        <a href="https://github.com/Tibibyte/pytest-arch" target="_blank" rel="noopener noreferrer" class="text-lg font-semibold hover:text-cyan-300 transition-colors duration-200">PyTestArch</a>
+                        <p class="text-sm text-gray-400">Architecture Tests</p>
+                    </div>
+                    <div class="text-center">
+                        <a href="https://coverage.readthedocs.io/" target="_blank" rel="noopener noreferrer" class="text-lg font-semibold hover:text-cyan-300 transition-colors duration-200">Coverage.py</a>
+                        <p class="text-sm text-gray-400">Code Coverage</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- highlight.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>
