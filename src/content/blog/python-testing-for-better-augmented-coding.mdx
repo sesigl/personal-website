@@ -7,7 +7,7 @@ draft: false
 heroImage: "/src/images/blog/posts/python-testing/python-testing.png"
 slug: "type-safe-python-tests-in-the-age-of-ai"
 category: "tech"
-readingTimeInMinutes: 13
+readingTimeInMinutes: 15
 ---
 
 import { Image } from 'astro:assets';
@@ -154,6 +154,67 @@ def test_checkout_charges_correct_amount() -> None:
 
 **Why it matters:** Protocols and static type checking create a verifiable system of contracts. If an AI refactors a component in a way that breaks the contract, your CI/CD pipeline will fail *before* the code is merged, not after it's deployed.
 
+### 5. Enforce Architectural Boundaries with Automated Rules
+
+The most insidious risk in AI-assisted development isn't syntax errors—it's architectural erosion. When an LLM generates a quick fix, it might take the path of least resistance: importing a private `_internal.py` module, creating a circular dependency, or bypassing your carefully designed layer boundaries. These violations accumulate silently until your clean architecture becomes unmaintainable spaghetti.
+
+The solution is to codify your architectural rules as automated tests using [PyTestArch](https://github.com/zyskarch/pytestarch). Just like unit tests catch functional bugs, architectural tests catch structural problems before they become technical debt.
+
+Here's how to protect your module privacy—a critical foundation for maintainable Python projects:
+
+```python
+# test_architecture.py
+from pytestarch import get_evaluable_architecture, Rule
+
+def test_private_module_protection():
+    """Private modules (_private.py) should not be imported from outside their package."""
+    
+    evaluable = get_evaluable_architecture(".", "./src")
+    
+    # This rule catches ALL _private.py violations automatically
+    rule = (Rule()
+        .modules_that()
+        .have_name_matching(r'.*\._[^.]*$')  # Matches any._private.py
+        .should_not()
+        .be_imported_by_modules_that()
+        .have_name_matching(r'^(?!.*\._[^.]*$).*')  # Matches non-private modules
+    )
+    
+    rule.assert_applies(evaluable)
+```
+
+And here's how to enforce clean layer boundaries in your application:
+
+```python
+def test_layered_architecture():
+    """Enforce clean architecture layers."""
+    
+    evaluable = get_evaluable_architecture(".", "./src")
+    
+    # Domain layer should not depend on infrastructure
+    domain_independence = (Rule()
+        .modules_that()
+        .are_sub_modules_of("src.domain")
+        .should_not()
+        .import_modules_that()
+        .are_sub_modules_of("src.infrastructure")
+    )
+    
+    # API layer should not skip business layer
+    api_discipline = (Rule()
+        .modules_that()
+        .are_sub_modules_of("src.api")
+        .should_not()
+        .import_modules_that()
+        .are_sub_modules_of("src.infrastructure")
+    )
+    
+    domain_independence.assert_applies(evaluable)
+    api_discipline.assert_applies(evaluable)
+```
+
+**Why it matters:** In the age of AI-generated code, architectural rules are your guardrails against structural chaos. They prevent the accumulation of technical debt by catching violations the moment they're introduced, whether by human oversight or LLM shortcuts. When your CI fails because someone imported a private module, you've just prevented weeks of future debugging.
+
 ### Your Modern Python Quality Stack
 
 Principles are powerful, but they are only effective when enforced by the right tools. Moving from theory to practice is easier than ever with a modern, integrated toolchain. Here is the state-of-the-art stack to build the safety net we've discussed.
@@ -171,10 +232,13 @@ Principles are powerful, but they are only effective when enforced by the right 
       * **Pyright**, developed by Microsoft and the engine for Pylance in VS Code, is often significantly faster and can be stricter.
         Both are excellent choices. Start with Pyright for speed and VS Code integration; use Mypy for projects requiring the broadest community support.
 
-  * **The Accountability Layer: [Coverage.py](https://www.google.com/search?q=https://coverage.pydata.org/)**
+  * **The Architectural Guardian: [PyTestArch](https://github.com/zyskarch/pytestarch)**
+    PyTestArch brings the power of architectural testing to Python, inspired by Java's ArchUnit. It lets you define structural rules as code and integrates seamlessly with pytest. Use it to enforce layer boundaries, prevent circular dependencies, and protect module privacy. In an AI-augmented world where code can be generated and refactored at machine speed, having automated architectural guards is no longer optional—it's essential.
+
+  * **The Accountability Layer: [Coverage.py](https://coverage.pydata.org/)**
     Integrated with Pytest via the `pytest-cov` plugin, this tool tells you exactly what parts of your code are *not* being exercised by your tests. The goal isn't just to hit a 90% metric, but to use the report to find critical business logic, error handling paths, and security checks that are currently running on hope alone.
 
-These tools work together to create an automated, multi-layered safety net that makes the principles in this article a daily reality for your team.
+These tools work together to create an automated, multi-layered safety net that makes the principles in this article a daily reality for your team. When your CI pipeline includes type checking, architectural validation, and comprehensive test coverage, you can embrace AI-assisted development with confidence, knowing that quality violations will be caught before they reach production.
 
 ### Final Thoughts: Code Fast, Ship Safe
 
