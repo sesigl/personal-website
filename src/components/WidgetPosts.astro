@@ -1,5 +1,5 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import PostRepository from "../lib/domain/article/PostRepository";
 
 type Props = {
     excludedPostIds: string[];
@@ -7,11 +7,10 @@ type Props = {
 
 const { excludedPostIds } = Astro.props;
 
-// allPosts.filter((post) => !excludedPostIds.includes(post._id));
+const allPosts = await new PostRepository().findPosts();
+const allPostsWithoutCurrentPosts = allPosts.filter((post) => !excludedPostIds.includes(post.id));
 
-// const somePosts = allPosts.slice(0, 3);
-
-const somePosts: CollectionEntry<"blog">["data"][] = [];
+const somePosts = allPostsWithoutCurrentPosts.slice(0, 3);
 ---
 
 <div
@@ -25,9 +24,9 @@ const somePosts: CollectionEntry<"blog">["data"][] = [];
                     <span class="text-sky-500 mr-2">—</span>{" "}
                     <a
                         class="font-aspekta font-[650] text-sm inline-flex relative hover:text-sky-500 duration-150 ease-out before:scale-x-0 before:origin-center before:absolute before:inset-0 before:bg-sky-200 dark:before:bg-sky-500 before:opacity-30 before:-z-10 before:translate-y-1/4 before:-rotate-2 hover:before:scale-100 before:duration-150 before:ease-in-out"
-                        href={`/posts/TBD-slug`}
+                        href={`/posts/${post.data.slug}`}
                     >
-                        {post.title}
+                        {post.data.title}
                     </a>
                 </li>
             ))
