@@ -17,6 +17,7 @@ const blog = defineCollection({
 		readingTimeInMinutes: z.optional(z.number()),
 		spotifyLink: z.optional(z.string()),
 		infographicLink: z.optional(z.string()),
+		youtubeLink: z.optional(z.string()),
 		category: z.enum(['tech', 'leadership']),
 	}),
 });
