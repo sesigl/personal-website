@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 5 Biases That Can Silently Kill Your LLM Evaluations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A; /* slate-900 */
+            color: #E2E8F0; /* slate-200 */
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        .card {
+            background-color: #1E293B; /* slate-800 */
+            border: 1px solid #334155; /* slate-700 */
+            border-radius: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1), 0 0 30px rgba(99, 102, 241, 0.3);
+        }
+        .card-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .icon-glow {
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+        }
+        .scale-arm {
+            transform-origin: center top;
+            animation: seesaw 5s ease-in-out infinite alternate;
+        }
+        .scale-pan {
+            transform-origin: center top;
+            animation: pan-sway 5s ease-in-out infinite alternate;
+        }
+        @keyframes seesaw {
+            0% { transform: rotate(-2deg); }
+            100% { transform: rotate(2deg); }
+        }
+        @keyframes pan-sway {
+            0% { transform: rotate(2deg) translateY(-2px); }
+            100% { transform: rotate(-2deg) translateY(-2px); }
+        }
+        .pulsing-bias {
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .step-line {
+            position: relative;
+        }
+        .step-line::before {
+            content: '';
+            position: absolute;
+            left: 1.25rem; /* Center of the circle */
+            top: 2.5rem;
+            bottom: -0.5rem;
+            width: 2px;
+            background-color: #334155; /* slate-700 */
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+
+        <!-- Header Section -->
+        <header class="text-center mb-20 md:mb-32">
+            <div class="max-w-xs mx-auto mb-12 h-48">
+                <!-- Animated Scale SVG -->
+                <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                    <!-- Base -->
+                    <path d="M 90 140 L 110 140 L 115 150 L 85 150 Z" fill="#475569"/>
+                    <rect x="98" y="40" width="4" height="100" fill="#475569"/>
+                    
+                    <!-- Scale Arm -->
+                    <g class="scale-arm">
+                        <rect x="25" y="40" width="150" height="4" rx="2" fill="#64748b"/>
+                        <circle cx="100" cy="42" r="6" fill="#475569"/>
+                    </g>
+
+                    <!-- Left Pan -->
+                    <g class="scale-pan">
+                        <path d="M 25 42 L 25 60" stroke="#64748b" stroke-width="2"/>
+                        <path d="M 25 60 C 0 80, 50 80, 25 60 Z" fill="#334155"/>
+                        <path d="M 10 70 Q 25 85, 40 70" stroke="#475569" stroke-width="2" fill="none"/>
+                    </g>
+                    
+                    <!-- Right Pan -->
+                    <g class="scale-pan" style="animation-direction: alternate-reverse;">
+                        <path d="M 175 42 L 175 60" stroke="#64748b" stroke-width="2"/>
+                        <path d="M 175 60 C 150 80, 200 80, 175 60 Z" fill="#334155"/>
+                        <path d="M 160 70 Q 175 85, 190 70" stroke="#475569" stroke-width="2" fill="none"/>
+                    </g>
+                </svg>
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">
+                The <span class="gradient-text">5 Biases</span> That Can Silently Kill Your <span class="gradient-text">LLM Evaluations</span>
+            </h1>
+            <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-400">
+                Your LLM-as-a-Judge system might be lying to you. Uncover the critical biases corrupting your AI evaluations and learn how to build a framework you can actually trust.
+            </p>
+        </header>
+
+        <!-- The 5 Biases Section -->
+        <section class="mb-20 md:mb-32">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-16">Unmasking Your AI Judge</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Bias 1: Positional Bias -->
+                <div class="card p-8 lg:col-span-2">
+                    <div class="flex items-start gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-16 h-16 bg-indigo-500/20 text-indigo-400 rounded-2xl flex items-center justify-center icon-glow">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4-4 4-4"/><path d="M17 12H3"/><path d="m3 8 4 4-4 4"/></svg>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-sm font-bold text-indigo-400">BIAS #1</span>
+                            <h3 class="text-2xl font-bold mt-1 mb-3 text-slate-100">Positional Bias</h3>
+                            <p class="text-slate-400 mb-4">The tendency to favor items based on their order, most often preferring the **first option** it sees.</p>
+                            <div class="mt-6">
+                                <h4 class="font-bold text-red-400 flex items-center gap-2 mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                                    Danger Zone
+                                </h4>
+                                <p class="text-sm text-slate-400 border-l-2 border-red-500/50 pl-4">Decisions are based on noise, not signal. You could ship a regression that your biased evaluation is completely blind to.</p>
+                            </div>
+                            <div class="mt-4">
+                                <h4 class="font-bold text-green-400 flex items-center gap-2 mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                                    The Fix
+                                </h4>
+                                <p class="text-sm text-slate-400 border-l-2 border-green-500/50 pl-4">For A/B tests, run the evaluation twice, **swapping the positions** of the candidates. Only accept consistent judgments.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bias 2: Verbosity Bias -->
+                <div class="card p-8">
+                    <div class="flex-shrink-0 mb-4">
+                        <div class="w-16 h-16 bg-sky-500/20 text-sky-400 rounded-2xl flex items-center justify-center icon-glow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12.5 8 15l2 2.5"/><path d="M14 12.5 16 15l-2 2.5"/><path d="M7 19H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"/><path d="M9 10h6"/><path d="M12 7v3"/></svg>
+                        </div>
+                    </div>
+                    <span class="text-sm font-bold text-sky-400">BIAS #2</span>
+                    <h3 class="text-2xl font-bold mt-1 mb-3 text-slate-100">Verbosity Bias</h3>
+                    <p class="text-slate-400 mb-4">Rating longer, more detailed responses more favorably, even if a shorter response is more correct and helpful.</p>
+                    <div class="mt-6">
+                        <h4 class="font-bold text-red-400 flex items-center gap-2 mb-2">Danger Zone</h4>
+                        <p class="text-sm text-slate-400 border-l-2 border-red-500/50 pl-4">You train models to be verbose, wasting users' time and delivering a frustrating experience.</p>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-bold text-green-400 flex items-center gap-2 mb-2">The Fix</h4>
+                        <p class="text-sm text-slate-400 border-l-2 border-green-500/50 pl-4">Use prompt engineering to explicitly state your rubric. Instruct the judge to **value conciseness** and penalize verbosity.</p>
+                    </div>
+                </div>
+
+                <!-- Bias 3: Self-Enhancement Bias -->
+                 <div class="card p-8">
+                    <div class="flex-shrink-0 mb-4">
+                        <div class="w-16 h-16 bg-purple-500/20 text-purple-400 rounded-2xl flex items-center justify-center icon-glow">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="23"/><line x1="8" x2="16" y1="23" y2="23"/></svg>
+                        </div>
+                    </div>
+                    <span class="text-sm font-bold text-purple-400">BIAS #3</span>
+                    <h3 class="text-2xl font-bold mt-1 mb-3 text-slate-100">Self-Enhancement Bias</h3>
+                    <p class="text-slate-400 mb-4">A model's tendency to prefer outputs generated by itself or models from the same family (aka "nepotism bias").</p>
+                    <div class="mt-6">
+                        <h4 class="font-bold text-red-400 flex items-center gap-2 mb-2">Danger Zone</h4>
+                        <p class="text-sm text-slate-400 border-l-2 border-red-500/50 pl-4">Creates an echo chamber, making objective cross-model benchmarking impossible and leading to vendor lock-in.</p>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-bold text-green-400 flex items-center gap-2 mb-2">The Fix</h4>
+                        <p class="text-sm text-slate-400 border-l-2 border-green-500/50 pl-4">Use a judge model from a **different provider or family** than the models being evaluated to act as a neutral third party.</p>
+                    </div>
+                </div>
+
+                <!-- Bias 4: Authority Bias -->
+                <div class="card p-8">
+                    <div class="flex-shrink-0 mb-4">
+                        <div class="w-16 h-16 bg-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center icon-glow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="m14 12-2-1-2 1"/><path d="m10 15 2 1 2-1"/></svg>
+                        </div>
+                    </div>
+                    <span class="text-sm font-bold text-amber-400">BIAS #4</span>
+                    <h3 class="text-2xl font-bold mt-1 mb-3 text-slate-100">Authority Bias</h3>
+                    <p class="text-slate-400 mb-4">Giving undue credibility to responses that cite sources, even if the citations are fabricated or irrelevant.</p>
+                    <div class="mt-6">
+                        <h4 class="font-bold text-red-400 flex items-center gap-2 mb-2">Danger Zone</h4>
+                        <p class="text-sm text-slate-400 border-l-2 border-red-500/50 pl-4">Builds models skilled at hallucinating plausible sources, directly eroding user trust.</p>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-bold text-green-400 flex items-center gap-2 mb-2">The Fix</h4>
+                        <p class="text-sm text-slate-400 border-l-2 border-green-500/50 pl-4">Implement a **reference-guided** approach. Provide the source document and prompt the judge to verify claims against it.</p>
+                    </div>
+                </div>
+
+                <!-- Bias 5: Moderation Bias -->
+                 <div class="card p-8">
+                    <div class="flex-shrink-0 mb-4">
+                        <div class="w-16 h-16 bg-rose-500/20 text-rose-400 rounded-2xl flex items-center justify-center icon-glow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                    </div>
+                    <span class="text-sm font-bold text-rose-400">BIAS #5</span>
+                    <h3 class="text-2xl font-bold mt-1 mb-3 text-slate-100">Moderation Bias</h3>
+                    <p class="text-slate-400 mb-4">Systematically favoring "safe" or ethically-aligned refusal responses more than human users do.</p>
+                    <div class="mt-6">
+                        <h4 class="font-bold text-red-400 flex items-center gap-2 mb-2">Danger Zone</h4>
+                        <p class="text-sm text-slate-400 border-l-2 border-red-500/50 pl-4">Steers your product toward being unhelpful and overly restrictive in the real world.</p>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-bold text-green-400 flex items-center gap-2 mb-2">The Fix</h4>
+                        <p class="text-sm text-slate-400 border-l-2 border-green-500/50 pl-4">Requires a **human-in-the-loop** workflow. Calibrate your LLM judge's outputs against real human preference data for sensitive topics.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Building a Resilient System Section -->
+        <section class="mb-20 md:mb-32">
+            <div class="text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Beyond Fixing Flaws:</h2>
+                <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-12 md:mb-16">Build an evaluation system that is resilient by design.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="card p-8">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-slate-700 rounded-2xl flex items-center justify-center text-teal-400 icon-glow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Use an Ensemble of Judges</h3>
+                    <p class="text-slate-400">Use a panel of diverse judges and make decisions based on a majority vote to reduce the impact of any single model's bias.</p>
+                </div>
+                <div class="card p-8">
+                     <div class="w-16 h-16 mx-auto mb-4 bg-slate-700 rounded-2xl flex items-center justify-center text-teal-400 icon-glow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6"/><path d="M2 11.5a10 10 0 0 1 18.8-4.3"/><path d="M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Implement Self-Consistency Checks</h3>
+                    <p class="text-slate-400">Run the same input through the same judge multiple times. Inconsistent results should be flagged for human review.</p>
+                </div>
+                <div class="card p-8">
+                     <div class="w-16 h-16 mx-auto mb-4 bg-slate-700 rounded-2xl flex items-center justify-center text-teal-400 icon-glow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9z"/><path d="M12 22a9.5 9.5 0 1 0 0-19 9.5 9.5 0 0 0 0 19z"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.93 19.07 1.41-1.41"/><path d="m17.66 6.34 1.41-1.41"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Calibrate Against a "Golden Dataset"</h3>
+                    <p class="text-slate-400">Periodically run your judge against a high-quality, human-labeled dataset to measure its agreement with experts and detect drift.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Conclusion & Next Steps -->
+        <section>
+            <div class="relative bg-slate-800 border border-slate-700 rounded-3xl p-8 md:p-12 lg:p-16 overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl"></div>
+                 <div class="absolute -bottom-16 -left-16 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl"></div>
+                <div class="relative z-10">
+                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Turn Faulty Instruments into Trusted Tools</h2>
+                    <p class="max-w-3xl mx-auto text-lg text-slate-400 text-center mb-12">By understanding these hidden forces, you can build an evaluation process that is fast, scalable, reliable, and trustworthy. Here's how to start.</p>
+    
+                    <div class="max-w-2xl mx-auto">
+                        <div class="step-line">
+                            <div class="flex items-start gap-4 mb-8">
+                                <div class="z-10 flex-shrink-0 w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-lg">1</div>
+                                <div>
+                                    <h4 class="text-xl font-bold mb-1">Audit Your Current System</h4>
+                                    <p class="text-slate-400">Review your existing LLM-as-a-Judge prompts. Are you vulnerable to any of the five biases?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-line">
+                            <div class="flex items-start gap-4 mb-8">
+                                <div class="z-10 flex-shrink-0 w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-lg">2</div>
+                                <div>
+                                    <h4 class="text-xl font-bold mb-1">Implement a Mitigation Strategy</h4>
+                                    <p class="text-slate-400">Start with the highest-impact fix. If you do pairwise comparisons, implement position-swapping today.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-line">
+                            <div class="flex items-start gap-4 mb-8">
+                                <div class="z-10 flex-shrink-0 w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-lg">3</div>
+                                <div>
+                                    <h4 class="text-xl font-bold mb-1">Establish a "Golden Dataset"</h4>
+                                    <p class="text-slate-400">Work with domain experts to create a high-quality set of labeled examples to benchmark your judge's performance.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                             <div class="flex items-start gap-4">
+                                <div class="z-10 flex-shrink-0 w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-lg">4</div>
+                                <div>
+                                    <h4 class="text-xl font-bold mb-1">Socialize These Concepts</h4>
+                                    <p class="text-slate-400">Share this infographic with your team to foster a culture of quality and critical thinking around AI evaluation.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Simple scroll animation for cards
+        const cards = document.querySelectorAll('.card');
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Add a small delay for each card to create a staggered effect
+                    setTimeout(() => {
+                        entry.target.classList.add('card-visible');
+                    }, index * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
+
