@@ -15,7 +15,7 @@ youtubeLink: ""
 
 Before we start, a quick disclaimer: this is not a universal blueprint for how to build a search system. There are many ways to succeed, but even more to fail. What follows is our story, the lessons from a year spent rebuilding search from the inside out.
 
-I have been building large scale software systems since 2014, always drawn to end to end architecture, connecting frontend, backend, data, and ML pipelines into coherent, scalable systems. For years, I built parts of search infrastructure. A year ago, I stepped into rebuilding search itself, the core that defines relevance. It was not my first search system, but it was the first time I faced its full complexity head on. That experience broke several assumptions I had carried for years.
+I have been building large scale software systems since 2014, always drawn to end-to-end architecture, connecting frontend, backend, data, and ML pipelines into coherent, scalable systems. For years, I built parts of search infrastructure. A year ago, I stepped into rebuilding search itself, the core that defines relevance. It was not my first search system, but it was the first time I faced its full complexity head on. That experience broke several assumptions I had carried for years.
 
 The journey from pure architecture to user centered system design can be summarized in a meme every engineer knows well.
 
@@ -39,9 +39,9 @@ We stopped designing for theoretical relevance and started engineering for live 
 ## Assumption 2: We must engineer for correctness from day one  
 **The Truth: Velocity unlocks correctness.**
 
-In interdependent systems, one broken piece can corrupt the end to end flow. The safe feeling is to perfect every component before shipping. That instinct kills learning. It slows you down before you know what matters.
+In interdependent systems, one broken piece can corrupt the end-to-end flow. The safe feeling is to perfect every component before shipping. That instinct kills learning. It slows you down before you know what matters.
 
-* **Scrappy end to end tests teach fastest:** A rough but working pipeline in production will surface truths you will not see in a lab.
+* **Scrappy end-to-end tests teach fastest:** A rough but working pipeline in production will surface truths you will not see in a lab.
 * **A-B testing is your compass:** Offline metrics are approximations. Reality is user response.
 * **Refactor after validation:** Clean code that solves the wrong problem is worse than messy code that proves value. Once an idea shows impact, then harden it.
 
