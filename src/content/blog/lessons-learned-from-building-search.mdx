@@ -2,110 +2,100 @@
 title: "After a Year Rebuilding Search, I Had to Rethink Everything"
 pubDate: "2025-10-11"
 heroImage: "/src/images/blog/posts/rebuilding-search-lessons-learned/search_lesson_learned.png"
-description: "A seasoned software engineer's lessons from a year-long deep dive into rebuilding a search system. This post explores the shift from pure engineering assumptions to a product-first approach, essential for any EM or Staff Engineer tackling complex, user-centric systems."
+description: "A seasoned engineer's lessons from a year rebuilding a search system from the ground up, shifting from engineering-first to product-first thinking."
 category: "tech"
 slug: "rebuilding-search-lessons-learned"
-readingTimeInMinutes: 16
+readingTimeInMinutes: 7
 spotifyLink: ""
 infographicLink: ""
 youtubeLink: ""
 ---
 
-![An abstract image of a complex, interconnected network of nodes and data streams being reconfigured, symbolizing the act of rethinking and rebuilding a core system.](../../images/blog/posts/rebuilding-search-lessons-learned/search_lesson_learned.png)
+![An abstract visualization of a complex network of nodes and data streams being reconfigured, symbolizing the act of rethinking and rebuilding a core system.](../../images/blog/posts/rebuilding-search-lessons-learned/search_lesson_learned.png)
 
-Before we dive in, a quick disclaimer: this is not a universal blueprint for how every search system must be built. As the saying goes, "There are many roads to success, but even more to failure." This is the story of our road—the lessons learned from an intense, year-long focus on rebuilding a core search system.
+Before we start, a quick disclaimer: this is not a universal blueprint for how to build a search system. There are many ways to succeed, but even more to fail. What follows is our story, the lessons from a year spent rebuilding search from the inside out.
 
-I've been building large-scale software since 2014, and my passion has always been the same: architecting robust, end-to-end systems that scale to millions. I love the craft of connecting frontend to backend, data pipelines to machine learning, and empowering teams to own and ship with velocity. For years, I contributed to various search systems, building out pieces of the infrastructure.
+I have been building large scale software systems since 2014, always drawn to end to end architecture, connecting frontend, backend, data, and ML pipelines into coherent, scalable systems. For years, I built parts of search infrastructure. A year ago, I stepped into rebuilding search itself, the core that defines relevance. It was not my first search system, but it was the first time I faced its full complexity head on. That experience broke several assumptions I had carried for years.
 
-But a year ago, I dove headfirst into rebuilding one from its core. This wasn't my first year in engineering, nor my first encounter with search. It was a year of intense, singular focus on the heart of the beast—the part of the system that defines relevance itself. And that experience forced me to challenge assumptions I'd held for years.
+The journey from pure architecture to user centered system design can be summarized in a meme every engineer knows well.
 
-That journey from established architectural principles to the nuanced reality of search is best captured by a meme every engineer instinctively understands.
+![The IQ Bell Curve meme, showing a simpleton on the left labeled "Look at user signals", a crying midwit in the middle labeled "Only AI can solve our problems", and an enlightened figure on the right labeled "Look at user signals"](../../images/blog/posts/rebuilding-search-lessons-learned/bellcurve_search_meme.png)
 
-![The IQ Bell Curve meme, showing a simpleton on the left labeled "ES + Data", a crying midwit in the center labeled "2 Tower Architecture", and an enlightened figure on the right also labeled "ES + Data"](../../images/blog/posts/rebuilding-search-lessons-learned/bellcurve_search_meme.png)
+Funny as it is, that meme captures something true. We started with sound principles, drifted into unnecessary sophistication, and returned, wiser, to simplicity. What follows are the five assumptions I had to unlearn, and the truths that replaced them. If you are a Software Engineer, or have a leadership role in systems that shape user experience, these lessons may help you avoid the same detours.
 
-This isn't just a joke; it's a roadmap of the humbling, and ultimately vital, lessons learned. As an experienced team, we started with solid principles, drifted into the tempting complexity of the middle, and eventually arrived at a more profound understanding on the right.
+## Assumption 1: Search is an Algorithm and Infrastructure Problem  
+**The Truth: Search is a Data and Product Problem first.**
 
-This post is the story of that journey. It's about the five foundational assumptions I, as a seasoned engineer, had to dismantle and the truths that replaced them. If you're an EM, Staff Engineer, or anyone passionate about building systems where user experience is paramount, this might save you from the same costly realizations.
+My instinct was to treat search as a systems design challenge. Build a solid architecture, make it fast, resilient, and technically pure. I missed the essence. Great search is shaped by user behavior, not architecture diagrams.
 
-## Assumption 1: Search is Primarily an Algorithm & Infrastructure Problem
-**The Truth: Search is a Data and Product Problem First.**
+Search quality lives or dies on how well your system captures and learns from real world signals. The most powerful architecture is not the one that serves the model fastest, it is the one that learns fastest.
 
-My core strength is building scalable infrastructure. Naturally, my first instinct was to treat search as a classic systems design challenge. The goal was clear: create the most sophisticated, technically pure model and the most resilient platform to serve it. We would win with superior architecture.
+* **Data quality beats model complexity:** Simple ranking models trained on high quality, near real time user data often beat complex ones trained on stale offline sets.
+* **Embrace the mess:** Real user data is noisy and incomplete. Build validation, monitoring, and guardrails that preserve useful signal instead of scrubbing it away.
+* **Tight feedback loops are the leverage point:** Minimize the time between user action, logging, retraining, and deployment. That loop defines your true performance ceiling.
 
-But I was missing the soul of the problem. **Great search isn't forged in a design doc; it's sculpted by user interactions.** The most powerful tool isn't a better algorithm, but a cleaner feedback loop. My passion for connecting systems found its true north: connecting the user's intent directly back to the model.
+We stopped designing for theoretical relevance and started engineering for live feedback. That changed everything.
 
-The breakthrough came when we shifted our engineering focus from inventing relevance in isolation to building a system that could listen and learn from user signals at scale.
+## Assumption 2: We must engineer for correctness from day one  
+**The Truth: Velocity unlocks correctness.**
 
-* **Data quality over model complexity:** Simple models fed with high-quality, real-time user interaction data consistently outperform complex models trained on stale, offline datasets. This is a data pipeline problem before it's an ML problem.
-* **Embrace the mess:** Real-world client data is messy. My experience in building robust systems taught me to create strong validation and monitoring to manage this chaos, rather than trying to sanitize it away.
-* **The product feedback loop is the ultimate scalable system:** The tightest possible loop between user action, data logging, model retraining, and deployment is the most critical piece of infrastructure you can build.
+In interdependent systems, one broken piece can corrupt the end to end flow. The safe feeling is to perfect every component before shipping. That instinct kills learning. It slows you down before you know what matters.
 
-## Assumption 2: We Must Engineer for Correctness from Day One
-**The Truth: Velocity Unlocks Correctness.**
+* **Scrappy end to end tests teach fastest:** A rough but working pipeline in production will surface truths you will not see in a lab.
+* **A-B testing is your compass:** Offline metrics are approximations. Reality is user response.
+* **Refactor after validation:** Clean code that solves the wrong problem is worse than messy code that proves value. Once an idea shows impact, then harden it.
 
-As an experienced engineer, I embrace experimentation for learning. Yet, when faced with a system where so many new concepts—data science, ML, complex backend logic—must work together, the temptation to engineer for perfect correctness from the start is immense. In such a system, one failure can cascade and invalidate your results. The instinct is to ensure every component is pristine before integrating.
+In complex systems, correctness is a byproduct of fast, validated learning.
 
-This is a trap. It leads to analysis paralysis and delays the single most important activity: learning from real-world feedback. The principle should be **make it work, then make it right.**
+## Assumption 3: Offline metrics are our north star  
+**The Truth: Business impact is the north star.**
 
-* **Scrappy tests are your best friend:** Got a hypothesis? Validate it with the quickest, dirtiest test you can build. A messy but functional end-to-end test in a real environment teaches you more than a perfectly architected component that hasn't seen production traffic.
-* **A/B testing is the single source of truth:** All offline metrics are proxies. The only ground truth comes from a trustworthy A/B test in production, which tells you if you're actually moving the needle.
-* **Refactor after validation:** Once an experiment proves an idea is valuable, *then* you invest the time to clean it up, add abstractions, and build robust infrastructure around it. The risk of building the wrong thing cleanly is far greater than the risk of building the right thing messily at first.
+We obsessed over nDCG, precision, recall, and MAE. Dashboards looked great. First A B tests told a different story. **Offline metrics can mislead you.** They are useful for debugging, but they are not the goal.
 
-## Assumption 3: Offline Metrics Are Our Engineering North Star
-**The Truth: Business Impact Is The North Star.**
+* **Avoid the metrics rabbit hole:** You can overfit to synthetic judgments and still fail to improve engagement or conversion.
+* **Tie performance to economics:** Latency and model complexity have costs. Measure tradeoffs against revenue, clicks, retention, or satisfaction.
+* **Ship only what moves the needle:** If an experiment does not move a business KPI, it is not a success, no matter how elegant the solution.
 
-Early on, we thought we needed to perfect our offline evaluation. We spent significant effort defining metrics like nDCG, MAE, precision, and recall. While these are all important diagnostic tools, we learned that focusing on them too early, before we could even observe key business KPIs, was a trap.
+Align every decision with measurable business outcomes. The roadmap gets clearer, and arguments get shorter.
 
-Here's the hard lesson: **your offline metrics can be lying to you.** They are useful for debugging, but they are not the goal.
+## Assumption 4: Functional roles define the work  
+**The Truth: Blurring the lines unlocks synergy.**
 
-* **The Metrics Rabbit Hole:** Over-investing in perfecting offline metrics before you have a solid A/B testing framework can lead to local optima. You might build a model that looks great on paper but fails to improve the user experience or move business metrics. Your beautiful nDCG score doesn't matter if users aren't clicking or converting.
-* **The Economic Reality of Speed:** Latency is an economic choice, not just a technical one. Is a 50ms improvement worth a month of engineering time if it doesn't change user behavior or increase conversion? The answer must be tied to business outcomes.
+We began with clean separation, data science owns models, backend owns APIs, platform owns infrastructure. Collaboration existed, curiosity did not cross boundaries. We optimized locally, not globally.
 
-We finally broke free when we **obsessively linked every experiment to a business KPI**. Did this change increase click-through rate? Did it improve conversion? If the answer was no, we didn't ship it, no matter how elegant the engineering.
+Acceleration started when we turned specializations into a shared toolkit.
 
-## Assumption 4: Functional Roles Define the Work
-**The Truth: Blurring the Lines Unlocks Synergy.**
+* **Enable data scientists:** Let them run A B tests and iterate on features without ticket ping pong.
+* **Upskill backend engineers:** Give them data exploration and observability tools so they can see behavior, not just code.
+* **Keep platform pragmatic:** Avoid premature abstractions. If the backend can host inference now, do it. Replatform when scale demands it.
 
-We didn't start in a full-blown silo, but we did operate with a natural separation of tasks: data science, backend, and platform engineering. Everyone had their domain. The problem wasn't a lack of collaboration, but a lack of cross-pollination. We were missing out on massive synergies by staying in our functional lanes.
+This did not create chaos. It created alignment, faster learning, and shared ownership.
 
-The real acceleration happened when we started blurring these lines.
-* **Empowering Data Science:** A data scientist shouldn't have to file a ticket to validate a hypothesis. We found that giving them easier ways to run A/B tests directly led to faster, better ideas.
-* **Upskilling the Backend:** A backend engineer benefits immensely from being able to do their own data exploration. When they can build their own powerful dashboards for continuous insights, they start asking better questions and building smarter solutions.
-* **Pragmatic Platforming:** A platform engineer's first thought might be to build dedicated, reusable model serving capabilities. We realized that for early stages, the backend service can simply do its own model inference. This pragmatic approach—"just run it in the backend for now"—avoids premature abstraction and gets features to users faster.
+## Assumption 5: Technical excellence guarantees a great product  
+**The Truth: Product mindset is the true compass.**
 
-The goal isn't to make everyone a generalist, but to create a team where functional expertise is a starting point, not a boundary.
+We often equate excellence with elegance, performance, or purity. The market rewards a different thing. It rewards solving the right problem for the right user, at the right cost.
 
-## Assumption 5: Technical Excellence Guarantees a Great Product
-**The Truth: A Strong Product Mindset is Our True Compass.**
+A product mindset means you keep asking:
 
-This is the assumption that encompasses all the others. As engineers, we're trained to value technical superiority. We believe the best technology should win.
+* **Who is the user, what are they trying to do, and what is hard for them today**
+* **Which business outcome do we enable or improve, and how will we know**
+* **What constraints define success, for example cost, latency, trust, safety, and compliance**
 
-But the market doesn't reward you for technical excellence alone. It rewards you for solving a user's problem in a way that creates business value. **Building the wrong thing perfectly is a spectacular waste of time and a failure of our craft.**
+When these answers are clear, technical tradeoffs become obvious. You build the most effective system, not the most sophisticated one.
 
-A product mindset means deeply understanding the "why" behind the "what."
-* **Who are our users?** What are they *really* trying to do?
-* **What is the business goal?** Are we trying to maximize engagement, revenue, or user satisfaction?
-* **How does our industry work?** What are the competitive pressures and unique constraints?
+## Conclusion: Lessons from the core
 
-Technology is a powerful tool to serve the product and the user. When you have a deep understanding of the user, the business, and the industry, you have a compass that guides the technical decisions, ensuring you're not just building the system right, but that you're building the right system.
+A year of rebuilding search taught me humility. Architecture is not a fortress of correctness, it is a living system shaped by feedback and purpose.
 
-## Conclusion: Lessons from the Core
+Here is the checklist I will keep using:
 
-This year-long deep dive into rebuilding search was a masterclass in humility and perspective. It forced me to take years of experience in building scalable systems and re-forge it in the fires of user relevance. The journey is about these five shifts:
+1. **Focus on signals:** Build the shortest path from user action to system learning.  
+2. **Optimize for learning speed:** Let velocity drive correctness, not the other way around.  
+3. **Tie everything to business KPIs:** Technical success without impact is not success.  
+4. **Organize for synergy:** Break functional barriers, enable shared ownership.  
+5. **Adopt a product mindset:** Serve the user and the business, measure it, and adjust.  
 
-1.  **Focus on Signals:** Apply your systems thinking to build relentless, high-fidelity feedback loops from your users.
-2.  **Optimize for Learning:** Use your architectural skills to optimize for experiment velocity, not premature correctness.
-3.  **Tie Everything to Business KPIs:** Your work isn't done until you've moved a metric the business actually cares about.
-4.  **Organize for Synergy:** Build cross-functional teams where expertise is shared, not siloed.
-5.  **Develop a Product Mindset:** Fall in love with the user's problem, not just your technical solution. Let that be your guide.
+The most valuable insights rarely come from textbooks or architecture diagrams. They emerge from building, breaking, and rebuilding real systems in the messy reality of production. As Einstein wisely noted: *"The only source of knowledge is experience."* This year of rebuilding search proved that truth over and over.
 
-This presentation, and by extension this post, was drafted with the help of AI to organize and articulate these lessons.[^1] It's a fitting meta-lesson: just as in search, the key is not just having a powerful tool, but guiding it with deep human insight and a clear focus on the desired outcome.
-
-*"Wisdom is not a product of schooling but of the lifelong attempt to acquire it."* — Albert Einstein[^2]
-
----
-
-## Footnotes
-
-[^1]: The original presentation and this blog post were generated using Gemini, with all content created with AI assistance based on the foundational concepts and lessons learned.
-[^2]: This quote from Albert Einstein was included in the original presentation and serves as a guiding principle for the continuous learning required in a complex field like search.
+If you are leading or building similar systems, I hope these hard won lessons help you navigate the complexity with more clarity and less detour than we had.
