@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>After a Year Rebuilding Search, I Had to Rethink Everything</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark blue-gray */
+            color: #E5E7EB; /* Light gray */
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        .card {
+            background-color: #1F2937; /* Darker card background */
+            border: 1px solid #374151; /* Subtle border */
+            border-radius: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.1), 0 4px 6px -2px rgba(56, 189, 248, 0.05);
+        }
+        .tag {
+            background-color: #374151;
+            color: #d1d5db;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .assumption-title {
+            color: #fca5a5; /* Light red for contrast */
+        }
+        .truth-title {
+            color: #86efac; /* Light green for contrast */
+        }
+        /* Scroll animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Custom path for the meme visual */
+        .path-line {
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+
+        <!-- Header -->
+        <header class="text-center mb-20 reveal">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
+                <span class="block text-white">After a Year Rebuilding Search,</span>
+                <span class="block gradient-text mt-2">I Had to Rethink Everything</span>
+            </h1>
+            <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-400">
+                This is not a universal blueprint. It's our story—the lessons from a year spent rebuilding search from the inside out.
+            </p>
+        </header>
+
+        <!-- The Journey Meme -->
+        <section class="mb-20 reveal">
+             <div class="card p-8">
+                <h2 class="text-2xl font-bold text-center text-white mb-6">The Journey in a Nutshell</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-sky-400 mb-4">The Plan</h3>
+                        <svg viewBox="0 0 100 100" class="w-full h-auto max-w-[200px] mx-auto">
+                            <circle cx="20" cy="50" r="8" fill="#818cf8"/>
+                            <path d="M 28 50 H 72" class="path-line" stroke="#818cf8" stroke-dasharray="5 5" />
+                            <circle cx="80" cy="50" r="8" fill="#38bdf8"/>
+                            <text x="20" y="75" text-anchor="middle" font-size="10" fill="#9ca3af">Start</text>
+                            <text x="80" y="75" text-anchor="middle" font-size="10" fill="#9ca3af">Finish</text>
+                        </svg>
+                        <p class="mt-4 text-gray-400">We started with sound architectural principles.</p>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-sky-400 mb-4">The Reality</h3>
+                        <svg viewBox="0 0 100 100" class="w-full h-auto max-w-[200px] mx-auto">
+                           <circle cx="15" cy="80" r="8" fill="#818cf8"/>
+                            <path d="M 23 78 C 30 40, 70 30, 60 50 S 30 70, 50 60 S 80 40, 75 20" class="path-line" stroke="#fca5a5"/>
+                            <circle cx="75" cy="20" r="8" fill="#38bdf8"/>
+                            <text x="15" y="98" text-anchor="middle" font-size="10" fill="#9ca3af">Start</text>
+                            <text x="75" y="38" text-anchor="middle" font-size="10" fill="#9ca3af">Finish</text>
+                        </svg>
+                        <p class="mt-4 text-gray-400">We returned, wiser, to user-centered simplicity.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content - Assumptions -->
+        <div class="space-y-16">
+
+            <!-- Assumption 1 -->
+            <section class="reveal">
+                <div class="card p-8">
+                    <div class="flex items-center mb-4">
+                        <span class="tag">Lesson #1</span>
+                    </div>
+                    <h3 class="text-xl font-bold assumption-title mb-2">Assumption: Search is an Algorithm & Infrastructure Problem</h3>
+                    <h2 class="text-2xl font-bold truth-title">The Truth: Search is a Data & Product Problem first.</h2>
+                    <p class="mt-4 text-gray-400">Great search is shaped by user behavior, not architecture diagrams. The most powerful architecture isn’t the one that serves the model fastest, it’s the one that learns fastest.</p>
+                    <ul class="mt-6 space-y-4">
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div><strong class="text-white">Data quality beats model complexity:</strong> Simple models on high-quality, near real-time user data often beat complex ones on stale offline sets.</div>
+                        </li>
+                        <li class="flex items-start">
+                             <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div><strong class="text-white">Tight feedback loops are key:</strong> Minimize the time between user action, logging, retraining, and deployment.</div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Assumption 2 -->
+            <section class="reveal">
+                <div class="card p-8">
+                    <div class="flex items-center mb-4">
+                        <span class="tag">Lesson #2</span>
+                    </div>
+                    <h3 class="text-xl font-bold assumption-title mb-2">Assumption: We must engineer for correctness from day one</h3>
+                    <h2 class="text-2xl font-bold truth-title">The Truth: Velocity unlocks correctness.</h2>
+                    <p class="mt-4 text-gray-400">In complex systems, perfecting every component before shipping kills learning. A rough but working pipeline in production will surface truths you won’t see in a lab.</p>
+                    <ul class="mt-6 space-y-4">
+                        <li class="flex items-start">
+                             <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div><strong class="text-white">Scrappy end-to-end tests teach fastest:</strong> Get a working pipeline live to see real-world issues.</div>
+                        </li>
+                        <li class="flex items-start">
+                             <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div><strong class="text-white">Refactor after validation:</strong> Once an idea shows impact, then harden it and clean the code.</div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Assumption 3 -->
+            <section class="reveal">
+                <div class="card p-8">
+                    <div class="flex items-center mb-4">
+                        <span class="tag">Lesson #3</span>
+                    </div>
+                    <h3 class="text-xl font-bold assumption-title mb-2">Assumption: Offline metrics are our north star</h3>
+                    <h2 class="text-2xl font-bold truth-title">The Truth: Business impact is the north star.</h2>
+                    <p class="mt-4 text-gray-400">We obsessed over nDCG and recall. Dashboards looked great, but A/B tests told a different story. Offline metrics are useful for debugging, but they are not the goal.</p>
+                     <ul class="mt-6 space-y-4">
+                        <li class="flex items-start">
+                             <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div><strong class="text-white">Tie performance to economics:</strong> Measure tradeoffs in latency and complexity against revenue, clicks, and retention.</div>
+                        </li>
+                        <li class="flex items-start">
+                             <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div><strong class="text-white">Ship only what moves the needle:</strong> If an experiment doesn’t move a business KPI, it’s not a success.</div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Assumption 4 -->
+            <section class="reveal">
+                <div class="card p-8">
+                    <div class="flex items-center mb-4">
+                        <span class="tag">Lesson #4</span>
+                    </div>
+                    <h3 class="text-xl font-bold assumption-title mb-2">Assumption: Functional roles define the work</h3>
+                    <h2 class="text-2xl font-bold truth-title">The Truth: Blurring the lines unlocks synergy.</h2>
+                    <p class="mt-4 text-gray-400">We began with clean separation: data science, backend, platform. We optimized locally, not globally. Acceleration started when we turned specializations into a shared toolkit.</p>
+                     <ul class="mt-6 space-y-4">
+                        <li class="flex items-start">
+                             <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div><strong class="text-white">Enable data scientists:</strong> Let them run A/B tests and iterate without ticket ping-pong.</div>
+                        </li>
+                        <li class="flex items-start">
+                             <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div><strong class="text-white">Upskill backend engineers:</strong> Give them data and observability tools so they can see behavior, not just code.</div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Assumption 5 -->
+            <section class="reveal">
+                <div class="card p-8">
+                    <div class="flex items-center mb-4">
+                        <span class="tag">Lesson #5</span>
+                    </div>
+                    <h3 class="text-xl font-bold assumption-title mb-2">Assumption: Technical excellence guarantees a great product</h3>
+                    <h2 class="text-2xl font-bold truth-title">The Truth: Product mindset is the true compass.</h2>
+                    <p class="mt-4 text-gray-400">The market rewards solving the right problem for the right user, at the right cost. A product mindset means you keep asking "who," "what," and "why."</p>
+                    <ul class="mt-6 space-y-4">
+                        <li class="flex items-start">
+                             <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div><strong class="text-white">Who is the user?</strong> What are they trying to do, and what is hard for them today?</div>
+                        </li>
+                        <li class="flex items-start">
+                             <svg class="w-6 h-6 text-sky-400 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div><strong class="text-white">Which business outcome do we enable?</strong> How will we know if we've succeeded?</div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            
+        </div>
+
+        <!-- Conclusion / Checklist -->
+        <section class="mt-24 reveal">
+            <div class="bg-gray-800/50 border border-gray-700 rounded-2xl p-8">
+                <h2 class="text-3xl font-bold text-center gradient-text">My Go-Forward Checklist</h2>
+                <div class="mt-8 max-w-2xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
+                    <div class="flex items-center p-4 bg-gray-900/50 rounded-lg">
+                        <svg class="w-8 h-8 text-indigo-400 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
+                        <p class="text-gray-300">Focus on <strong class="text-white">signals</strong></p>
+                    </div>
+                    <div class="flex items-center p-4 bg-gray-900/50 rounded-lg">
+                         <svg class="w-8 h-8 text-indigo-400 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <p class="text-gray-300">Optimize for <strong class="text-white">learning speed</strong></p>
+                    </div>
+                    <div class="flex items-center p-4 bg-gray-900/50 rounded-lg">
+                        <svg class="w-8 h-8 text-indigo-400 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+                        <p class="text-gray-300">Tie everything to <strong class="text-white">business KPIs</strong></p>
+                    </div>
+                    <div class="flex items-center p-4 bg-gray-900/50 rounded-lg">
+                        <svg class="w-8 h-8 text-indigo-400 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <p class="text-gray-300">Organize for <strong class="text-white">synergy</strong></p>
+                    </div>
+                     <div class="flex items-center p-4 bg-gray-900/50 rounded-lg sm:col-span-2 sm:justify-center">
+                        <svg class="w-8 h-8 text-indigo-400 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L15 9l-6 3l6 3l-5.447 2.724A1 1 0 019 20z"></path></svg>
+                        <p class="text-gray-300">Adopt a <strong class="text-white">product mindset</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Quote -->
+        <footer class="mt-20 text-center reveal">
+            <blockquote class="max-w-xl mx-auto">
+                <p class="text-xl italic text-gray-400">“The only source of knowledge is experience.”</p>
+                <cite class="block mt-4 text-gray-500 not-italic">— Albert Einstein</cite>
+            </blockquote>
+        </footer>
+    </div>
+
+    <!-- JS for scroll animations -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+            });
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
