@@ -106,3 +106,12 @@ resource "aws_route53_record" "ses_mail_from_txt" {
   ttl     = 300
   records = ["v=spf1 include:amazonses.com ~all"]
 }
+
+# roast my code subdomain
+resource "aws_route53_record" "cname_roastmycode" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "roastmycode"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["b1dbe3c13e29928f.vercel-dns-017.com."]
+}
