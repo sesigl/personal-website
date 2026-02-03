@@ -14,7 +14,7 @@ import node from '@astrojs/node';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://www.sebastiansigl.com',
-    integrations: [mermaid(), mdx(), sitemap(), tailwind({ applyBaseStyles: false }), react()],
+    integrations: [mermaid({ theme: 'dark', autoTheme: true }), mdx(), sitemap(), tailwind({ applyBaseStyles: false }), react()],
     adapter: vercel({
         imageService: true,
         webAnalytics: {
