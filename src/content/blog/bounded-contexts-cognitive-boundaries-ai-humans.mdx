@@ -16,7 +16,7 @@ The hard part was never typing code. The hard part is our limited capacity to ho
 
 Exactly the same thing happens with LLMs.
 
-This is not mainly about hitting a hard context limit. Even far below the maximum context window, model performance already goes down as prompts grow larger and noisier. Research shows that irrelevant or badly structured context hurts reasoning quality, even when the model technically "supports" long inputs.
+This is not mainly about hitting a hard context limit. Even far below the maximum context window, model performance already goes down as prompts grow larger and noisier. Research shows that irrelevant or badly structured context hurts reasoning quality, even when the model technically "supports" long inputs[^2] [^3].
 
 So if you want AI-assisted coding to actually be reliable, the goal is not stuff more context into the prompt.
 The goal is to design systems so that each task needs less context in the first place.
@@ -59,11 +59,11 @@ These boundaries were originally designed for humans. But they map extremely wel
 
 ### Attention is a scarce resource
 
-Modern LLMs are built on the Transformer architecture, which relies on attention mechanisms to decide which tokens matter during prediction.
+Modern LLMs are built on the Transformer architecture, which relies on attention mechanisms to decide which tokens matter during prediction[^1].
 
 Attention is capacity, not magic. As more irrelevant tokens enter the context window, attention gets diluted. Bigger context does not automatically mean better results.
 
-This is not just theory. Multiple studies show that even long-context models struggle to reliably use relevant information when the prompt grows, especially when relevant parts are surrounded by distractors or sit somewhere in the middle of a long input.
+This is not just theory. Multiple studies show that even long-context models struggle to reliably use relevant information when the prompt grows, especially when relevant parts are surrounded by distractors or sit somewhere in the middle of a long input[^2] [^3] [^4].
 
 In short, more tokens can actually make reasoning worse.
 
@@ -253,9 +253,12 @@ Good architecture has always been about managing complexity.
 
 AI just made the cost of ignoring it impossible to hide.
 
-## References
+## Footnotes
 
-- [Vaswani et al., Attention Is All You Need](https://arxiv.org/abs/1706.03762)
-- [Liu et al., Lost in the Middle: How Language Models Use Long Contexts](https://arxiv.org/abs/2307.03172)
-- [Shi et al., Large Language Models Can Be Easily Distracted by Irrelevant Context](https://arxiv.org/abs/2302.00093)
-- [Found in the Middle: How Language Models Use Positional Information](https://arxiv.org/abs/2406.16008)
+[^1]: Vaswani, A., et al. (2017). *Attention Is All You Need*. arXiv:1706.03762. [https://arxiv.org/abs/1706.03762](https://arxiv.org/abs/1706.03762)
+
+[^2]: Liu, N., et al. (2023). *Lost in the Middle: How Language Models Use Long Contexts*. arXiv:2307.03172. [https://arxiv.org/abs/2307.03172](https://arxiv.org/abs/2307.03172)
+
+[^3]: Shi, F., et al. (2023). *Large Language Models Can Be Easily Distracted by Irrelevant Context*. arXiv:2302.00093. [https://arxiv.org/abs/2302.00093](https://arxiv.org/abs/2302.00093)
+
+[^4]: Hsieh, C., et al. (2024). *Found in the Middle: How Language Models Use Positional Information*. arXiv:2406.16008. [https://arxiv.org/abs/2406.16008](https://arxiv.org/abs/2406.16008)
