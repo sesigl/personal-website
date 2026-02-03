@@ -2,6 +2,7 @@
 import { defineConfig, envField } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import mermaid from 'astro-mermaid';
 
 import tailwind from '@astrojs/tailwind';
 
@@ -13,7 +14,7 @@ import node from '@astrojs/node';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://www.sebastiansigl.com',
-    integrations: [mdx(), sitemap(), tailwind({ applyBaseStyles: false }), react()],
+    integrations: [mermaid(), mdx(), sitemap(), tailwind({ applyBaseStyles: false }), react()],
     adapter: vercel({
         imageService: true,
         webAnalytics: {
