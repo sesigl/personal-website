@@ -150,3 +150,49 @@ hr {
 	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }
+
+/* Mermaid diagrams dark mode support */
+.dark .mermaid {
+	background: transparent !important;
+}
+
+.dark .mermaid svg {
+	background: transparent !important;
+}
+
+/* Override mermaid node colors for dark mode */
+.dark .mermaid .node rect,
+.dark .mermaid .node circle,
+.dark .mermaid .node ellipse,
+.dark .mermaid .node polygon,
+.dark .mermaid .node path {
+	fill: #1e293b !important;
+	stroke: #64748b !important;
+}
+
+.dark .mermaid .cluster rect {
+	fill: #0f172a !important;
+	stroke: #475569 !important;
+}
+
+.dark .mermaid .nodeLabel,
+.dark .mermaid .cluster-label,
+.dark .mermaid .label {
+	color: #e2e8f0 !important;
+	fill: #e2e8f0 !important;
+}
+
+.dark .mermaid .edgeLabel {
+	background-color: #1e293b !important;
+	color: #e2e8f0 !important;
+}
+
+.dark .mermaid .edgePath path,
+.dark .mermaid .flowchart-link {
+	stroke: #64748b !important;
+}
+
+.dark .mermaid marker path {
+	fill: #64748b !important;
+	stroke: #64748b !important;
+}
