@@ -12,8 +12,6 @@ const props = Astro.props as Props;
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/images/**/*.{jpeg,jpg,png,gif,webp}')
 const heroImagePath = props.data.heroImage
 if (!heroImagePath || !images[heroImagePath]) throw new Error(`"${heroImagePath}" does not exist in glob: "src/images/**/*.{jpeg,jpg,png,gif}"`);
-const postUrl = props.data.link ?? `/blog/${props.data.slug}`;
-const isExternalLink = Boolean(props.data.link);
 ---
 
 <article class="py-5 border-b border-slate-100 dark:border-slate-800">
@@ -33,9 +31,7 @@ const isExternalLink = Boolean(props.data.link);
             <h3 class="font-aspekta text-lg font-[650] mb-1">
                 <a
                     class="inline-flex relative hover:text-sky-500 duration-150 ease-out before:scale-x-0 before:origin-center before:absolute before:inset-0 before:bg-sky-200 dark:before:bg-sky-500 before:opacity-30 before:-z-10 before:translate-y-1/4 before:-rotate-2 hover:before:scale-100 before:duration-150 before:ease-in-out"
-                    href={postUrl}
-                    target={isExternalLink ? "_blank" : undefined}
-                    rel={isExternalLink ? "noreferrer" : undefined}
+                    href={`/blog/${props.data.slug}`}
                 >
                     {props.data.title}
                 </a>
@@ -46,10 +42,8 @@ const isExternalLink = Boolean(props.data.link);
                 </div>
                 <a
                     class="hidden lg:flex shrink-0 text-sky-500 items-center justify-center w-12 group"
-                    href={postUrl}
+                    href={`/blog/${props.data.slug}`}
                     tabindex={-1}
-                    target={isExternalLink ? "_blank" : undefined}
-                    rel={isExternalLink ? "noreferrer" : undefined}
                 >
                     <svg
                         class="fill-current group-hover:translate-x-2 duration-150 ease-in-out"
