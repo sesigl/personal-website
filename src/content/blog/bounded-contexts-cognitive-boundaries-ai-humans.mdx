@@ -134,6 +134,28 @@ In the bounded-context version, the system is split into two explicit contexts:
 
 The only shared surface is a small, explicit contract.
 
+```
+src/
+  api/                              (routes, controllers)
+  modules/
+    pricing/                        (Pricing Bounded Context)
+      application/                  (PricingService)
+      domain/                       (PriceEntry, Money, SKU, Promotion…)
+      infrastructure/               (InMemoryPriceRepository, WarehouseAdapter…)
+    warehouse/                      (Warehouse Bounded Context)
+      application/                  (WarehouseService)
+      domain/                       (InventoryItem, Quantity, Reservation, SKU…)
+      infrastructure/               (InMemoryInventoryRepository…)
+  shared/
+    contract/
+      warehouse/
+        AvailabilitySignal.ts       (Published Language)
+```
+
+Each bounded context is a vertical slice. It owns its domain, its application logic, and its infrastructure. The only thing that crosses the boundary is the explicit contract: `AvailabilitySignal`.
+
+Notice that both contexts have their own `SKU` value object. This is intentional. An SKU in Pricing is not the same concept as an SKU in Warehouse. They might have the same format today, but their semantics and evolution are independent.
+
 To enforce this, I use dependency-cruiser rules. These rules are not documentation or conventions.
 
 This is not a linter warning. It is a build failure.
