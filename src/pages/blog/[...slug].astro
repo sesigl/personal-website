@@ -10,10 +10,17 @@ export async function getStaticPaths() {
 			props: CollectionEntry<"blog">;
 		}[] = [
 			{
-				params: { slug: post.id },
+				params: { slug: post.data.slug },
 				props: post,
 			},
 		];
+
+		if (post.id !== post.data.slug) {
+			postPaths.push({
+				params: { slug: post.id },
+				props: post,
+			});
+		}
 
 		if (post.data.slugAlternative) {
 			postPaths.push({
