@@ -95,18 +95,7 @@ An "order" in billing is not the same thing as an "order" in warehouse. Bounded 
 
 Bounded contexts are attention boundaries. They protect the model's focus.
 
-## 4) The experiment: monolith vs bounded contexts
-
-To make this more concrete, I built a small TypeScript backend for a supermarket system in two versions:
-
-1. A monolith
-2. A bounded-context-based design
-
-Both implementations expose the same API and both must pass the exact same API-level test suite. From the outside, they behave identical.
-
-The difference is entirely inside the system.
-
-### The monolith (what AI generates by default)
+xth (what AI generates by default)
 
 Without explicit guidance, an AI usually produces something like this:
 
@@ -220,7 +209,7 @@ if (product.inventory.count < 5) { reduceDiscount(); }
 
 It works.
 The tests pass.
-And you have just created a distributed monolith.
+And you have just created one more coupling making your monolith worse.
 
 Now the coupling is implicit:
 
