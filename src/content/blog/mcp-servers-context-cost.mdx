@@ -18,13 +18,13 @@ The problem is not MCP. The problem is using it where you do not need to. And th
 
 ## Where MCP Is the Only Option
 
-There is a category of tools where MCP is not a preference — it is the only viable architecture. Browser control is the clearest example.
+There is a category of tools where MCP is not a preference. It is the only viable architecture. Browser control is the clearest example.
 
-When your agent needs to navigate a webpage, click a button, fill a form, or read a dynamic page rendered by JavaScript, there is no CLI for that. You cannot `gh browse` your way into a browser session. Chrome DevTools MCP, Playwright MCP — these unlock a capability that simply does not exist otherwise. Your agent can control an actual browser, interact with live interfaces, and automate workflows that were previously manual. This is MCP doing exactly what it was designed for: connecting an agent to a system it cannot access through text commands.
+When your agent needs to navigate a webpage, click a button, fill a form, or read a dynamic page rendered by JavaScript, there is no CLI for that. You cannot `gh browse` your way into a browser session. Chrome DevTools MCP, Playwright MCP — these give your agent a capability that simply does not exist otherwise. It can control an actual browser, interact with live interfaces, and automate workflows that were previously manual. This is MCP doing exactly what it was designed for: connecting an agent to a system it cannot access through text commands.
 
 Research tools are similar. When you need your agent to fetch live web content, browse search results, or read a page that requires a real HTTP session, MCP is the right layer. A Brave Search MCP or a Fetch MCP gives the agent structured web access. The agent cannot replicate this with bash alone.
 
-The same applies to persistent database connections that need a live session, or internal tooling with no public documentation — anything where the agent needs to interact with a stateful, external system that was never designed to be driven from a command line.
+The same applies to persistent database connections that need a live session, or internal tooling with no public documentation. Anything where the agent needs to interact with a stateful, external system that was never designed to be driven from a command line.
 
 In all these cases, not using MCP would be the wrong call. The capability genuinely requires the protocol.
 
@@ -38,9 +38,9 @@ But your agent already knows how to use `gh pr list`. It knows `kubectl get pods
 
 The difference: a CLI call costs zero tokens in tool definitions. An MCP server for the same operation costs thousands, loaded upfront, whether the agent calls it or not.
 
-There is another option that is even better for structured operations: skills. In OpenCode, a skill is a markdown file that tells the agent how to operate a tool — what commands to use, what parameters matter, what to watch out for. The Chrome DevTools skill I use for browser automation, for example, is just a detailed reference document in markdown. The agent reads it as context when needed, not as a persistent definition that takes up space in every session. Same knowledge transfer, fraction of the context cost.
+There is another option that is even better for structured operations: skills. In OpenCode, a skill is a markdown file that tells the agent how to operate a tool, what commands to use, what parameters matter, what to watch out for. The Chrome DevTools skill I use for browser automation, for example, is just a detailed reference document in markdown. The agent reads it as context when needed, not as a persistent definition that takes up space in every session. Same knowledge transfer, fraction of the context cost.
 
-This is the question worth asking for each server in your config: does this tool require MCP, or does my agent already know how to use it from training data and documentation? If it is git, kubectl, the AWS CLI, docker — the agent knows. CLI beats MCP on context cost every time for these.
+This is the question worth asking for each server in your config: does this tool require MCP, or does my agent already know how to use it from training data and documentation? If it is git, kubectl, the AWS CLI, docker, the agent already knows. CLI beats MCP on context cost every time for these.
 
 ## The Context Tax Is Real
 
@@ -78,9 +78,9 @@ Environment variables keep secrets out of version control. The server only loads
 
 OpenCode takes a different approach. You can disable globally defined servers at the project level with `"enabled": false`, and scope tools per agent so specific MCP tools only activate for agents that need them. Skills complement this: put detailed operational documentation in a skill file, load it only for the agents that need it, and skip the MCP server entirely for tools your agent can drive through CLI.
 
-**The heuristic**: ask "does this tool require MCP to function, or does my agent already know the CLI?" Browser control, live research, stateful sessions — MCP. Git, deployment CLIs, cloud provider APIs — CLI or skills. When in doubt, try CLI first. You can always add the MCP server later.
+**The heuristic**: browser control, live research, stateful sessions - use MCP. Git, deployment CLIs, cloud provider APIs - use CLI or skills. When in doubt, try CLI first. You can always add the MCP server later.
 
-For teams, treat `.mcp.json` like `package.json`. Review MCP additions in pull requests. When someone adds a server for a tool that has a well-known CLI, that is a conversation — the same way adding an unnecessary dependency is a conversation. Onboard new developers with the project's `.mcp.json`, not a global dump of every server someone tried once.
+For teams, treat `.mcp.json` like `package.json`. Review MCP additions in pull requests. When someone adds a server for a tool that has a well-known CLI, that is a conversation, the same way adding an unnecessary dependency is a conversation. Onboard new developers with the project's `.mcp.json`, not a global dump of every server someone tried once.
 
 ## MCP Servers Have the Keys to Your Machine
 
@@ -88,13 +88,13 @@ One more thing that is not discussed enough. MCP servers running via stdio are l
 
 The permission model is binary. The server either has access or it does not. There is no per-tool authorization, no sandboxing by default, no way to say "this server can read files but not write them."
 
-Read the source before installing. Use project scoping to limit which servers load where, so a compromised server in one project cannot reach another project's environment. For teams, Claude Code offers `managed-mcp.json` — a system-level config that restricts which servers developers can install via allowlists. If you would not `npm install` a package without checking its README, the same standard applies here.
+Read the source before installing. Use project scoping to limit which servers load where, so a compromised server in one project cannot reach another project's environment. For teams, Claude Code offers `managed-mcp.json`, a system-level config that restricts which servers developers can install via allowlists. If you would not `npm install` a package without checking its README, the same standard applies here.
 
 ## So, What Now?
 
-The mental model that helps: MCP is a capability unlock for things your agent cannot do otherwise. Browser control, live research, stateful external systems — these are the cases where MCP pays for itself. For everything else, your agent already knows the CLI, and CLI does not pollute your context window.
+The mental model that helps: MCP is for things your agent cannot do otherwise. Browser control, live research, stateful external systems, these are the cases where MCP pays for itself. For everything else, your agent already knows the CLI, and CLI does not pollute your context window.
 
-Open your MCP config. For each server, ask: would this workflow be impossible without MCP, or is there a CLI or skill that handles it just as well? Keep the ones that unlock real capabilities. Replace the rest with CLI calls or skill documentation. Move what stays into project-scoped `.mcp.json` so each server only loads where it is actually needed.
+Open your MCP config. For each server, ask: would this workflow be impossible without MCP, or is there a CLI or skill that handles it just as well? Keep the ones that enable real capabilities. Replace the rest with CLI calls or skill documentation. Move what stays into project-scoped `.mcp.json` so each server only loads where it is actually needed.
 
 The question is not whether to use MCP. The question is whether each server you have loaded is earning its context cost.
 
