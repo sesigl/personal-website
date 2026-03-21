@@ -104,13 +104,26 @@ Read the source before installing. Use project scoping to limit which servers lo
 
 ## So, What Now?
 
-The mental model that helps: MCP servers are convenient and well-structured, but they come with a context cost. For capabilities your agent cannot get any other way, like browser control or live research, that cost is easy to justify. For well-known CLIs where the agent already has deep training data, the math is different. A skill with guardrails might give you the same result for less.
+If you are not sure where a tool falls, this decision tree can help:
 
-Open your MCP config. For each server, ask: is the convenience of this server worth the context space it takes? Keep the ones where the answer is clearly yes. For the rest, try CLI first, maybe with a skill for project-specific context. Move what stays into project-scoped config so each server only loads where it is actually needed.
+```mermaid
+graph TD
+    A["Does your agent need<br/>this tool?"] -->|Yes| B["Can the agent already<br/>use it via CLI?"]
+    A -->|No| Z["Remove it"]
+    B -->|"No (browser, live DB,<br/>proprietary system)"| C["Keep the MCP server"]
+    B -->|"Yes (git, kubectl,<br/>docker, gh, aws)"| D["Is the CLI usage<br/>complex or repetitive?"]
+    D -->|Yes| E["Consider MCP for<br/>convenience, but monitor<br/>context cost"]
+    D -->|No| F["Use CLI directly"]
+    C --> G["Add a skill to describe<br/>which tools matter and<br/>how to use them well"]
+    F --> H["Add a skill if the agent<br/>needs project-specific<br/>flags or guardrails"]
+    E --> G
+```
+
+MCP servers are convenient and well-structured, but they come with a context cost. For capabilities your agent cannot get any other way, like browser control or live research, that cost is easy to justify. For well-known CLIs where the agent already has deep training data, the math is different. A skill with guardrails might give you the same result for less.
+
+Open your MCP config. For each server, ask: is the convenience worth the context space it takes? Keep the ones where the answer is clearly yes. For the rest, try CLI first, maybe with a skill for project-specific context. Move what stays into project-scoped config so each server only loads where it is actually needed.
 
 The question is not whether to use MCP. The question is whether each server you have loaded is earning its context cost.
-
-Which servers in your config pass that test?
 
 ---
 
