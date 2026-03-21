@@ -190,165 +190,132 @@
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">The Decision Tree</h2>
             <p class="text-center text-slate-400 mb-12 max-w-2xl mx-auto">For every MCP server in your config, run it through this.</p>
 
-            <style>
-                .tree-connector {
-                    position: relative;
-                }
-                .tree-connector::before {
-                    content: '';
-                    position: absolute;
-                    background-color: #475569;
-                    z-index: 0;
-                }
-                .connector-down::before {
-                    width: 2px;
-                    height: 32px;
-                    left: 50%;
-                    top: -32px;
-                    transform: translateX(-50%);
-                }
-                .connector-down-long::before {
-                    width: 2px;
-                    height: 48px;
-                    left: 50%;
-                    top: -48px;
-                    transform: translateX(-50%);
-                }
-                .tree-arrow {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 4px;
-                }
-                .tree-arrow .arrow-line {
-                    width: 2px;
-                    height: 28px;
-                    background-color: #475569;
-                }
-                .tree-arrow .arrow-head {
-                    width: 0;
-                    height: 0;
-                    border-left: 6px solid transparent;
-                    border-right: 6px solid transparent;
-                    border-top: 8px solid #475569;
-                }
-                .tree-arrow-right {
-                    display: flex;
-                    align-items: center;
-                    gap: 4px;
-                }
-                .tree-arrow-right .arrow-line {
-                    width: 28px;
-                    height: 2px;
-                    background-color: #475569;
-                }
-                .tree-arrow-right .arrow-head {
-                    width: 0;
-                    height: 0;
-                    border-top: 6px solid transparent;
-                    border-bottom: 6px solid transparent;
-                    border-left: 8px solid #475569;
-                }
-                .tree-branch-label {
-                    font-size: 12px;
-                    font-weight: 700;
-                    letter-spacing: 0.025em;
-                }
-            </style>
+            <div class="max-w-3xl mx-auto" id="decision-tree">
+                <style>
+                    #decision-tree .tree-node {
+                        padding: 16px 24px;
+                        border-radius: 12px;
+                        font-weight: 700;
+                        font-size: 15px;
+                        text-align: center;
+                        line-height: 1.4;
+                    }
+                    #decision-tree .tree-question {
+                        background: #1e293b;
+                        border: 2px solid #475569;
+                        color: #e2e8f0;
+                    }
+                    #decision-tree .tree-result-remove { background: #451a1a; border: 2px solid #ef4444; color: #fca5a5; }
+                    #decision-tree .tree-result-keep { background: #0a2e1a; border: 2px solid #10b981; color: #6ee7b7; }
+                    #decision-tree .tree-result-consider { background: #2e1f00; border: 2px solid #f59e0b; color: #fcd34d; }
+                    #decision-tree .tree-result-cli { background: #0a1e2e; border: 2px solid #38bdf8; color: #7dd3fc; }
+                    #decision-tree .tree-result-skill { background: #1a0a2e; border: 2px solid #a78bfa; color: #c4b5fd; }
+                    #decision-tree .tree-label {
+                        font-size: 13px;
+                        font-weight: 700;
+                        padding: 2px 10px;
+                        border-radius: 6px;
+                    }
+                    #decision-tree .tree-line {
+                        background: #475569;
+                    }
+                    #decision-tree .tree-line-v {
+                        width: 2px;
+                        margin: 0 auto;
+                    }
+                    #decision-tree .tree-line-h {
+                        height: 2px;
+                    }
+                    #decision-tree .tree-line-dashed {
+                        background: none;
+                        border-left: 2px dashed #7c3aed;
+                    }
+                </style>
 
-            <div class="max-w-3xl mx-auto">
-                <!-- Q1: Does your agent need this tool? -->
-                <div class="flex justify-center items-center gap-4 md:gap-6">
-                    <div class="decision-node card p-5 text-center !opacity-100 !transform-none" style="max-width: 280px;">
-                        <p class="text-base font-bold text-slate-100">Does your agent actually need this tool?</p>
+                <!-- Row 1: Q1 + Remove -->
+                <div class="flex items-center justify-center gap-4">
+                    <div class="tree-node tree-question" style="max-width: 260px;">Does your agent need this tool?</div>
+                    <div class="flex items-center gap-2">
+                        <div class="tree-line tree-line-h" style="width: 32px;"></div>
+                        <div class="tree-label bg-red-500/20 text-red-400">No</div>
+                        <div class="tree-line tree-line-h" style="width: 12px;"></div>
                     </div>
-                    <div class="tree-arrow-right">
-                        <div class="arrow-line"></div>
-                        <div class="arrow-head"></div>
-                    </div>
-                    <div>
-                        <div class="tree-branch-label text-red-400 text-center mb-1">No</div>
-                        <div class="decision-node bg-slate-800 border border-red-500/30 rounded-xl px-5 py-3 flex-shrink-0">
-                            <span class="text-sm font-bold text-red-400">Remove it</span>
+                    <div class="tree-node tree-result-remove">Remove it</div>
+                </div>
+
+                <!-- Vertical line + Yes label -->
+                <div class="flex flex-col items-center" style="margin-right: 160px;">
+                    <div class="tree-line tree-line-v" style="height: 12px;"></div>
+                    <div class="tree-label bg-emerald-500/20 text-emerald-400">Yes</div>
+                    <div class="tree-line tree-line-v" style="height: 12px;"></div>
+                </div>
+
+                <!-- Row 2: Q2 -->
+                <div class="flex justify-center" style="margin-right: 160px;">
+                    <div class="tree-node tree-question" style="max-width: 280px;">Can the agent already use it via CLI?</div>
+                </div>
+
+                <!-- Branch split: horizontal line spanning both columns, then vertical drops -->
+                <div style="margin-right: 160px;">
+                    <div class="tree-line tree-line-v mx-auto" style="height: 16px;"></div>
+                    <div class="flex justify-center items-start" style="gap: 0;">
+                        <!-- Left branch: No -->
+                        <div class="flex flex-col items-center" style="width: 50%;">
+                            <div class="flex items-center w-full justify-end">
+                                <div class="tree-line tree-line-h" style="width: 50%;"></div>
+                            </div>
+                            <div class="tree-line tree-line-v" style="height: 8px;"></div>
+                            <div class="tree-label bg-sky-500/20 text-sky-400 mb-1">No</div>
+                            <div class="text-xs text-slate-500 mb-2">(browser, live DB, proprietary)</div>
+                            <div class="tree-node tree-result-keep">Keep the MCP server</div>
+                        </div>
+                        <!-- Right branch: Yes -->
+                        <div class="flex flex-col items-center" style="width: 50%;">
+                            <div class="flex items-center w-full justify-start">
+                                <div class="tree-line tree-line-h" style="width: 50%;"></div>
+                            </div>
+                            <div class="tree-line tree-line-v" style="height: 8px;"></div>
+                            <div class="tree-label bg-amber-500/20 text-amber-400 mb-1">Yes</div>
+                            <div class="text-xs text-slate-500 mb-2">(git, kubectl, docker, gh, aws)</div>
+                            <div class="tree-node tree-question">Is CLI usage complex or repetitive?</div>
+
+                            <!-- Sub-branch split -->
+                            <div class="tree-line tree-line-v" style="height: 16px;"></div>
+                            <div class="flex justify-center items-start w-full gap-6" style="">
+                                <!-- Yes -->
+                                <div class="flex flex-col items-center" style="flex: 1;">
+                                    <div class="flex items-center w-full justify-end">
+                                        <div class="tree-line tree-line-h" style="width: 50%;"></div>
+                                    </div>
+                                    <div class="tree-line tree-line-v" style="height: 8px;"></div>
+                                    <div class="tree-label bg-amber-500/20 text-amber-400 mb-1">Yes</div>
+                                    <div class="tree-node tree-result-consider text-sm">Consider MCP,<br>monitor cost</div>
+                                </div>
+                                <!-- No -->
+                                <div class="flex flex-col items-center" style="flex: 1;">
+                                    <div class="flex items-center w-full justify-start">
+                                        <div class="tree-line tree-line-h" style="width: 50%;"></div>
+                                    </div>
+                                    <div class="tree-line tree-line-v" style="height: 8px;"></div>
+                                    <div class="tree-label bg-sky-500/20 text-sky-400 mb-1">No</div>
+                                    <div class="tree-node tree-result-cli text-sm">Use CLI directly</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Arrow down (Yes) -->
-                <div class="flex justify-center" style="margin-left: -100px;">
-                    <div class="tree-arrow">
-                        <div class="tree-branch-label text-emerald-400">Yes</div>
-                        <div class="arrow-line"></div>
-                        <div class="arrow-head"></div>
-                    </div>
-                </div>
-
-                <!-- Q2: Can the agent use it via CLI? -->
-                <div class="flex justify-center">
-                    <div class="decision-node card p-5 text-center !opacity-100 !transform-none" style="max-width: 300px;">
-                        <p class="text-base font-bold text-slate-100">Can the agent already use it via CLI?</p>
-                    </div>
-                </div>
-
-                <!-- Branch arrows: No (left) / Yes (right) -->
-                <div class="grid grid-cols-2 gap-8 mt-2">
-                    <div class="flex flex-col items-center">
-                        <div class="tree-arrow">
-                            <div class="tree-branch-label text-sky-400">No</div>
-                            <div class="arrow-line"></div>
-                            <div class="arrow-head"></div>
-                        </div>
-                        <div class="text-xs text-slate-500 mb-2">(browser, live DB, proprietary)</div>
-                        <div class="decision-node bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-5">
-                            <span class="text-sm font-bold text-emerald-400">Keep the MCP server</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="tree-arrow">
-                            <div class="tree-branch-label text-amber-400">Yes</div>
-                            <div class="arrow-line"></div>
-                            <div class="arrow-head"></div>
-                        </div>
-                        <div class="text-xs text-slate-500 mb-2">(git, kubectl, docker, gh, aws)</div>
-                        <div class="decision-node card p-5 text-center !opacity-100 !transform-none">
-                            <p class="text-sm font-bold text-slate-100">Is the CLI usage complex or repetitive?</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Q3 branch arrows: Yes / No -->
-                <div class="grid grid-cols-2 gap-8 mt-2" style="margin-left: 50%; max-width: 50%;">
-                    <div class="flex flex-col items-center">
-                        <div class="tree-arrow">
-                            <div class="tree-branch-label text-amber-400">Yes</div>
-                            <div class="arrow-line"></div>
-                            <div class="arrow-head"></div>
-                        </div>
-                        <div class="decision-node bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
-                            <span class="text-xs font-bold text-amber-300">Consider MCP,<br>monitor context cost</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="tree-arrow">
-                            <div class="tree-branch-label text-sky-400">No</div>
-                            <div class="arrow-line"></div>
-                            <div class="arrow-head"></div>
-                        </div>
-                        <div class="decision-node bg-sky-500/10 border border-sky-500/30 rounded-xl p-4">
-                            <span class="text-xs font-bold text-sky-300">Use CLI directly</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dashed lines converging to skills -->
-                <div class="flex justify-center mt-6 mb-2">
-                    <div style="width: 2px; height: 24px; background: repeating-linear-gradient(to bottom, #7c3aed 0, #7c3aed 4px, transparent 4px, transparent 8px);"></div>
+                <!-- Horizontal bar connecting all outcomes to skills -->
+                <div class="mt-8 mb-3 max-w-lg mx-auto flex items-center gap-2">
+                    <div style="flex: 1; height: 1px; background: linear-gradient(to right, transparent, #7c3aed);"></div>
+                    <div style="width: 6px; height: 6px; background: #7c3aed; border-radius: 50%; opacity: 0.8;"></div>
+                    <div style="flex: 1; height: 1px; background: #7c3aed; opacity: 0.5;"></div>
+                    <div style="width: 6px; height: 6px; background: #7c3aed; border-radius: 50%; opacity: 0.8;"></div>
+                    <div style="flex: 1; height: 1px; background: linear-gradient(to left, transparent, #7c3aed);"></div>
                 </div>
 
                 <!-- Skills callout -->
-                <div class="bg-purple-500/10 border border-purple-500/30 rounded-xl p-6 text-center max-w-md mx-auto">
-                    <p class="text-sm font-bold text-purple-300">In all cases: add a skill for project-specific context, guardrails, and documentation</p>
-                </div>
+                <div class="tree-node tree-result-skill max-w-lg mx-auto text-sm">In all cases: add a skill for project-specific context, guardrails, and documentation</div>
             </div>
         </section>
 
