@@ -59,7 +59,7 @@ This is the question worth asking for each server in your config: does the conve
 
 Every MCP server loads all its tool definitions at startup. This is not a minor cost.
 
-Four servers with 50+ tools consumed 67,000 tokens in my setup. Cloudflare's own MCP best practices [warn against treating an MCP server as a wrapper around your full API schema](https://developers.cloudflare.com/agents/model-context-protocol/), specifically because agents with limited context windows cannot handle it. Their ["Code Mode" research](https://blog.cloudflare.com/code-mode/) found that presenting tools as a TypeScript API instead of raw tool definitions produced dramatically better results, precisely because the tool definition overhead was hurting agent performance.
+Four servers with 50+ tools consumed 67,000 tokens in my setup. Cloudflare's own MCP best practices warn against treating an MCP server as a wrapper around your full API schema, specifically because agents with limited context windows cannot handle it[^1]. Their "Code Mode" research found that presenting tools as a TypeScript API instead of raw tool definitions produced dramatically better results, precisely because the tool definition overhead was hurting agent performance[^2].
 
 This matters because context windows are finite, and **reasoning quality degrades as they fill up**. I have seen this directly: an agent that correctly refactored a 200-line file with 3 MCP servers loaded missed a critical import statement when the same task ran with 8 servers loaded. The tool definitions that nobody called pushed the code context further back in the window. The agent lost track of earlier file contents.
 
@@ -125,3 +125,9 @@ MCP servers are convenient and well-structured, but they come with a context cos
 Open your MCP config. For each server, ask: is the convenience worth the context space it takes? Keep the ones where the answer is clearly yes. For the rest, try CLI first, maybe with a skill for project-specific context. Move what stays into project-scoped config so each server only loads where it is actually needed.
 
 The question is not whether to use MCP. The question is whether each server you have loaded is earning its context cost.
+
+---
+
+[^1]: Cloudflare. (2025). *Model Context Protocol (MCP) — Best Practices*. Cloudflare Developers. [https://developers.cloudflare.com/agents/model-context-protocol/](https://developers.cloudflare.com/agents/model-context-protocol/)
+
+[^2]: Varda, K. & Pai, S. (2025). *Code Mode: the better way to use MCP*. Cloudflare Blog. [https://blog.cloudflare.com/code-mode/](https://blog.cloudflare.com/code-mode/)
