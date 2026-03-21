@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Servers Have a Context Cost. Make Sure They Earn It.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+            color: #E2E8F0;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #f97316, #ef4444, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .gradient-text-blue {
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .card {
+            background-color: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 0 30px rgba(99,102,241,0.2);
+        }
+        .card-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .icon-glow {
+            filter: drop-shadow(0 0 10px rgba(99,102,241,0.5));
+        }
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+        .decision-node {
+            transition: all 0.3s ease;
+        }
+        .decision-node:hover {
+            transform: scale(1.03);
+        }
+        .pulse-ring {
+            animation: pulse-ring 3s ease-in-out infinite;
+        }
+        @keyframes pulse-ring {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.3); }
+            50% { box-shadow: 0 0 0 12px rgba(239,68,68,0); }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+
+        <!-- Header -->
+        <header class="text-center mb-20 md:mb-28">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">
+                MCP Servers Have a <span class="gradient-text">Context Cost</span>
+            </h1>
+            <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-400">
+                Some tools require MCP. Most don't. Knowing the difference keeps your agent sharp.
+            </p>
+        </header>
+
+        <!-- The Problem: Stats Section -->
+        <section class="mb-20 md:mb-28">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card p-8 text-center">
+                    <div class="text-5xl md:text-6xl font-extrabold text-red-400 stat-number pulse-ring inline-block rounded-2xl px-4 py-2">67K</div>
+                    <p class="mt-4 text-slate-400">tokens consumed by 4 MCP servers before typing a single prompt</p>
+                </div>
+                <div class="card p-8 text-center">
+                    <div class="text-5xl md:text-6xl font-extrabold text-amber-400 stat-number">50+</div>
+                    <p class="mt-4 text-slate-400">tool definitions loaded, most of which the agent never called</p>
+                </div>
+                <div class="card p-8 text-center">
+                    <div class="text-5xl md:text-6xl font-extrabold text-sky-400 stat-number">1M+</div>
+                    <p class="mt-4 text-slate-400">tokens Cloudflare estimated for exposing their full API via MCP</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- When MCP Is Essential vs Not -->
+        <section class="mb-20 md:mb-28">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">When to Use MCP, When Not To</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <!-- MCP Essential -->
+                <div class="card p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-xl flex items-center justify-center icon-glow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-emerald-400">Use MCP</h3>
+                    </div>
+                    <p class="text-slate-400 mb-6">When MCP provides a capability your agent cannot get any other way.</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 text-emerald-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </span>
+                            <div><strong class="text-slate-200">Browser control</strong><br><span class="text-sm text-slate-400">Chrome DevTools MCP, Playwright MCP. No CLI equivalent exists.</span></div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 text-emerald-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </span>
+                            <div><strong class="text-slate-200">Live research</strong><br><span class="text-sm text-slate-400">Brave Search MCP, Fetch MCP. Real HTTP sessions for web access.</span></div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 text-emerald-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </span>
+                            <div><strong class="text-slate-200">Stateful external systems</strong><br><span class="text-sm text-slate-400">Persistent DB connections, proprietary internal tools.</span></div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- CLI Is Enough -->
+                <div class="card p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-amber-500/20 text-amber-400 rounded-xl flex items-center justify-center icon-glow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-amber-400">Consider CLI Instead</h3>
+                    </div>
+                    <p class="text-slate-400 mb-6">Your agent was trained on millions of examples for these tools. Zero token overhead.</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 font-mono text-sm text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded">$</span>
+                            <div><strong class="text-slate-200">gh pr list</strong><br><span class="text-sm text-slate-400">GitHub MCP exposes 40+ tool definitions. The CLI costs zero.</span></div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 font-mono text-sm text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded">$</span>
+                            <div><strong class="text-slate-200">kubectl get pods</strong><br><span class="text-sm text-slate-400">kubectl MCP loads full Kubernetes API surface into context.</span></div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 font-mono text-sm text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded">$</span>
+                            <div><strong class="text-slate-200">docker, git, aws cli</strong><br><span class="text-sm text-slate-400">Well-known CLIs with deep training data coverage.</span></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills: The Complement -->
+        <section class="mb-20 md:mb-28">
+            <div class="card p-8 md:p-12">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-purple-500/20 text-purple-400 rounded-2xl flex items-center justify-center icon-glow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </div>
+                    <h2 class="text-3xl font-bold">Skills Make Both Better</h2>
+                    <p class="mt-3 text-slate-400 max-w-2xl mx-auto">Skills are not a replacement for MCP. They add metadata, guardrails, and project-specific context to <em>any</em> tool.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+                        <h4 class="font-bold text-purple-300 mb-2">For MCP servers</h4>
+                        <p class="text-sm text-slate-400">Describe which of 40+ tools matter. Document gotchas, recommended sequences, project-specific context.</p>
+                    </div>
+                    <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+                        <h4 class="font-bold text-purple-300 mb-2">For CLI tools</h4>
+                        <p class="text-sm text-slate-400">Add project-specific flags, guardrails, API specs. Point to OpenAPI docs, explain which endpoints to avoid.</p>
+                    </div>
+                    <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+                        <h4 class="font-bold text-purple-300 mb-2">With scripts</h4>
+                        <p class="text-sm text-slate-400">Wrap CLIs with safety checks, rate limits, and defaults. More work than MCP, but real guardrails.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Decision Tree -->
+        <section class="mb-20 md:mb-28">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">The Decision Tree</h2>
+            <p class="text-center text-slate-400 mb-12 max-w-2xl mx-auto">For every MCP server in your config, run it through this.</p>
+
+            <div class="max-w-3xl mx-auto">
+                <!-- Step 1 -->
+                <div class="decision-node card p-6 mb-4 text-center">
+                    <p class="text-lg font-bold text-slate-100">Does your agent actually need this tool?</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-emerald-400 mb-2">Yes &darr;</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="decision-node bg-slate-800 border border-red-500/30 rounded-xl p-4">
+                            <span class="text-sm font-bold text-red-400">No &rarr; Remove it</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="decision-node card p-6 mb-4 text-center max-w-md mx-auto">
+                    <p class="text-lg font-bold text-slate-100">Can the agent already use it via CLI?</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sky-400 mb-2">No</div>
+                        <div class="text-xs text-slate-500 mb-2">(browser, live DB, proprietary)</div>
+                        <div class="decision-node bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4">
+                            <span class="text-sm font-bold text-emerald-400">Keep the MCP server</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-amber-400 mb-2">Yes</div>
+                        <div class="text-xs text-slate-500 mb-2">(git, kubectl, docker, gh, aws)</div>
+                        <div class="decision-node card p-4 text-center !opacity-100 !transform-none">
+                            <p class="text-sm font-bold text-slate-100">Is the CLI usage complex or repetitive?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="grid grid-cols-2 gap-4 mb-8 ml-auto" style="max-width:50%; margin-left: 50%;">
+                    <div class="text-center">
+                        <div class="text-xs font-bold text-amber-400 mb-2">Yes</div>
+                        <div class="decision-node bg-amber-500/10 border border-amber-500/30 rounded-xl p-3">
+                            <span class="text-xs font-bold text-amber-300">Consider MCP,<br>monitor context cost</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xs font-bold text-sky-400 mb-2">No</div>
+                        <div class="decision-node bg-sky-500/10 border border-sky-500/30 rounded-xl p-3">
+                            <span class="text-xs font-bold text-sky-300">Use CLI directly</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills callout -->
+                <div class="bg-purple-500/10 border border-purple-500/30 rounded-xl p-6 text-center max-w-md mx-auto">
+                    <p class="text-sm font-bold text-purple-300">In all cases: add a skill for project-specific context, guardrails, and documentation</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Best Practices -->
+        <section class="mb-20 md:mb-28">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Best Practices</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div class="card p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-sky-500/20 text-sky-400 rounded-xl flex items-center justify-center font-bold">1</div>
+                        <div>
+                            <h4 class="font-bold text-slate-100 mb-1">Scope per project, not globally</h4>
+                            <p class="text-sm text-slate-400">Use project-scoped <code class="text-sky-300 bg-slate-800 px-1.5 py-0.5 rounded">.mcp.json</code> so each server only loads where needed.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-sky-500/20 text-sky-400 rounded-xl flex items-center justify-center font-bold">2</div>
+                        <div>
+                            <h4 class="font-bold text-slate-100 mb-1">Track what your agent actually calls</h4>
+                            <p class="text-sm text-slate-400">Tool usage follows a power law. 2-3 tools do the work. The rest eat context.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-sky-500/20 text-sky-400 rounded-xl flex items-center justify-center font-bold">3</div>
+                        <div>
+                            <h4 class="font-bold text-slate-100 mb-1">Review MCP additions in PRs</h4>
+                            <p class="text-sm text-slate-400">Treat <code class="text-sky-300 bg-slate-800 px-1.5 py-0.5 rounded">.mcp.json</code> like <code class="text-sky-300 bg-slate-800 px-1.5 py-0.5 rounded">package.json</code>. Every server addition is a conversation.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-red-500/20 text-red-400 rounded-xl flex items-center justify-center font-bold">4</div>
+                        <div>
+                            <h4 class="font-bold text-slate-100 mb-1">Read the source before installing</h4>
+                            <p class="text-sm text-slate-400">MCP servers are local subprocesses with full filesystem access. No sandboxing by default.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Closing -->
+        <section>
+            <div class="relative bg-slate-800 border border-slate-700 rounded-3xl p-8 md:p-12 overflow-hidden text-center">
+                <div class="absolute -top-10 -right-10 w-48 h-48 bg-orange-500/10 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-16 -left-16 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl"></div>
+                <div class="relative z-10">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">The question is not whether to use MCP.</h2>
+                    <p class="text-xl md:text-2xl gradient-text-blue font-bold">The question is whether each server is earning its context cost.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.card');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('card-visible');
+                    }, index * 80);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        cards.forEach(card => observer.observe(card));
+    </script>
+</body>
+</html>
