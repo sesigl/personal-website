@@ -5,7 +5,7 @@ pubDate: "2026-03-20"
 heroImage: "/src/images/blog/posts/mcp-servers-context-cost/hero.png"
 slug: "mcp-servers-context-cost"
 category: "tech"
-readingTimeInMinutes: 6
+readingTimeInMinutes: 7
 ---
 
 ![An abstract visualization of a weight scale where one side holds a dense cluster of glowing tool nodes and the other holds clear empty space, symbolizing the tradeoff between capability and context cost.](../../images/blog/posts/mcp-servers-context-cost/hero.png)
@@ -28,19 +28,31 @@ The same applies to persistent database connections that need a live session, or
 
 In all these cases, not using MCP would be the wrong call. The capability genuinely requires the protocol.
 
-## Where CLI and Scripts Beat MCP
+## Where CLI Can Be Enough
 
 Now consider the other category. Your agent wants to check open pull requests. List recent commits. Apply a Kubernetes deployment. Query your cloud provider's API.
 
 Every tutorial tells you to install MCP servers for these. GitHub MCP, kubectl MCP, AWS MCP. Each one advertises all its tools to your agent upfront. The GitHub MCP server alone exposes 40+ tool definitions. Your agent loads every single one into its context window before you have asked anything.
 
-But your agent already knows how to use `gh pr list`. It knows `kubectl get pods`. It has been trained on millions of Stack Overflow answers, documentation pages, and code examples for these tools. It can run them through a bash tool with zero overhead.
+But your agent already knows how to use `gh pr list`. It knows `kubectl get pods`. It has been trained on millions of Stack Overflow answers, documentation pages, and code examples for these tools. It can run them through a bash tool with zero extra tool definitions loaded.
 
-The difference: a CLI call costs zero tokens in tool definitions. An MCP server for the same operation costs thousands, loaded upfront, whether the agent calls it or not.
+That said, MCP servers have real advantages. They expose a structured interface, with typed tool definitions, descriptions, and parameters. They are usually packaged as npm modules or Docker containers that update automatically. You do not need to maintain scripts, write wrappers, or keep documentation in sync. For many teams, that convenience is worth it.
 
-There is another option that is even better for structured operations: skills. In OpenCode, a skill is a markdown file that tells the agent how to operate a tool, what commands to use, what parameters matter, what to watch out for. The Chrome DevTools skill I use for browser automation, for example, is just a detailed reference document in markdown. The agent reads it as context when needed, not as a persistent definition that takes up space in every session. Same knowledge transfer, fraction of the context cost.
+The tradeoff is context cost. A CLI call costs zero tokens in tool definitions. An MCP server for the same operation costs thousands, loaded at startup, whether the agent calls it or not. So the question becomes: is the convenience of this particular server worth the context space it takes from your actual work?
 
-This is the question worth asking for each server in your config: does this tool require MCP, or does my agent already know how to use it from training data and documentation? If it is git, kubectl, the AWS CLI, docker, the agent already knows. CLI beats MCP on context cost every time for these.
+For well-known CLIs where the agent already has deep training data, the answer is often no. For internal tools, proprietary APIs, or systems with complex authentication flows, the structured interface of an MCP server can save more time than it costs.
+
+## Skills: The Layer That Makes Both Better
+
+There is another piece to this puzzle that most setup guides miss entirely. In Claude Code (and similar tools like OpenCode, Cursor, Windsurf), you can write skills. A skill is a markdown file that describes how to operate a tool. What parameters matter. What common mistakes to avoid. Where the API docs or OpenAPI spec live.
+
+Skills are not a replacement for MCP. They are a complement to everything. A skill can describe how to use an MCP server more effectively, which of its 40 tools actually matter for your project, and what the gotchas are. A skill can describe how to use a CLI with project-specific flags and guardrails. A skill can point to an OpenAPI spec and explain which endpoints to avoid in production.
+
+The Chrome DevTools skill I use for browser automation, for example, is a detailed reference that the agent loads on demand. It describes how to interact with the MCP server, what to watch out for, what sequences of actions work best. The MCP server provides the capability. The skill provides the context about how to use it well.
+
+You can also go further. A skill can include a script that wraps a CLI with safety checks, rate limits, or project-specific defaults. That is more work than installing an MCP server, but it gives you guardrails that no server provides out of the box.
+
+This is the question worth asking for each server in your config: does the convenience of this MCP server justify its context cost, or would a CLI call (maybe paired with a skill for context) get you the same result for less?
 
 ## The Context Tax Is Real
 
@@ -58,7 +70,7 @@ In practice, tool usage follows a power law. Track which tools your agent calls 
 
 The default setup for most developers is global MCP configuration. Every project gets every server. Your coding project loads the research server. Your automation project loads the database server. This is the equivalent of importing every package in your language's ecosystem into every project.
 
-Claude Code has the most mature scoping model right now, with three levels. Local scope is private to you, stored in `~/.claude.json`. Project scope lives in `.mcp.json` at the project root, checked into git, shared with your team. User scope is global.
+Claude Code has the most mature scoping model right now, with three levels. Local scope is private to you, stored in `~/.claude.json`. Project scope lives in `.mcp.json` at the project root, checked into git, shared with your team. User scope is global. The other coding agents mentioned above have similar concepts, though the config formats differ.
 
 The project-scoped `.mcp.json` is the one that matters most:
 
@@ -76,9 +88,9 @@ The project-scoped `.mcp.json` is the one that matters most:
 
 Environment variables keep secrets out of version control. The server only loads when you are in this project. Other projects are not affected.
 
-OpenCode takes a different approach. You can disable globally defined servers at the project level with `"enabled": false`, and scope tools per agent so specific MCP tools only activate for agents that need them. Skills complement this: put detailed operational documentation in a skill file, load it only for the agents that need it, and skip the MCP server entirely for tools your agent can drive through CLI.
+Claude Code also lets you disable globally defined servers at the project level, and scope tools per agent so specific MCP tools only activate for agents that need them.
 
-**The heuristic**: browser control, live research, stateful sessions - use MCP. Git, deployment CLIs, cloud provider APIs - use CLI or skills. When in doubt, try CLI first. You can always add the MCP server later.
+**The heuristic**: for each server, ask yourself whether the convenience justifies the context cost. Browser control, live research, stateful sessions - those typically do. Well-known CLIs like git, kubectl, and docker - those typically do not. When in doubt, start with CLI and add the MCP server if you find yourself writing the same complex commands repeatedly.
 
 For teams, treat `.mcp.json` like `package.json`. Review MCP additions in pull requests. When someone adds a server for a tool that has a well-known CLI, that is a conversation, the same way adding an unnecessary dependency is a conversation. Onboard new developers with the project's `.mcp.json`, not a global dump of every server someone tried once.
 
@@ -92,9 +104,9 @@ Read the source before installing. Use project scoping to limit which servers lo
 
 ## So, What Now?
 
-The mental model that helps: MCP is for things your agent cannot do otherwise. Browser control, live research, stateful external systems, these are the cases where MCP pays for itself. For everything else, your agent already knows the CLI, and CLI does not pollute your context window.
+The mental model that helps: MCP servers are convenient and well-structured, but they come with a context cost. For capabilities your agent cannot get any other way, like browser control or live research, that cost is easy to justify. For well-known CLIs where the agent already has deep training data, the math is different. A skill with guardrails might give you the same result for less.
 
-Open your MCP config. For each server, ask: would this workflow be impossible without MCP, or is there a CLI or skill that handles it just as well? Keep the ones that enable real capabilities. Replace the rest with CLI calls or skill documentation. Move what stays into project-scoped `.mcp.json` so each server only loads where it is actually needed.
+Open your MCP config. For each server, ask: is the convenience of this server worth the context space it takes? Keep the ones where the answer is clearly yes. For the rest, try CLI first, maybe with a skill for project-specific context. Move what stays into project-scoped config so each server only loads where it is actually needed.
 
 The question is not whether to use MCP. The question is whether each server you have loaded is earning its context cost.
 
