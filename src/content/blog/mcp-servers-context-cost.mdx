@@ -89,7 +89,7 @@ The project-scoped `.mcp.json` is the one that matters most:
 
 Environment variables keep secrets out of version control. The server only loads when you are in this project. Other projects are not affected.
 
-Claude Code also lets you disable globally defined servers at the project level, and scope tools per agent so specific MCP tools only activate for agents that need them.
+Claude Code also lets you disable globally defined servers at the project level, and scope tools per agent so specific MCP tools only activate for agents that need them. One thing it does not offer is a simple on/off default per server in config. OpenCode does: each MCP entry has an `"enabled": true/false` field, so you can define a server once and keep it disabled until a specific project or agent needs it. A small difference, but it matters when you have a dozen servers defined globally and only want two active.
 
 **The heuristic**: for each server, ask yourself whether the convenience justifies the context cost. Browser control, live research, stateful sessions - those typically do. Well-known CLIs like git, kubectl, and docker - those typically do not. When in doubt, start with CLI and add the MCP server if you find yourself writing the same complex commands repeatedly.
 
