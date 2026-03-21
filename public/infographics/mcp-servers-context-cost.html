@@ -89,8 +89,8 @@
                     <p class="mt-4 text-slate-400">tool definitions loaded, most of which the agent never called</p>
                 </div>
                 <div class="card p-8 text-center">
-                    <div class="text-5xl md:text-6xl font-extrabold text-sky-400 stat-number">1M+</div>
-                    <p class="mt-4 text-slate-400">tokens Cloudflare estimated for exposing their full API via MCP</p>
+                    <div class="text-5xl md:text-6xl font-extrabold text-sky-400 stat-number">10%</div>
+                    <p class="mt-4 text-slate-400">context threshold where Claude Code auto-defers MCP tool definitions</p>
                 </div>
             </div>
         </section>
@@ -190,57 +190,159 @@
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">The Decision Tree</h2>
             <p class="text-center text-slate-400 mb-12 max-w-2xl mx-auto">For every MCP server in your config, run it through this.</p>
 
+            <style>
+                .tree-connector {
+                    position: relative;
+                }
+                .tree-connector::before {
+                    content: '';
+                    position: absolute;
+                    background-color: #475569;
+                    z-index: 0;
+                }
+                .connector-down::before {
+                    width: 2px;
+                    height: 32px;
+                    left: 50%;
+                    top: -32px;
+                    transform: translateX(-50%);
+                }
+                .connector-down-long::before {
+                    width: 2px;
+                    height: 48px;
+                    left: 50%;
+                    top: -48px;
+                    transform: translateX(-50%);
+                }
+                .tree-arrow {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 4px;
+                }
+                .tree-arrow .arrow-line {
+                    width: 2px;
+                    height: 28px;
+                    background-color: #475569;
+                }
+                .tree-arrow .arrow-head {
+                    width: 0;
+                    height: 0;
+                    border-left: 6px solid transparent;
+                    border-right: 6px solid transparent;
+                    border-top: 8px solid #475569;
+                }
+                .tree-arrow-right {
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                }
+                .tree-arrow-right .arrow-line {
+                    width: 28px;
+                    height: 2px;
+                    background-color: #475569;
+                }
+                .tree-arrow-right .arrow-head {
+                    width: 0;
+                    height: 0;
+                    border-top: 6px solid transparent;
+                    border-bottom: 6px solid transparent;
+                    border-left: 8px solid #475569;
+                }
+                .tree-branch-label {
+                    font-size: 12px;
+                    font-weight: 700;
+                    letter-spacing: 0.025em;
+                }
+            </style>
+
             <div class="max-w-3xl mx-auto">
-                <!-- Step 1 -->
-                <div class="decision-node card p-6 mb-4 text-center">
-                    <p class="text-lg font-bold text-slate-100">Does your agent actually need this tool?</p>
-                </div>
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div class="text-center">
-                        <div class="text-sm font-bold text-emerald-400 mb-2">Yes &darr;</div>
+                <!-- Q1: Does your agent need this tool? -->
+                <div class="flex justify-center items-center gap-4 md:gap-6">
+                    <div class="decision-node card p-5 text-center !opacity-100 !transform-none" style="max-width: 280px;">
+                        <p class="text-base font-bold text-slate-100">Does your agent actually need this tool?</p>
                     </div>
-                    <div class="text-center">
-                        <div class="decision-node bg-slate-800 border border-red-500/30 rounded-xl p-4">
-                            <span class="text-sm font-bold text-red-400">No &rarr; Remove it</span>
+                    <div class="tree-arrow-right">
+                        <div class="arrow-line"></div>
+                        <div class="arrow-head"></div>
+                    </div>
+                    <div>
+                        <div class="tree-branch-label text-red-400 text-center mb-1">No</div>
+                        <div class="decision-node bg-slate-800 border border-red-500/30 rounded-xl px-5 py-3 flex-shrink-0">
+                            <span class="text-sm font-bold text-red-400">Remove it</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 2 -->
-                <div class="decision-node card p-6 mb-4 text-center max-w-md mx-auto">
-                    <p class="text-lg font-bold text-slate-100">Can the agent already use it via CLI?</p>
+                <!-- Arrow down (Yes) -->
+                <div class="flex justify-center" style="margin-left: -100px;">
+                    <div class="tree-arrow">
+                        <div class="tree-branch-label text-emerald-400">Yes</div>
+                        <div class="arrow-line"></div>
+                        <div class="arrow-head"></div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div class="text-center">
-                        <div class="text-sm font-bold text-sky-400 mb-2">No</div>
+
+                <!-- Q2: Can the agent use it via CLI? -->
+                <div class="flex justify-center">
+                    <div class="decision-node card p-5 text-center !opacity-100 !transform-none" style="max-width: 300px;">
+                        <p class="text-base font-bold text-slate-100">Can the agent already use it via CLI?</p>
+                    </div>
+                </div>
+
+                <!-- Branch arrows: No (left) / Yes (right) -->
+                <div class="grid grid-cols-2 gap-8 mt-2">
+                    <div class="flex flex-col items-center">
+                        <div class="tree-arrow">
+                            <div class="tree-branch-label text-sky-400">No</div>
+                            <div class="arrow-line"></div>
+                            <div class="arrow-head"></div>
+                        </div>
                         <div class="text-xs text-slate-500 mb-2">(browser, live DB, proprietary)</div>
-                        <div class="decision-node bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4">
+                        <div class="decision-node bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-5">
                             <span class="text-sm font-bold text-emerald-400">Keep the MCP server</span>
                         </div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-sm font-bold text-amber-400 mb-2">Yes</div>
+                    <div class="flex flex-col items-center">
+                        <div class="tree-arrow">
+                            <div class="tree-branch-label text-amber-400">Yes</div>
+                            <div class="arrow-line"></div>
+                            <div class="arrow-head"></div>
+                        </div>
                         <div class="text-xs text-slate-500 mb-2">(git, kubectl, docker, gh, aws)</div>
-                        <div class="decision-node card p-4 text-center !opacity-100 !transform-none">
+                        <div class="decision-node card p-5 text-center !opacity-100 !transform-none">
                             <p class="text-sm font-bold text-slate-100">Is the CLI usage complex or repetitive?</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 3 -->
-                <div class="grid grid-cols-2 gap-4 mb-8 ml-auto" style="max-width:50%; margin-left: 50%;">
-                    <div class="text-center">
-                        <div class="text-xs font-bold text-amber-400 mb-2">Yes</div>
-                        <div class="decision-node bg-amber-500/10 border border-amber-500/30 rounded-xl p-3">
+                <!-- Q3 branch arrows: Yes / No -->
+                <div class="grid grid-cols-2 gap-8 mt-2" style="margin-left: 50%; max-width: 50%;">
+                    <div class="flex flex-col items-center">
+                        <div class="tree-arrow">
+                            <div class="tree-branch-label text-amber-400">Yes</div>
+                            <div class="arrow-line"></div>
+                            <div class="arrow-head"></div>
+                        </div>
+                        <div class="decision-node bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
                             <span class="text-xs font-bold text-amber-300">Consider MCP,<br>monitor context cost</span>
                         </div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-xs font-bold text-sky-400 mb-2">No</div>
-                        <div class="decision-node bg-sky-500/10 border border-sky-500/30 rounded-xl p-3">
+                    <div class="flex flex-col items-center">
+                        <div class="tree-arrow">
+                            <div class="tree-branch-label text-sky-400">No</div>
+                            <div class="arrow-line"></div>
+                            <div class="arrow-head"></div>
+                        </div>
+                        <div class="decision-node bg-sky-500/10 border border-sky-500/30 rounded-xl p-4">
                             <span class="text-xs font-bold text-sky-300">Use CLI directly</span>
                         </div>
                     </div>
+                </div>
+
+                <!-- Dashed lines converging to skills -->
+                <div class="flex justify-center mt-6 mb-2">
+                    <div style="width: 2px; height: 24px; background: repeating-linear-gradient(to bottom, #7c3aed 0, #7c3aed 4px, transparent 4px, transparent 8px);"></div>
                 </div>
 
                 <!-- Skills callout -->
