@@ -16,9 +16,11 @@ if (lightSwitches.length > 0) {
       });
       if (lightSwitch.checked) {
         document.documentElement.classList.add('dark');
+        document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('dark-mode', true);
       } else {
         document.documentElement.classList.remove('dark');
+        document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem('dark-mode', false);
       }
     });

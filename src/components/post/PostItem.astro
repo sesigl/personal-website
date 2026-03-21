@@ -12,6 +12,7 @@ const props = Astro.props as Props;
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/images/**/*.{jpeg,jpg,png,gif,webp}')
 const heroImagePath = props.data.heroImage
 if (!heroImagePath || !images[heroImagePath]) throw new Error(`"${heroImagePath}" does not exist in glob: "src/images/**/*.{jpeg,jpg,png,gif}"`);
+const postUrl = props.data.link ?? `/blog/${props.data.slug}`;
 ---
 
 <article class="py-5 border-b border-slate-100 dark:border-slate-800">
@@ -31,7 +32,7 @@ if (!heroImagePath || !images[heroImagePath]) throw new Error(`"${heroImagePath}
             <h3 class="font-aspekta text-lg font-[650] mb-1">
                 <a
                     class="inline-flex relative hover:text-sky-500 duration-150 ease-out before:scale-x-0 before:origin-center before:absolute before:inset-0 before:bg-sky-200 dark:before:bg-sky-500 before:opacity-30 before:-z-10 before:translate-y-1/4 before:-rotate-2 hover:before:scale-100 before:duration-150 before:ease-in-out"
-                    href={`/blog/${props.data.slug}`}
+                    href={postUrl}
                 >
                     {props.data.title}
                 </a>
@@ -42,7 +43,7 @@ if (!heroImagePath || !images[heroImagePath]) throw new Error(`"${heroImagePath}
                 </div>
                 <a
                     class="hidden lg:flex shrink-0 text-sky-500 items-center justify-center w-12 group"
-                    href={`/blog/${props.data.slug}`}
+                    href={postUrl}
                     tabindex={-1}
                 >
                     <svg
@@ -76,4 +77,3 @@ if (!heroImagePath || !images[heroImagePath]) throw new Error(`"${heroImagePath}
         </div>
     </div>
 </article>
-
