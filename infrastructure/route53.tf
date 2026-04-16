@@ -107,6 +107,11 @@ resource "aws_route53_record" "ses_mail_from_txt" {
   records = ["v=spf1 include:amazonses.com ~all"]
 }
 
+resource "aws_route53_zone" "dev_drill" {
+  name = "dev-drill.com"
+}
+
+
 # roast my code subdomain
 resource "aws_route53_record" "cname_roastmycode" {
   zone_id = aws_route53_zone.primary.zone_id
@@ -114,4 +119,68 @@ resource "aws_route53_record" "cname_roastmycode" {
   type    = "CNAME"
   ttl     = 300
   records = ["b1dbe3c13e29928f.vercel-dns-017.com."]
+}
+
+resource "aws_route53_record" "dev_drill_a" {
+  zone_id = aws_route53_zone.dev_drill.zone_id
+  name    = ""
+  type    = "A"
+  ttl     = 300
+  records = ["216.198.79.1"]
+}
+
+resource "aws_route53_record" "dev_drill_www_cname" {
+  zone_id = aws_route53_zone.dev_drill.zone_id
+  name    = "www"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["b1dbe3c13e29928f.vercel-dns-017.com."]
+}
+
+resource "aws_route53_record" "dev_drill_app_cname" {
+  zone_id = aws_route53_zone.dev_drill.zone_id
+  name    = "app"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["cd7fc7c487d9e7b1.vercel-dns-017.com."]
+}
+
+resource "aws_route53_record" "dev_drill_google_verification_txt" {
+  zone_id = aws_route53_zone.dev_drill.zone_id
+  name    = ""
+  type    = "TXT"
+  ttl     = 300
+  records = ["google-site-verification=d-q-TX6iwzi5ohGAWEXMt5Jhr4Plb4ju5S70hlj9hT8"]
+}
+
+resource "aws_route53_record" "dev_drill_ses_dkim_1" {
+  zone_id = aws_route53_zone.dev_drill.zone_id
+  name    = "htg6azoqj4kf5a6gfnu4qoyrdkhpbztt._domainkey"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["htg6azoqj4kf5a6gfnu4qoyrdkhpbztt.dkim.amazonses.com"]
+}
+
+resource "aws_route53_record" "dev_drill_ses_dkim_2" {
+  zone_id = aws_route53_zone.dev_drill.zone_id
+  name    = "x4oax5aac4tyzhrpr4iwgv6xscravdbd._domainkey"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["x4oax5aac4tyzhrpr4iwgv6xscravdbd.dkim.amazonses.com"]
+}
+
+resource "aws_route53_record" "dev_drill_ses_dkim_3" {
+  zone_id = aws_route53_zone.dev_drill.zone_id
+  name    = "cqaidap3jtmmk2zpc5tevzz3wtt3dlf2._domainkey"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["cqaidap3jtmmk2zpc5tevzz3wtt3dlf2.dkim.amazonses.com"]
+}
+
+resource "aws_route53_record" "dev_drill_dmarc" {
+  zone_id = aws_route53_zone.dev_drill.zone_id
+  name    = "_dmarc"
+  type    = "TXT"
+  ttl     = 300
+  records = ["v=DMARC1; p=none"]
 }
