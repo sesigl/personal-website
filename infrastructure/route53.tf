@@ -156,6 +156,22 @@ resource "aws_route53_record" "dev_drill_google_verification_txt" {
   ]
 }
 
+resource "aws_route53_record" "dev_drill_google_mx" {
+  zone_id = aws_route53_zone.dev_drill.zone_id
+  name    = ""
+  type    = "MX"
+  ttl     = 300
+  records = ["1 smtp.google.com."]
+}
+
+resource "aws_route53_record" "dev_drill_google_dkim" {
+  zone_id = aws_route53_zone.dev_drill.zone_id
+  name    = "google._domainkey"
+  type    = "TXT"
+  ttl     = 300
+  records = ["v=DKIM1;k=rsa;p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhZfRYH50Lak5d8P7l3TJH7uUfslGew7loqwRELl+jR7hoDemZ4gHpJlgLaXwTLjOXVzvQsFKPfSjuGiKODaMKr7XKqWjDInX56otM8p8Im6qBh18APtzfVkvWYfY4QpiH4jT29aI4+08b0oQMMpA/wcUict2jK4aPe52YneBB/Jt4anpQwQg91S3pqkRHHQuVam\" \"fmlp+HCLKmEeMyE4pGV3/d0zC74l/HP1KdWExeg5MTw1hpe63iDyIz3vf0i1zkJZ5DT419g81/XyNLLl0EHyqZOcR1s9lut9DWNV7TwMdh79gz7pIzz10pjN4NL2vya0GDTo47M/YBDJ3imId5wIDAQAB"]
+}
+
 resource "aws_route53_record" "dev_drill_dmarc" {
   zone_id = aws_route53_zone.dev_drill.zone_id
   name    = "_dmarc"
