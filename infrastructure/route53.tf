@@ -145,6 +145,22 @@ resource "aws_route53_record" "dev_drill_app_cname" {
   records = ["cd7fc7c487d9e7b1.vercel-dns-017.com."]
 }
 
+resource "aws_route53_record" "dev_drill_sandbox_app_cname" {
+  zone_id = aws_route53_zone.dev_drill.zone_id
+  name    = "sandbox-app"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["78a1bc273c4e0d30.vercel-dns-016.com."]
+}
+
+resource "aws_route53_record" "dev_drill_sandbox_cname" {
+  zone_id = aws_route53_zone.dev_drill.zone_id
+  name    = "sandbox"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["a037883450c9a63c.vercel-dns-016.com."]
+}
+
 resource "aws_route53_record" "dev_drill_google_verification_txt" {
   zone_id = aws_route53_zone.dev_drill.zone_id
   name    = ""
@@ -153,6 +169,7 @@ resource "aws_route53_record" "dev_drill_google_verification_txt" {
   records = [
     "google-site-verification=d-q-TX6iwzi5ohGAWEXMt5Jhr4Plb4ju5S70hlj9hT8",
     "google-site-verification=RA2xsbDQ11W8JFdBwMe7t-yvWfGpfqaylPCzqDhKMwk",
+    "v=spf1 include:_spf.google.com include:amazonses.com ~all",
   ]
 }
 
@@ -177,5 +194,5 @@ resource "aws_route53_record" "dev_drill_dmarc" {
   name    = "_dmarc"
   type    = "TXT"
   ttl     = 300
-  records = ["v=DMARC1; p=none"]
+  records = ["v=DMARC1; p=quarantine; rua=mailto:hello@dev-drill.com"]
 }
