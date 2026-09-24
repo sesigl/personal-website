@@ -26,7 +26,7 @@ One of the most effective ways to do that is bounded contexts.
 Bounded contexts are not just some old-school architectural pattern.
 They are one of the most effective ways to improve the Signal-to-Noise Ratio for both humans and AI agents working on the same codebase.
 
-## 1) The problem: AI amplifies complexity
+## The problem: AI amplifies complexity
 
 AI can write code faster than we can reason about it.
 
@@ -41,7 +41,7 @@ The problem is not that the model is "not smart enough".
 
 The problem is that we give it too much irrelevant context, which creates ambiguity. And ambiguity is where correctness usually dies.
 
-## 2) The solution in one minute: bounded contexts
+## The solution in one minute: bounded contexts
 
 A bounded context is a clearly defined slice of the system where:
 
@@ -55,7 +55,7 @@ Bounded contexts apply the same principle to code. They reduce the search space.
 
 These boundaries were originally designed for humans. But they map extremely well to what LLMs need to perform reliably, which is a small, high-signal working set.
 
-## 3) Why AI needs boundaries: signal-to-noise ratio
+## Why AI needs boundaries: signal-to-noise ratio
 
 ### Attention is a scarce resource
 
@@ -151,7 +151,7 @@ This is not a linter warning. It is a build failure.
 
 If an AI agent tries to import a Warehouse domain model into Pricing, the build breaks immediately. The dependency rules are the architecture spec.
 
-## 5) The bounded-context map and the contract
+## The bounded-context map and the contract
 
 This is the structure the system enforces:
 
@@ -187,7 +187,7 @@ In DDD terms, this relationship has a precise name:
 
 Pricing is the customer. Warehouse is the supplier. The shared language is intentionally small and boring.
 
-## 6) The showdown: one change that breaks weak architecture
+## The showdown: one change that breaks weak architecture
 
 The change request is deliberately cross-context:
 
@@ -242,7 +242,7 @@ In one sentence, this is the difference:
 
 That single constraint is doing a lot of architectural work.
 
-## 7) Conclusion: architecture is context engineering
+## Conclusion: architecture is context engineering
 
 Context engineering is not stuffing more information into the prompt.
 
@@ -263,8 +263,6 @@ Bounded contexts reduce cognitive load for humans, and they reduce required cont
 Good architecture has always been about managing complexity.
 
 AI just made the cost of ignoring it impossible to hide.
-
-## Footnotes
 
 [^1]: Vaswani, A., et al. (2017). *Attention Is All You Need*. arXiv:1706.03762. [https://arxiv.org/abs/1706.03762](https://arxiv.org/abs/1706.03762)
 

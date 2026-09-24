@@ -28,3 +28,31 @@
 	padding: 16px;
 	overflow-x: auto;
 }
+
+/* Long URLs and identifiers in prose must wrap instead of widening the page. */
+.ss-prose {
+	overflow-wrap: break-word;
+}
+.ss-prose a {
+	overflow-wrap: anywhere;
+}
+
+/* Newsletter editor (Yoopta). The email preview is a light surface, so its ink
+   stays dark in both themes; the editor and its portals get their own scoped
+   colour context. The editor can also be wider than a phone screen, so it
+   scrolls inside its wrapper instead of widening the page. */
+.newsletter-editor {
+	overflow-x: auto;
+	min-width: 0;
+}
+.newsletter-admin-page > *,
+.newsletter-admin > * {
+	min-width: 0;
+}
+#yoopta-email-builder,
+.yoopta-toolbar-root,
+.yoopta-action-menu-list,
+.yoopta-link-tool {
+	color-scheme: light;
+	color: #26251f;
+}

@@ -266,6 +266,7 @@ export default function EmailBuilderExample() {
       {
         editor !== null && editorOptions !== null && <>
           <main
+            className="newsletter-admin-page"
             style={{
               maxWidth: 1200,
               margin: '0 auto',
@@ -277,14 +278,17 @@ export default function EmailBuilderExample() {
             <section className="ss-stack-4" aria-labelledby="editor-h">
               <div className="ss-kicker">00 · Email body</div>
               <h1 id="editor-h" className="ss-h2">Newsletter editor</h1>
-              <EmailBuilder
-                editor={editor}
-                value={value}
-                onChange={setValue}
-              />
+              <div className="newsletter-editor">
+                <EmailBuilder
+                  editor={editor}
+                  value={value}
+                  onChange={setValue}
+                />
+              </div>
             </section>
 
             <div
+              className="newsletter-admin"
               style={{
                 display: 'grid',
                 gap: 32,
