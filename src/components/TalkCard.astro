@@ -1,0 +1,24 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+	title: string;
+	image?: string;
+	href: string;
+	meta?: string;
+}
+
+const { title, image, href, meta = 'YouTube' } = Astro.props;
+---
+
+<a class="ss-talk" href={href} target="_blank" rel="noopener noreferrer">
+	<span class="ss-talk__media">
+		{image ? <img src={image} alt="" loading="lazy" /> : null}
+		<span class="ss-talk__play" aria-hidden="true"><Icon name="play" size={12} />Watch</span>
+	</span>
+	<span class="ss-talk__body">
+		<span class="ss-talk__title">{title}</span>
+		<span class="ss-talk__meta">{meta} ↗</span>
+	</span>
+	<span class="ss-sr-only">(opens in a new tab)</span>
+</a>

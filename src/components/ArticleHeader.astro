@@ -1,0 +1,57 @@
+---
+import MediaLinks from './MediaLinks.astro';
+import ShareButtons from './ShareButtons.astro';
+import Tag from './Tag.astro';
+
+interface Props {
+	title: string;
+	description?: string;
+	date: Date;
+	readingTime: number;
+	category?: string;
+	url: string;
+	spotify?: string;
+	youtube?: string;
+	infographic?: string;
+}
+
+const {
+	title,
+	description,
+	date,
+	readingTime,
+	category,
+	url,
+	spotify,
+	youtube,
+	infographic,
+} = Astro.props;
+
+const iso = date.toISOString();
+const longDate = date
+	.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+	.toUpperCase();
+---
+
+<header class="ss-article-head">
+	<div class="ss-meta">
+		<span class="ss-meta__dash" aria-hidden="true"></span>
+		<time datetime={iso}>{longDate}</time>
+		<span class="ss-meta__dot" aria-hidden="true">·</span>
+		<span>{readingTime} min read</span>
+		{
+			category ? (
+				<>
+					<span class="ss-meta__dot" aria-hidden="true">·</span>
+					<Tag href={`/${category}`}>{category}</Tag>
+				</>
+			) : null
+		}
+	</div>
+	<h1 class="ss-h1 ss-article-head__title">{title}</h1>
+	{description ? <p class="ss-article-head__lede">{description}</p> : null}
+	<div class="ss-article-head__bar">
+		<MediaLinks spotify={spotify} youtube={youtube} infographic={infographic} />
+		<ShareButtons url={url} title={title} />
+	</div>
+</header>

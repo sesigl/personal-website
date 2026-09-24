@@ -1,6 +1,18 @@
 /* Site-only rules. The design system owns colours, type, components and layout;
    this file holds the few things that are specific to this site. */
 
+/* Theme toggle: one icon per theme, chosen by the data-theme attribute that is
+   set before first paint. */
+.js-theme-icon-dark {
+	display: none;
+}
+[data-theme="dark"] .js-theme-icon-light {
+	display: none;
+}
+[data-theme="dark"] .js-theme-icon-dark {
+	display: block;
+}
+
 /* Shiki (Astro's code highlighter) writes an inline background colour on <pre>.
    The design system wants dark code blocks in both themes, so pin the page
    colour to the design system token. */

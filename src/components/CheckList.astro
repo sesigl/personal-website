@@ -1,0 +1,18 @@
+---
+interface Props {
+	items?: string[];
+}
+
+const { items = [] } = Astro.props;
+---
+
+<ol class="ss-checklist">
+	{
+		items.map((item, index) => (
+			<li>
+				<span class="ss-checklist__n" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+				<span>{item}</span>
+			</li>
+		))
+	}
+</ol>

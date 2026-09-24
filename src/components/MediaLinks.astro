@@ -1,0 +1,36 @@
+---
+import spotifyIcon from '../images/social/spotify.svg';
+import youtubeIcon from '../images/social/youtube.svg';
+import infographicIcon from '../images/social/infographic.svg';
+
+interface Props {
+	spotify?: string;
+	youtube?: string;
+	infographic?: string;
+}
+
+const { spotify, youtube, infographic } = Astro.props;
+
+const links = [
+	{ href: spotify, src: spotifyIcon.src, label: 'Podcast', sr: 'Listen on Spotify' },
+	{ href: youtube, src: youtubeIcon.src, label: 'Video', sr: 'Watch on YouTube' },
+	{ href: infographic, src: infographicIcon.src, label: 'Infographic', sr: 'Open infographic' },
+].filter((link) => link.href && link.href !== '#');
+---
+
+{
+	links.length ? (
+		<ul class="ss-media-links" aria-label="Also available as" style="list-style:none;margin:0;padding:0">
+			{links.map((link) => (
+				<li>
+					<a class="ss-media-link" href={link.href} target="_blank" rel="noopener noreferrer">
+						<img src={link.src} alt="" width="16" height="16" />
+						{link.label}
+						<span class="ss-media-link__ext" aria-hidden="true">↗</span>
+						<span class="ss-sr-only"> — {link.sr} (opens in a new tab)</span>
+					</a>
+				</li>
+			))}
+		</ul>
+	) : null
+}

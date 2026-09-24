@@ -32,7 +32,19 @@ interface CharacterCountProps {
 function CharacterCount({ current, min, max, recommended }: CharacterCountProps) {
   const isRecommended = current >= min && current <= max;
   return (
-    <span style={{ color: isRecommended ? '#22c55e' : '#ef4444' }}>
+    <span
+      className="ss-field__hint"
+      aria-live="polite"
+      style={{
+        color: isRecommended
+          ? 'var(--status-success-fg)'
+          : current === 0
+            ? 'var(--text-muted)'
+            : 'var(--status-danger-fg)',
+        fontVariantNumeric: 'tabular-nums',
+        fontWeight: 500,
+      }}
+    >
       {current}/{recommended}
     </span>
   );
@@ -253,102 +265,144 @@ export default function EmailBuilderExample() {
     <div>
       {
         editor !== null && editorOptions !== null && <>
-          <EmailBuilder
-            editor={editor}
-            value={value}
-            onChange={setValue}
-          />
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="campaign-title" className="block mb-2 font-medium">
-                Campaign Title (for tracking and resume)
-              </label>
-              <input 
-                id="campaign-title"
-                type="text" 
-                value={campaignTitle}
-                onChange={(e) => setCampaignTitle(e.target.value)}
-                placeholder="e.g., weekly-update-2024-01" 
-                className="w-full p-2 border" 
+          <main
+            style={{
+              maxWidth: 1200,
+              margin: '0 auto',
+              padding: '40px 24px 64px',
+              display: 'grid',
+              gap: 32,
+            }}
+          >
+            <section className="ss-stack-4" aria-labelledby="editor-h">
+              <div className="ss-kicker">00 · Email body</div>
+              <h1 id="editor-h" className="ss-h2">Newsletter editor</h1>
+              <EmailBuilder
+                editor={editor}
+                value={value}
+                onChange={setValue}
               />
+            </section>
+
+            <div
+              style={{
+                display: 'grid',
+                gap: 32,
+                gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,340px),1fr))',
+                alignItems: 'start',
+              }}
+            >
+              <div className="ss-stack-4">
+                <div className="ss-kicker">01 · Compose</div>
+                <h2 id="compose" className="ss-h2">New campaign</h2>
+                <div className="ss-field">
+                  <div className="ss-field__row">
+                    <label className="ss-field__label" htmlFor="campaign-title">
+                      Campaign title
+                    </label>
+                  </div>
+                  <input
+                    id="campaign-title"
+                    className="ss-input"
+                    type="text"
+                    value={campaignTitle}
+                    onChange={(e) => setCampaignTitle(e.target.value)}
+                    placeholder="e.g., weekly-update-2024-01"
+                  />
+                  <div className="ss-field__hint">Used for tracking and resuming a send.</div>
+                </div>
+                <div className="ss-field">
+                  <div className="ss-field__row">
+                    <label className="ss-field__label" htmlFor="newsletter-subject">
+                      Newsletter subject
+                    </label>
+                    <CharacterCount
+                      current={subject.length}
+                      {...SUBJECT_LENGTH}
+                    />
+                  </div>
+                  <input
+                    id="newsletter-subject"
+                    className="ss-input js-newsletter-subject"
+                    type="text"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    placeholder={`Recommended ${SUBJECT_LENGTH.recommended} characters`}
+                  />
+                </div>
+                <div className="ss-field">
+                  <div className="ss-field__row">
+                    <label className="ss-field__label" htmlFor="newsletter-preview">
+                      Preview text
+                    </label>
+                    <CharacterCount
+                      current={previewHeadline.length}
+                      {...PREVIEW_LENGTH}
+                    />
+                  </div>
+                  <input
+                    id="newsletter-preview"
+                    className="ss-input js-newsletter-preview"
+                    type="text"
+                    value={previewHeadline}
+                    onChange={(e) => setPreviewHeadline(e.target.value)}
+                    placeholder={`Recommended ${PREVIEW_LENGTH.recommended} characters`}
+                  />
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  <button
+                    type="button"
+                    className="ss-btn ss-btn--primary"
+                    onClick={() => handleSendNewsletter(false)}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Sending…' : 'Send'}
+                  </button>
+                  <button
+                    type="button"
+                    className="ss-btn ss-btn--secondary"
+                    onClick={() => handleSendNewsletter(true)}
+                    disabled={isLoading}
+                  >
+                    Send Test
+                  </button>
+                  <button
+                    type="button"
+                    className="ss-btn ss-btn--ghost"
+                    onClick={() => logTestNewsletter()}
+                  >
+                    Log Test
+                  </button>
+                  <button
+                    type="button"
+                    className="ss-btn ss-btn--ghost"
+                    onClick={resetForm}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+
+              <section className="ss-stack-4" aria-labelledby="progress-h">
+                <div className="ss-kicker">02 · Delivery</div>
+                <h2 id="progress-h" className="ss-h2">Status</h2>
+                {trackingCampaign ? (
+                  <ProgressTracker
+                    campaignTitle={trackingCampaign}
+                    autoStart={true}
+                    pollInterval={2000}
+                    testMode={isCurrentCampaignTest}
+                  />
+                ) : (
+                  <div className="ss-alert ss-alert--neutral" role="status">
+                    No campaign running. Send a test first — it goes to your own inbox only.
+                  </div>
+                )}
+              </section>
             </div>
-            <div>
-              <label htmlFor="newsletter-subject" className="block mb-2 font-medium">
-                Newsletter Subject
-              </label>
-              <input 
-                id="newsletter-subject"
-                type="text" 
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                placeholder={`Recommended ${SUBJECT_LENGTH.recommended} characters`} 
-                className="js-newsletter-subject w-full p-2 border" 
-              />
-              <CharacterCount 
-                current={subject.length}
-                {...SUBJECT_LENGTH}
-              />
-            </div>
-            <div>
-              <label htmlFor="newsletter-preview" className="block mb-2 font-medium">
-                Preview Text
-              </label>
-              <input 
-                id="newsletter-preview"
-                type="text"
-                value={previewHeadline}
-                onChange={(e) => setPreviewHeadline(e.target.value)}
-                placeholder={`Recommended ${PREVIEW_LENGTH.recommended} characters`}
-                className="js-newsletter-preview w-full p-2 border"
-              />
-              <CharacterCount 
-                current={previewHeadline.length}
-                {...PREVIEW_LENGTH}
-              />
-            </div>
-            <div className="flex gap-2">
-              <button 
-                onClick={() => handleSendNewsletter(false)}
-                disabled={isLoading}
-                className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
-              >
-                {isLoading ? 'Sending...' : 'Send'}
-              </button>
-              <button 
-                onClick={() => handleSendNewsletter(true)}
-                disabled={isLoading}
-                className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
-              >
-                Send Test
-              </button>
-              <button 
-                onClick={() => logTestNewsletter()}
-                className="px-4 py-2 bg-green-500 text-white rounded"
-              >
-                Log Test
-              </button>
-              <button 
-                onClick={resetForm}
-                className="px-4 py-2 bg-gray-500 text-white rounded"
-              >
-                Reset
-              </button>
-            </div>
-            
-            {/* Progress tracking section */}
-            {trackingCampaign && (
-              <ProgressTracker
-                campaignTitle={trackingCampaign}
-                autoStart={true}
-                pollInterval={2000}
-                testMode={isCurrentCampaignTest}
-              />
-            )}
-          </div>
+          </main>
         </>
       }
-      ----
-      {JSON.stringify(value)}
     </div>
   );
 }

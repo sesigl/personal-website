@@ -1,21 +1,38 @@
 import { actions } from "astro:actions";
 
-export function setupNewsletterForm(formSelector: string, buttonSelector: string, emailFieldSelector: string) {
-    const newsletterForm = document.querySelector(formSelector)!! as HTMLFormElement;
+/**
+ * Wires one newsletter form root (see SubscribeForm.astro) to the
+ * subscribeToNewsletter action. The root must contain:
+ * a form, an email input, a submit button and the
+ * .js-newsletter-success / .js-newsletter-error messages.
+ */
+export function setupNewsletterForm(root: HTMLElement) {
+    const form = root.querySelector<HTMLFormElement>("form");
+    const submitButton = root.querySelector<HTMLButtonElement>("button[type=submit]");
+    const emailField = root.querySelector<HTMLInputElement>("input[type=email]");
+    const successMessage = root.querySelector<HTMLElement>(".js-newsletter-success");
+    const errorMessage = root.querySelector<HTMLElement>(".js-newsletter-error");
 
-    const newsletterSignUpButton = newsletterForm.querySelector(buttonSelector)!!;
+    if (!form || !submitButton || !emailField || !successMessage || !errorMessage) {
+        return;
+    }
 
-    newsletterSignUpButton.addEventListener("click", handleNewsletterSignUp);
+    // Keep non-nullable references for the event handler closure.
+    const newsletterForm: HTMLFormElement = form;
+    const emailInput: HTMLInputElement = emailField;
+    const success: HTMLElement = successMessage;
+    const failure: HTMLElement = errorMessage;
+
+    submitButton.addEventListener("click", handleNewsletterSignUp);
 
     async function handleNewsletterSignUp(event: Event) {
-
         if (newsletterForm.checkValidity() === false) {
             return;
-        } else {
-            event.preventDefault();
         }
 
-        const email = ((document.querySelector(emailFieldSelector)!!) as HTMLInputElement).value;
+        event.preventDefault();
+
+        const email = emailInput.value;
 
         if (!email) {
             return;
@@ -24,13 +41,14 @@ export function setupNewsletterForm(formSelector: string, buttonSelector: string
         const { error } = await actions.subscribeToNewsletter({
             email: email,
         });
+
         if (!error) {
-            document.querySelector(".js-newsletter-success")!!.classList.remove("hidden");
-            document.querySelector(".js-newsletter-error")!!.classList.add("hidden");
+            success.classList.remove("hidden");
+            failure.classList.add("hidden");
         } else {
-            document.querySelector(".js-newsletter-error")!!.classList.remove("hidden");
-            document.querySelector(".js-newsletter-error")!!.textContent = error.message;
-            document.querySelector(".js-newsletter-success")!!.classList.add("hidden");
+            failure.classList.remove("hidden");
+            failure.textContent = error.message;
+            success.classList.add("hidden");
         }
     }
 }

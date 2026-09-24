@@ -1,0 +1,56 @@
+---
+interface Item {
+	id: string;
+	label: string;
+}
+
+interface Props {
+	items?: Item[];
+	title?: string;
+}
+
+const { items = [], title = 'On this page' } = Astro.props;
+---
+
+{
+	items.length ? (
+		<nav class="ss-toc" aria-label="Table of contents">
+			<div class="ss-kicker">{title}</div>
+			<ol class="ss-toc__list">
+				{items.map((item, index) => (
+					<li>
+						<a href={`#${item.id}`}>
+							<span class="ss-toc__n">{String(index + 1).padStart(2, '0')}</span>
+							<span>{item.label}</span>
+						</a>
+					</li>
+				))}
+			</ol>
+		</nav>
+	) : null
+}
+
+<script>
+	// Highlight the section that is currently in view.
+	document.querySelectorAll<HTMLElement>('.ss-toc').forEach((toc) => {
+		const links = Array.from(toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
+		if (!links.length) return;
+
+		const offset = 120;
+		const onScroll = () => {
+			let current = links[0].hash;
+			for (const link of links) {
+				const target = document.getElementById(link.hash.slice(1));
+				if (target && target.getBoundingClientRect().top - offset <= 0) {
+					current = link.hash;
+				}
+			}
+			links.forEach((link) =>
+				link.setAttribute('aria-current', link.hash === current ? 'true' : 'false'),
+			);
+		};
+
+		onScroll();
+		window.addEventListener('scroll', onScroll, { passive: true });
+	});
+</script>

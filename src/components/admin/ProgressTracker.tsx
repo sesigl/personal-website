@@ -223,52 +223,78 @@ export function ProgressDisplay({
     return null;
   }
 
-  const getStatusColor = (status: string) => {
+  const getStatusTone = (status: string) => {
     switch (status) {
       case 'completed':
-        return 'bg-green-200 text-green-800';
+        return 'success';
       case 'failed':
-        return 'bg-red-200 text-red-800';
+        return 'danger';
       case 'in_progress':
-        return 'bg-blue-200 text-blue-800';
+        return 'info';
       default:
-        return 'bg-gray-200 text-gray-800';
+        return 'neutral';
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return 'Completed';
+      case 'failed':
+        return 'Failed';
+      case 'in_progress':
+        return 'In progress';
+      default:
+        return 'Pending';
     }
   };
 
   return (
-    <div className={`mt-4 p-4 border rounded bg-gray-50 ${className}`} data-testid="progress-display">
-      <h3 className="font-medium mb-2">Newsletter Progress</h3>
-      <div className="space-y-2">
-        <div data-testid="campaign-title">
-          <strong>Campaign:</strong> {progress.campaignTitle}
-        </div>
-        <div data-testid="status">
-          <strong>Status:</strong> 
-          <span 
-            className={`ml-2 px-2 py-1 rounded text-sm ${getStatusColor(progress.status)}`}
-            data-testid="status-badge"
+    <section className={`ss-card ${className}`} data-testid="progress-display" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+        <div>
+          <div className="ss-meta" style={{ display: 'block' }}>Campaign</div>
+          <div
+            data-testid="campaign-title"
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--text-strong)' }}
           >
-            {progress.status}
-          </span>
-        </div>
-        <div data-testid="progress-text">
-          <strong>Progress:</strong> {progress.processedCount}/{progress.totalRecipients} ({progress.progressPercentage}%)
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2" data-testid="progress-bar-container">
-          <div 
-            className="bg-blue-600 h-2 rounded-full transition-all"
-            style={{ width: `${progress.progressPercentage}%` }}
-            data-testid="progress-bar"
-          ></div>
-        </div>
-        {progress.hasFailures && (
-          <div className="text-red-600" data-testid="failure-warning">
-            ⚠️ Some deliveries failed
+            Campaign: {progress.campaignTitle}
           </div>
-        )}
+        </div>
+        <span
+          className={`ss-badge ss-badge--${getStatusTone(progress.status)}`}
+          data-testid="status-badge"
+        >
+          {getStatusLabel(progress.status)}
+        </span>
       </div>
-    </div>
+      <div
+        className="ss-progress"
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={progress.progressPercentage}
+        aria-label="Delivery progress"
+        data-testid="progress-bar-container"
+      >
+        <div
+          className="ss-progress__bar"
+          style={{ width: `${progress.progressPercentage}%` }}
+          data-testid="progress-bar"
+        ></div>
+      </div>
+      <div
+        data-testid="progress-text"
+        style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-muted)', fontVariantNumeric: 'tabular-nums' }}
+      >
+        Progress: {progress.processedCount}/{progress.totalRecipients} ({progress.progressPercentage}%)
+      </div>
+      {progress.hasFailures && (
+        <div className="ss-alert ss-alert--danger" role="alert" data-testid="failure-warning">
+          Some deliveries failed.
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -295,35 +321,42 @@ export default function ProgressTracker({
   const shouldShowStatus = campaignTitle || progress || isPolling || error;
 
   return (
-    <div className={className} data-testid="progress-tracker">
+    <div className={className} data-testid="progress-tracker" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {/* Test mode indicator */}
       {isTestMode && (
-        <div className="mt-4 p-3 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded" data-testid="test-mode-indicator">
-          🧪 <strong>Test Mode:</strong> {progress ? 'Sending to akrillo89@gmail.com only' : 'Simulating realistic progress for demo purposes'}
+        <div className="ss-alert ss-alert--warning" role="status" data-testid="test-mode-indicator">
+          <div>
+            <strong>Test mode:</strong>{' '}
+            {progress
+              ? 'Sending to akrillo89@gmail.com only'
+              : 'Simulating realistic progress for demo purposes'}
+          </div>
         </div>
       )}
 
       {/* Error state */}
       {error && (
-        <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded" data-testid="error-message">
-          ❌ <strong>Error:</strong> {error}
+        <div className="ss-alert ss-alert--danger" role="alert" data-testid="error-message">
+          <div>
+            <strong>Error:</strong> {error}
+          </div>
         </div>
       )}
-      
+
       {/* Starting/polling state */}
       {isPolling && !progress && (
-        <div className="mt-4 p-3 bg-blue-100 border border-blue-400 text-blue-700 rounded" data-testid="polling-indicator">
-          <div className="flex items-center">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-700 mr-2"></div>
-            {isTestMode ? 'Starting test newsletter campaign...' : 'Checking progress...'}
-          </div>
+        <div className="ss-alert ss-alert--info" role="status" data-testid="polling-indicator" style={{ alignItems: 'center' }}>
+          <span className="ss-btn__spinner" aria-hidden="true" />
+          <div>{isTestMode ? 'Starting test newsletter campaign...' : 'Checking progress...'}</div>
         </div>
       )}
 
       {/* Campaign status when we have a title but no progress yet */}
       {shouldShowStatus && !progress && !isPolling && !error && (
-        <div className="mt-4 p-3 bg-gray-100 border border-gray-400 text-gray-700 rounded" data-testid="waiting-indicator">
-          📋 <strong>Campaign:</strong> {campaignTitle} - Waiting to start...
+        <div className="ss-alert ss-alert--neutral" role="status" data-testid="waiting-indicator">
+          <div>
+            <strong>Campaign:</strong> {campaignTitle} - Waiting to start...
+          </div>
         </div>
       )}
 
@@ -332,8 +365,11 @@ export default function ProgressTracker({
 
       {/* Additional test mode info */}
       {isTestMode && progress && (
-        <div className="mt-2 text-sm text-gray-600" data-testid="test-mode-info">
-          💡 Test mode: Real email sent to <strong>akrillo89@gmail.com</strong>
+        <div
+          style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-muted)' }}
+          data-testid="test-mode-info"
+        >
+          Test mode: Real email sent to <strong>akrillo89@gmail.com</strong>
         </div>
       )}
     </div>

@@ -1,0 +1,51 @@
+---
+interface Stat {
+	label: string;
+	value: string;
+}
+
+interface Props {
+	kicker?: string;
+	avatarSrc?: string;
+	title?: string;
+	before?: string;
+	highlight?: string;
+	after?: string;
+	lede?: string;
+	stats?: Stat[];
+}
+
+const {
+	kicker = 'Staff Engineer · Adevinta',
+	avatarSrc,
+	title,
+	before,
+	highlight,
+	after,
+	lede,
+	stats,
+} = Astro.props;
+---
+
+<section class="ss-hero">
+	<div class="ss-hero__kicker">
+		{avatarSrc ? <img class="ss-hero__avatar" src={avatarSrc} width="32" height="32" alt="Sebastian Sigl" /> : null}
+		<span class="ss-kicker">{kicker}</span>
+	</div>
+	<h1 class="ss-display ss-hero__title">
+		{title ?? <>{before} <span class="ss-hl">{highlight}</span> {after}</>}
+	</h1>
+	{lede ? <p class="ss-lede ss-hero__lede">{lede}</p> : null}
+	{
+		stats && stats.length ? (
+			<dl class="ss-hero__stats">
+				{stats.map((stat) => (
+					<div class="ss-hero__stat">
+						<dt>{stat.label}</dt>
+						<dd>{stat.value}</dd>
+					</div>
+				))}
+			</dl>
+		) : null
+	}
+</section>

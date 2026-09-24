@@ -1,0 +1,73 @@
+---
+interface Props {
+	id?: string;
+	layout?: 'stacked' | 'inline';
+	placeholder?: string;
+	buttonLabel?: string;
+	testIds?: boolean;
+	class?: string;
+}
+
+const {
+	id,
+	layout = 'stacked',
+	placeholder = 'Your email…',
+	buttonLabel = 'Subscribe',
+	testIds = false,
+	class: className,
+} = Astro.props;
+
+// Unique, deterministic id per rendered form (a page can hold more than one form).
+const uid = id ?? `newsletter-form-${Math.random().toString(36).slice(2, 8)}`;
+const emailId = `${uid}-email`;
+
+const inline = layout === 'inline';
+const formStyle = inline
+	? 'display:flex;flex-wrap:wrap;gap:8px;max-width:448px'
+	: 'display:flex;flex-direction:column;gap:8px';
+const buttonCls = inline ? 'ss-btn ss-btn--primary' : 'ss-btn ss-btn--primary ss-btn--sm ss-btn--block';
+---
+
+<div class:list={['js-newsletter-root', className]}>
+	<form id={uid} style={formStyle}>
+		<div style={inline ? 'flex:1 1 220px' : undefined}>
+			<label class="ss-sr-only" for={emailId}>Your email</label>
+			<input
+				id={emailId}
+				class="ss-input js-newsletter-email-input"
+				type="email"
+				name="email"
+				autocomplete="email"
+				placeholder={placeholder}
+				required
+				data-testid={testIds ? 'subscribe-form-input' : undefined}
+			/>
+		</div>
+		<button
+			class={buttonCls}
+			type="submit"
+			style={inline ? 'min-height:40px' : undefined}
+			data-testid={testIds ? 'subscribe-form-button' : undefined}
+		>
+			{buttonLabel}
+		</button>
+	</form>
+	<p
+		class="ss-alert ss-alert--success js-newsletter-success hidden"
+		role="status"
+		style="justify-content:center"
+	>
+		<strong>Thanks for subscribing!</strong>
+	</p>
+	<p class="ss-field__error js-newsletter-error hidden" role="alert">
+		Something went wrong. Please try again.
+	</p>
+</div>
+
+<script>
+	import { setupNewsletterForm } from "../lib/infrastructure/inlineJs/setupNewsletterForm";
+
+	document.querySelectorAll<HTMLElement>(".js-newsletter-root").forEach((root) => {
+		setupNewsletterForm(root);
+	});
+</script>

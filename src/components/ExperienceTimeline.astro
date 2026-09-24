@@ -1,0 +1,40 @@
+---
+interface Item {
+	start: string;
+	end: string;
+	role: string;
+	org: string;
+	logo?: string;
+	description?: string;
+}
+
+interface Props {
+	items?: Item[];
+}
+
+const { items = [] } = Astro.props;
+---
+
+<ol class="ss-timeline">
+	{
+		items.map((item) => (
+			<li class="ss-timeline__item">
+				<div class="ss-timeline__when">
+					{item.start} – {item.end}
+				</div>
+				<div>
+					<div class="ss-timeline__head">
+						<div class="ss-timeline__logo">
+							{item.logo ? <img src={item.logo} alt="" /> : null}
+						</div>
+						<div>
+							<h3 class="ss-timeline__role">{item.role}</h3>
+							<div class="ss-timeline__org">{item.org}</div>
+						</div>
+					</div>
+					{item.description ? <p class="ss-timeline__desc">{item.description}</p> : null}
+				</div>
+			</li>
+		))
+	}
+</ol>

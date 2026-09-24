@@ -1,0 +1,29 @@
+---
+interface Props {
+	href?: string;
+	variant?: 'solid' | 'outline' | 'muted';
+	class?: string;
+}
+
+const { href, variant = 'solid', class: className } = Astro.props;
+const cls = [
+	'ss-tag',
+	variant === 'outline' && 'ss-tag--outline',
+	variant === 'muted' && 'ss-tag--muted',
+	className,
+]
+	.filter(Boolean)
+	.join(' ');
+---
+
+{
+	href ? (
+		<a class={cls} href={href}>
+			<slot />
+		</a>
+	) : (
+		<span class={cls}>
+			<slot />
+		</span>
+	)
+}

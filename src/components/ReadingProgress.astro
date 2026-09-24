@@ -1,0 +1,44 @@
+---
+interface Props {
+	targetId?: string;
+	label?: string;
+}
+
+const { targetId, label = 'Reading progress' } = Astro.props;
+---
+
+<div
+	class="ss-reading-progress"
+	role="progressbar"
+	aria-label={label}
+	aria-valuemin="0"
+	aria-valuemax="100"
+	aria-valuenow="0"
+	data-reading-progress
+	data-target={targetId}
+>
+	<div class="ss-reading-progress__bar"></div>
+</div>
+
+<script>
+	const bars = document.querySelectorAll<HTMLElement>('[data-reading-progress]');
+
+	const update = (bar: HTMLElement) => {
+		const target = bar.dataset.target
+			? document.getElementById(bar.dataset.target)
+			: document.documentElement;
+		if (!target) return;
+		const rect = target.getBoundingClientRect();
+		const total = rect.height - window.innerHeight;
+		const progress = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 1;
+		const fill = bar.querySelector<HTMLElement>('.ss-reading-progress__bar');
+		if (fill) fill.style.transform = `scaleX(${progress})`;
+		bar.setAttribute('aria-valuenow', String(Math.round(progress * 100)));
+	};
+
+	bars.forEach((bar) => {
+		update(bar);
+		window.addEventListener('scroll', () => update(bar), { passive: true });
+		window.addEventListener('resize', () => update(bar));
+	});
+</script>

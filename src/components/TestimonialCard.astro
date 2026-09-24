@@ -1,0 +1,21 @@
+---
+interface Props {
+	title?: string;
+	quote: string;
+	author: string;
+	avatar?: string;
+}
+
+const { title, quote, author, avatar } = Astro.props;
+---
+
+<figure class="ss-card" style="margin:0">
+	<div class="ss-quote">
+		{title ? <div class="ss-quote__title">{title}</div> : null}
+		<blockquote class="ss-quote__text">“{quote}”</blockquote>
+		<figcaption class="ss-quote__cite">
+			{avatar ? <img class="ss-quote__avatar" src={avatar} width="28" height="28" alt="" /> : null}
+			{author}
+		</figcaption>
+	</div>
+</figure>

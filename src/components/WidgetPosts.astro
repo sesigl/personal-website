@@ -1,35 +1,28 @@
 ---
 import PostRepository from "../lib/domain/article/PostRepository";
 
-type Props = {
-    excludedPostIds: string[];
-};
+interface Props {
+	excludedPostIds?: string[];
+	title?: string;
+}
 
-const { excludedPostIds } = Astro.props;
+const { excludedPostIds = [], title = 'Popular' } = Astro.props;
 
 const allPosts = await new PostRepository().findPosts();
-const allPostsWithoutCurrentPosts = allPosts.filter((post) => !excludedPostIds.includes(post.id));
-
-const somePosts = allPostsWithoutCurrentPosts.slice(0, 3);
+const posts = allPosts
+	.filter((post) => !excludedPostIds.includes(post.id))
+	.slice(0, 4);
 ---
 
-<div
-    class="rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-800/30 odd:rotate-1 even:-rotate-1 p-5"
->
-    <div class="font-aspekta font-[650] mb-3">Popular Posts</div>
-    <ul class="space-y-3">
-        {
-            somePosts.map((post) => (
-                <li class="inline-flex">
-                    <span class="text-sky-500 mr-2">—</span>{" "}
-                    <a
-                        class="font-aspekta font-[650] text-sm inline-flex relative hover:text-sky-500 duration-150 ease-out before:scale-x-0 before:origin-center before:absolute before:inset-0 before:bg-sky-200 dark:before:bg-sky-500 before:opacity-30 before:-z-10 before:translate-y-1/4 before:-rotate-2 hover:before:scale-100 before:duration-150 before:ease-in-out"
-                        href={post.data.link ?? `/posts/${post.data.slug}`}
-                    >
-                        {post.data.title}
-                    </a>
-                </li>
-            ))
-        }
-    </ul>
-</div>
+<section class="ss-widget" aria-labelledby="popular-posts">
+	<h2 id="popular-posts" class="ss-kicker">{title}</h2>
+	<ol class="ss-widget__list">
+		{
+			posts.map((post) => (
+				<li>
+					<a href={post.data.link ?? `/blog/${post.data.slug}`}>{post.data.title}</a>
+				</li>
+			))
+		}
+	</ol>
+</section>

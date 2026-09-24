@@ -71,19 +71,19 @@ describe('ProgressDisplay', () => {
     
     expect(screen.getByTestId('progress-display')).toBeInTheDocument();
     expect(screen.getByTestId('campaign-title')).toHaveTextContent('Campaign: test-campaign-2024');
-    expect(screen.getByTestId('status-badge')).toHaveTextContent('in_progress');
+    expect(screen.getByTestId('status-badge')).toHaveTextContent('In progress');
     expect(screen.getByTestId('progress-text')).toHaveTextContent('Progress: 75/100 (75%)');
   });
 
   it('applies correct status colors', () => {
     const { rerender } = render(<ProgressDisplay progress={completedProgressData} />);
-    expect(screen.getByTestId('status-badge')).toHaveClass('bg-green-200', 'text-green-800');
+    expect(screen.getByTestId('status-badge')).toHaveClass('ss-badge', 'ss-badge--success');
 
     rerender(<ProgressDisplay progress={failedProgressData} />);
-    expect(screen.getByTestId('status-badge')).toHaveClass('bg-red-200', 'text-red-800');
+    expect(screen.getByTestId('status-badge')).toHaveClass('ss-badge', 'ss-badge--danger');
 
     rerender(<ProgressDisplay progress={mockProgressData} />);
-    expect(screen.getByTestId('status-badge')).toHaveClass('bg-blue-200', 'text-blue-800');
+    expect(screen.getByTestId('status-badge')).toHaveClass('ss-badge', 'ss-badge--info');
   });
 
   it('renders progress bar with correct width', () => {
@@ -97,7 +97,7 @@ describe('ProgressDisplay', () => {
     render(<ProgressDisplay progress={failedProgressData} />);
     
     expect(screen.getByTestId('failure-warning')).toBeInTheDocument();
-    expect(screen.getByTestId('failure-warning')).toHaveTextContent('⚠️ Some deliveries failed');
+    expect(screen.getByTestId('failure-warning')).toHaveTextContent('Some deliveries failed.');
   });
 
   it('does not show failure warning when hasFailures is false', () => {
@@ -290,22 +290,22 @@ describe('ProgressDisplay - All States', () => {
     const pendingData = { ...mockProgressData, status: 'pending' as const };
     render(<ProgressDisplay progress={pendingData} />);
     
-    expect(screen.getByTestId('status-badge')).toHaveTextContent('pending');
-    expect(screen.getByTestId('status-badge')).toHaveClass('bg-gray-200', 'text-gray-800');
+    expect(screen.getByTestId('status-badge')).toHaveTextContent('Pending');
+    expect(screen.getByTestId('status-badge')).toHaveClass('ss-badge', 'ss-badge--neutral');
   });
 
   it('displays completed status correctly', () => {
     render(<ProgressDisplay progress={completedProgressData} />);
     
-    expect(screen.getByTestId('status-badge')).toHaveTextContent('completed');
-    expect(screen.getByTestId('status-badge')).toHaveClass('bg-green-200', 'text-green-800');
+    expect(screen.getByTestId('status-badge')).toHaveTextContent('Completed');
+    expect(screen.getByTestId('status-badge')).toHaveClass('ss-badge', 'ss-badge--success');
   });
 
   it('displays failed status correctly', () => {
     render(<ProgressDisplay progress={failedProgressData} />);
     
-    expect(screen.getByTestId('status-badge')).toHaveTextContent('failed');
-    expect(screen.getByTestId('status-badge')).toHaveClass('bg-red-200', 'text-red-800');
+    expect(screen.getByTestId('status-badge')).toHaveTextContent('Failed');
+    expect(screen.getByTestId('status-badge')).toHaveClass('ss-badge', 'ss-badge--danger');
     expect(screen.getByTestId('failure-warning')).toBeInTheDocument();
   });
 

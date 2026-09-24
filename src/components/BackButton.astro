@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+	href?: string;
+	label?: string;
+}
+
+const { href = '/', label = 'All articles' } = Astro.props;
+---
+
+<a class="ss-back" href={href}><Icon name="chevronLeft" size={12} />{label}</a>

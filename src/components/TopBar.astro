@@ -1,0 +1,55 @@
+---
+import Icon from './Icon.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+	active?: 'home' | 'about' | 'subscribe' | 'search';
+	query?: string;
+}
+
+const { active, query = '' } = Astro.props;
+
+const nav = [
+	{ id: 'home', label: 'Writing', href: '/' },
+	{ id: 'about', label: 'About', href: '/about' },
+];
+---
+
+<header class="ss-topbar">
+	<div class="ss-topbar__inner">
+		<a class="ss-brand" href="/">
+			<span class="ss-brand__mark" aria-hidden="true"></span>sebastian.sigl
+		</a>
+		<nav aria-label="Primary">
+			<ul class="ss-topnav">
+				{nav.map((item) => (
+					<li>
+						<a href={item.href} aria-current={active === item.id ? 'page' : undefined}>{item.label}</a>
+					</li>
+				))}
+			</ul>
+		</nav>
+		<form class="ss-topbar__search" role="search" method="get" action="/search">
+			<div class="ss-field">
+				<label class="ss-sr-only" for="search">Search articles</label>
+				<div class="ss-input-wrap">
+					<span class="ss-input-wrap__icon"><Icon name="search" size={14} /></span>
+					<input
+						id="search"
+						class="ss-input"
+						type="search"
+						name="q"
+						placeholder="Search articles"
+						value={query}
+						autocomplete="off"
+					/>
+					<span class="ss-input-wrap__end" aria-hidden="true"><kbd class="ss-kbd">⌘K</kbd></span>
+				</div>
+			</div>
+		</form>
+		<div class="ss-topbar__actions">
+			<ThemeToggle />
+			<a class="ss-btn ss-btn--primary ss-btn--sm ss-topbar__subscribe" href="/subscribe">Subscribe</a>
+		</div>
+	</div>
+</header>

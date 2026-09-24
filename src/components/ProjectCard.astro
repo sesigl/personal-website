@@ -1,0 +1,30 @@
+---
+interface Props {
+	title: string;
+	description?: string;
+	logo?: string;
+	href: string;
+}
+
+const { title, description, logo, href } = Astro.props;
+
+let host = '';
+try {
+	host = new URL(href).host.replace(/^www\./, '');
+} catch {
+	host = '';
+}
+---
+
+<a class="ss-card" href={href} target="_blank" rel="noopener noreferrer">
+	<div class="ss-project">
+		<div class="ss-project__head">
+			<div class="ss-project__logo">{logo ? <img src={logo} alt="" /> : null}</div>
+			<span class="ss-project__arrow" aria-hidden="true">↗</span>
+		</div>
+		<div class="ss-project__title">{title}</div>
+		{description ? <p class="ss-project__desc">{description}</p> : null}
+		{host ? <div class="ss-project__foot"><span>{host}</span></div> : null}
+	</div>
+	<span class="ss-sr-only">(opens in a new tab)</span>
+</a>

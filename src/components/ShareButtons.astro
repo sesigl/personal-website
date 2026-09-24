@@ -1,0 +1,38 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+	url: string;
+	title?: string;
+	label?: string;
+}
+
+const { url, title = '', label = 'Share' } = Astro.props;
+
+const u = encodeURIComponent(url);
+const t = encodeURIComponent(title);
+const items = [
+	{ icon: 'twitter', label: 'Share on X', href: `https://twitter.com/intent/tweet?url=${u}&text=${t}` },
+	{ icon: 'linkedin', label: 'Share on LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${u}` },
+	{ icon: 'facebook', label: 'Share on Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${u}` },
+];
+---
+
+<ul class="ss-share" aria-label="Share this article">
+	{label ? <li class="ss-share__label" aria-hidden="true">{label}</li> : null}
+	{
+		items.map((item) => (
+			<li>
+				<a
+					class="ss-icon-btn"
+					href={item.href}
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label={`${item.label} (opens in a new tab)`}
+				>
+					<Icon name={item.icon} size={15} />
+				</a>
+			</li>
+		))
+	}
+</ul>

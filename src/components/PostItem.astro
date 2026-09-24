@@ -1,0 +1,56 @@
+---
+import Tag from './Tag.astro';
+
+const MEDIA: Record<string, string> = {
+	spotify: 'Podcast',
+	youtube: 'Video',
+	infographic: 'Infographic',
+};
+
+interface Props {
+	title: string;
+	description?: string;
+	date: Date | string;
+	readingTime?: number;
+	href: string;
+	category?: string;
+	media?: { spotify?: string; youtube?: string; infographic?: string };
+	index?: number;
+	showTags?: boolean;
+	headingLevel?: 2 | 3;
+}
+
+const {
+	title,
+	description,
+	date,
+	readingTime,
+	href,
+	category,
+	media,
+	index,
+	showTags = true,
+	headingLevel = 3,
+} = Astro.props;
+
+const H = `h${headingLevel}` as 'h3';
+const iso = typeof date === 'string' ? date.slice(0, 10) : date.toISOString().slice(0, 10);
+const formats = media ? Object.keys(MEDIA).filter((key) => media[key as keyof typeof media]) : [];
+const cls = ['ss-post', index == null && 'ss-post--no-index'].filter(Boolean).join(' ');
+---
+
+<article class={cls}>
+	{index != null ? <span class="ss-post__n" aria-hidden="true">{String(index).padStart(3, '0')}</span> : null}
+	<time class="ss-post__date" datetime={iso}>{iso}</time>
+	<div class="ss-post__body">
+		<H class="ss-post__title"><a href={href}>{title}</a></H>
+		{description ? <p class="ss-post__desc">{description}</p> : null}
+		{showTags && (category || formats.length) ? (
+			<div class="ss-post__tags">
+				{category ? <Tag href={`/search?q=${category}&categoryOnly`}>{category}</Tag> : null}
+				{formats.map((format) => <Tag variant="muted">{MEDIA[format]}</Tag>)}
+			</div>
+		) : null}
+	</div>
+	<span class="ss-post__time">{readingTime ? `${readingTime} min` : ''}</span>
+</article>

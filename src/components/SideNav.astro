@@ -1,0 +1,29 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+	active?: 'home' | 'about' | 'subscribe' | 'search';
+}
+
+const { active } = Astro.props;
+
+const items = [
+	{ id: 'home', label: 'Writing', icon: 'home', href: '/' },
+	{ id: 'search', label: 'Search', icon: 'search', href: '/search' },
+	{ id: 'about', label: 'About', icon: 'about', href: '/about' },
+	{ id: 'subscribe', label: 'Subscribe', icon: 'subscribe', href: '/subscribe' },
+];
+---
+
+<nav class="ss-rail" aria-label="Primary (mobile)">
+	<ul class="ss-rail__list">
+		{items.map((item) => (
+			<li>
+				<a class="ss-rail__link" href={item.href} aria-current={active === item.id ? 'page' : undefined}>
+					<Icon name={item.icon} size={18} />
+					<span class="ss-rail__label">{item.label}</span>
+				</a>
+			</li>
+		))}
+	</ul>
+</nav>
