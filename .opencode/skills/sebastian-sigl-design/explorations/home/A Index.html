@@ -1,0 +1,74 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Home · Direction A · Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbfbf9;--bg2:#f2f2ee;--ink:#141412;--ink2:#56554f;--ink3:#8a8980;--line:#e3e2dc;--line2:#cfcdc5;--acc:oklch(0.62 0.2 38);--acc-ink:oklch(0.52 0.19 38);--on-acc:#fff;--sans:"Geist",system-ui,sans-serif;--mono:"Geist Mono",ui-monospace,monospace;color-scheme:light}
+[data-theme="dark"]{--bg:#0e0e0d;--bg2:#171715;--ink:#f1f0ea;--ink2:#b0aea4;--ink3:#7a7970;--line:#26251f;--line2:#3a3932;--acc:oklch(0.7 0.18 42);--acc-ink:oklch(0.76 0.16 45);--on-acc:#0e0e0d;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--ink);text-decoration:none}a:hover{color:var(--acc-ink)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:12px;background:var(--acc);color:var(--on-acc);padding:8px 12px;z-index:9}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink3)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+header{position:sticky;top:0;z-index:5;background:color-mix(in oklab,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:24px;height:60px}
+.mark{font:500 14px var(--mono);display:flex;align-items:center;gap:10px}.mark i{width:10px;height:10px;background:var(--acc);display:block}
+nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0}nav a{font:500 14px var(--sans);padding:8px 12px;border-radius:4px;color:var(--ink2)}nav a[aria-current]{color:var(--ink);background:var(--bg2)}
+.sp{flex:1}
+.search{display:flex;align-items:center;gap:8px;height:36px;padding:0 10px;border:1px solid var(--line2);border-radius:4px;min-width:220px;background:var(--bg)}
+.search input{border:0;background:none;color:var(--ink);font:14px var(--sans);flex:1;outline:none;min-width:0}.search:focus-within{border-color:var(--acc)}
+kbd{font:11px var(--mono);color:var(--ink3);border:1px solid var(--line2);border-radius:3px;padding:1px 5px}
+.btn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:4px;border:1px solid var(--line2);background:none;color:var(--ink);font:500 14px var(--sans);cursor:pointer}
+.btn:hover{border-color:var(--ink)}.btn.pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}.btn.pri:hover{background:var(--acc);border-color:var(--acc);color:var(--on-acc)}
+.hero{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;padding:72px 0 48px;border-bottom:1px solid var(--line)}
+.hero h1{grid-column:1/9;margin:12px 0 0;font:600 clamp(34px,5vw,56px)/1.04 var(--sans);letter-spacing:-.035em;text-wrap:balance}
+.hero p{grid-column:1/8;margin:0;color:var(--ink2);font-size:18px;text-wrap:pretty}
+.hero .meta{grid-column:1/-1;display:flex;gap:32px;flex-wrap:wrap}
+.hero .meta b{display:block;font:500 13px var(--mono);color:var(--ink);text-transform:none}
+.body{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:0}
+.list{border-right:1px solid var(--line);min-width:0}
+.filters{display:flex;align-items:center;gap:8px;padding:16px 24px 16px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.chip{font:500 12px var(--mono);text-transform:uppercase;letter-spacing:.03em;padding:6px 10px;border:1px solid var(--line2);border-radius:3px;background:none;color:var(--ink2);cursor:pointer;min-height:32px}
+.chip sup{color:var(--ink3);margin-left:4px}.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}.chip[aria-pressed="true"] sup{color:inherit;opacity:.6}
+.row{display:grid;grid-template-columns:56px 96px minmax(0,1fr) 90px;gap:16px;padding:24px 24px 24px 0;border-bottom:1px solid var(--line);position:relative}
+.row:hover{background:var(--bg2)}.row:hover .t{color:var(--acc-ink)}
+.row .n{font:500 12px var(--mono);color:var(--ink3);padding-top:4px}
+.row .d{font:12px var(--mono);color:var(--ink3);padding-top:4px}
+.row .t{font:600 20px/1.3 var(--sans);letter-spacing:-.015em;margin:0;text-wrap:pretty}.row .t a::after{content:"";position:absolute;inset:0}
+.row .x{color:var(--ink2);font-size:15px;margin:6px 0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tags{display:flex;gap:6px;flex-wrap:wrap}.tag{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.03em;padding:3px 7px;border:1px solid var(--line2);border-radius:3px;color:var(--ink2)}
+.tag.m{border-color:transparent;background:var(--bg2);color:var(--ink2)}.tag.c{color:var(--acc-ink);border-color:color-mix(in oklab,var(--acc) 40%,transparent)}
+.row .r{font:12px var(--mono);color:var(--ink3);text-align:right;padding-top:4px}
+.empty{padding:48px 0;color:var(--ink2)}
+aside{padding:24px 0 24px 24px;display:flex;flex-direction:column;gap:24px}
+.box{border:1px solid var(--line2);padding:20px;position:sticky;top:84px;background:var(--bg)}
+.box h2{font:600 18px/1.25 var(--sans);letter-spacing:-.01em;margin:10px 0 8px}.box p{margin:0 0 16px;color:var(--ink2);font-size:14px}
+.field{display:flex;flex-direction:column;gap:8px}.field input{height:40px;border:1px solid var(--line2);border-radius:4px;padding:0 12px;font:15px var(--sans);background:var(--bg);color:var(--ink)}.field input:focus{outline:none;border-color:var(--acc)}
+.field .btn{justify-content:center;height:40px}.msg{font:12px var(--mono);color:var(--acc-ink);min-height:16px;margin-top:8px}
+.faces{display:flex;margin-top:16px;align-items:center;gap:10px}.faces span{display:flex}.faces img{width:24px;height:24px;border-radius:50%;border:2px solid var(--bg);margin-left:-6px}.faces img:first-child{margin-left:0}
+footer{border-top:1px solid var(--line)}footer .wrap{display:flex;gap:24px;align-items:center;justify-content:space-between;padding-top:24px;padding-bottom:24px;flex-wrap:wrap}
+footer ul{display:flex;gap:16px;list-style:none;margin:0;padding:0;flex-wrap:wrap}footer a{font:12px var(--mono);text-transform:uppercase;color:var(--ink2)}
+@media(max-width:960px){.body{grid-template-columns:1fr}.list{border-right:0}aside{padding:24px 0}.box{position:static}.search{min-width:0;flex:1}}
+@media(max-width:720px){nav{display:none}.bar{gap:12px}.search kbd{display:none}.hero{padding:48px 0 32px}.hero h1,.hero p{grid-column:1/-1}.row{grid-template-columns:minmax(0,1fr);gap:6px;padding-right:0}.row .n{display:none}.row .r{text-align:left;order:-1}.row .d{order:-2;padding:0}.row{display:flex;flex-direction:column}.btn .lbl{display:none}}
+</style></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="wrap bar"><a class="mark" href="#"><i></i>sebastian.sigl</a>
+<nav aria-label="Primary"><ul><li><a href="#" aria-current="page">Writing</a></li><li><a href="#">About</a></li><li><a href="#">Subscribe</a></li></ul></nav><span class="sp"></span>
+<form class="search" role="search" data-search-form><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><label class="skip" for="q">Search articles</label><input id="q" data-search placeholder="Search articles"><kbd>⌘K</kbd></form>
+<button class="btn" data-theme-toggle aria-pressed="false" aria-label="Toggle dark mode"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"></path></svg><span class="lbl" data-theme-label>Light</span></button></div></header>
+<main id="main"><div class="wrap">
+<section class="hero"><div class="mono" style="grid-column:1/-1">// Staff Engineer · Adevinta · Berlin</div><h1>Notes on building software, systems and teams.</h1><p>Long-form articles on AI-augmented engineering, search, and technical leadership. Some come with a podcast, video or infographic.</p>
+<div class="meta mono"><div>Articles<b id="c-all"></b></div><div>Latest<b id="latest"></b></div><div>Topics<b>Tech · Leadership</b></div></div></section>
+<div class="body"><section class="list" aria-labelledby="lh"><h2 id="lh" class="skip">Articles</h2>
+<div class="filters" role="group" aria-label="Filter by topic"><button class="chip" data-cat="all" aria-pressed="true">All<sup></sup></button><button class="chip" data-cat="tech" aria-pressed="false">Tech<sup></sup></button><button class="chip" data-cat="leadership" aria-pressed="false">Leadership<sup></sup></button><span class="sp"></span><span class="mono" id="res" aria-live="polite"></span></div>
+<ol id="rows" style="list-style:none;margin:0;padding:0"></ol></section>
+<aside aria-label="Newsletter"><form class="box" data-sub><div class="mono">Newsletter</div><h2>One article a month. No noise.</h2><p>New posts on engineering and leadership, straight to your inbox.</p><div class="field"><label class="skip" for="em">Email address</label><input id="em" type="email" required placeholder="you@company.com" autocomplete="email"><button class="btn pri">Subscribe</button></div><div class="msg" data-sub-msg role="status"></div><div class="faces"><span id="faces"></span><span class="mono" style="text-transform:none">Join other engineers</span></div></form></aside></div>
+</div></main>
+<footer><div class="wrap"><span class="mono">© 2026 Sebastian Sigl</span><ul><li><a href="#">GitHub ↗</a></li><li><a href="#">LinkedIn ↗</a></li><li><a href="#">X ↗</a></li><li><a href="#">Patreon ↗</a></li><li><a href="#">Imprint</a></li></ul></div></footer>
+<script src="../../ui_kits/website/data.js"></script><script src="shared.js"></script><script>
+HX.theme('hx-a-theme');
+document.getElementById('c-all').textContent=String(SS_DATA.posts.length).padStart(2,'0');document.getElementById('latest').textContent=HX.fmt(SS_DATA.posts[0].date);
+document.querySelectorAll('[data-cat]').forEach(b=>b.querySelector('sup').textContent=HX.count(b.dataset.cat));
+document.getElementById('faces').innerHTML=SS_DATA.avatars.slice(0,4).map(s=>`<img src="${s}" alt="">`).join('');
+HX.filterable((ps)=>{document.getElementById('res').textContent=ps.length+' result'+(ps.length===1?'':'s');
+document.getElementById('rows').innerHTML=ps.length?ps.map((p)=>{const i=SS_DATA.posts.indexOf(p);return `<li class="row"><span class="n">${String(SS_DATA.posts.length-i).padStart(3,'0')}</span><time class="d" datetime="${p.date}">${p.date}</time><div><h3 class="t"><a href="#">${HX.esc(p.title)}</a></h3><p class="x">${HX.esc(p.description)}</p><div class="tags"><span class="tag c">${p.category}</span>${HX.media(p).map(m=>`<span class="tag m">${HX.MEDIA_LABEL[m]}</span>`).join('')}</div></div><span class="r">${p.readingTime} min</span></li>`}).join(''):'<li class="empty">No articles match. Try another term.</li>';});
+</script></body></html>

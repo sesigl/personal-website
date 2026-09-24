@@ -1,0 +1,107 @@
+<!-- @dsCard group="Website" viewport="1280x900" name="sebastiansigl.com" subtitle="Click-through: home, category, article, search, about, subscribe, imprint, unsubscribe, admin" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sebastian Sigl — Website UI kit</title>
+<link rel="icon" href="../../assets/favicon.svg">
+<link rel="stylesheet" href="../../styles.css">
+<style>.kit-switch{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;align-items:center;gap:8px;height:36px;padding:0 6px 0 12px;border-radius:4px;background:var(--bg-inverse);color:var(--text-inverse);font:500 11px/1 var(--font-mono);letter-spacing:.04em;text-transform:uppercase;box-shadow:var(--shadow-pop)}.kit-switch select{background:transparent;color:inherit;border:0;font:500 12px var(--font-mono);padding:4px;text-transform:none}.kit-switch option{color:#0e0e0d;background:#fff}.ss-footer{padding-bottom:56px}@media(max-width:767px){.kit-switch{bottom:calc(var(--layout-tabbar-h) + 12px)}}</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script src="data.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="HomeScreen.jsx"></script>
+<script type="text/babel" src="ArticleScreen.jsx"></script>
+<script type="text/babel" src="PageScreens.jsx"></script>
+<script type="text/babel" src="AdminScreen.jsx"></script>
+<script type="text/babel">
+const KIT = window.SebastianSiglDesignSystem_0b5f4d;
+const KEY = 'ss-kit-hash';
+const SCREENS = [['#/','home','Home'],['#/blog/mcp-servers-context-cost','article','Article'],['#/search?q=search','search','Search results'],['#/about','about','About'],['#/subscribe','subscribe','Subscribe'],['#/imprint','imprint','Imprint'],['#/unsubscribe','unsubscribe','Unsubscribe'],['#/admin','admin','Admin · Newsletter']];
+
+// Hash routes mirror the real site's paths: #/, #/tech, #/blog/<slug>, #/search?q=…, #/about, #/subscribe, #/imprint, #/unsubscribe, #/admin
+function parse(hash) {
+  const h = (hash || '').replace(/^#/, '') || '/';
+  const [path, qs = ''] = h.split('?');
+  const seg = path.split('/').filter(Boolean);
+  const q = new URLSearchParams(qs);
+  if (!seg.length) return { page: 'home', category: 'all' };
+  if (seg[0] === 'tech' || seg[0] === 'leadership') return { page: 'home', category: seg[0] };
+  if ((seg[0] === 'blog' || seg[0] === 'posts') && seg[1]) return { page: 'article', slug: seg[1] };
+  if (seg[0] === 'search') return { page: 'search', query: q.get('q') || '', categoryOnly: q.has('categoryOnly') };
+  if (['about', 'subscribe', 'imprint', 'unsubscribe', 'admin'].includes(seg[0])) return { page: seg[0] };
+  return { page: 'notfound' };
+}
+function toHash(page, p = {}) {
+  if (page === 'home') return !p.category || p.category === 'all' ? '#/' : '#/' + p.category;
+  if (page === 'article') return '#/blog/' + p.slug;
+  if (page === 'search') return '#/search?q=' + encodeURIComponent(p.query || '') + (p.categoryOnly ? '&categoryOnly' : '');
+  return '#/' + page;
+}
+let depth = 0;
+
+function App() {
+  const [hash, setHash] = React.useState(() => location.hash || localStorage.getItem(KEY) || '#/');
+  const [theme, setTheme] = React.useState(() => { const v = localStorage.getItem('dark-mode'); return v === null ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : v === 'true' ? 'dark' : 'light'; });
+  React.useEffect(() => { document.documentElement.setAttribute('data-theme', theme); localStorage.setItem('dark-mode', theme === 'dark'); }, [theme]);
+  React.useEffect(() => {
+    if (location.hash !== hash) history.replaceState(null, '', hash);
+    const on = () => { depth++; setHash(location.hash || '#/'); };
+    window.addEventListener('hashchange', on);
+    return () => window.removeEventListener('hashchange', on);
+  }, []);
+  React.useEffect(() => {
+    localStorage.setItem(KEY, hash);
+    window.scrollTo(0, 0);
+    const m = document.getElementById('main'); if (m) m.focus({ preventScroll: true });
+  }, [hash]);
+  const route = parse(hash);
+  const go = (page, params = {}) => {
+    if (page === 'back') { if (depth > 0) { depth -= 2; history.back(); } else location.hash = '#/'; return; }
+    const next = toHash(page, params);
+    if (next === location.hash) { window.scrollTo(0, 0); return; }
+    location.hash = next;
+  };
+  const p = route.page;
+  const current = (SCREENS.find((s) => s[1] === p) || SCREENS[0])[0];
+  const switcher = (
+    <label className="kit-switch">Screen
+      <select value={current} onChange={(e) => { location.hash = e.target.value; }}>{SCREENS.map(([h, k, l]) => <option key={k} value={h}>{l}</option>)}</select>
+    </label>
+  );
+  if (p === 'admin') return <div data-screen-label="Admin"><AdminScreen go={go} />{switcher}</div>;
+  const active = p === 'home' ? 'home' : p === 'about' ? 'about' : p === 'subscribe' ? 'subscribe' : p === 'search' ? 'search' : undefined;
+  let screen;
+  if (p === 'article') screen = <ArticleScreen key={route.slug} slug={route.slug} go={go} />;
+  else if (p === 'search') screen = <SearchScreen query={route.query || ''} categoryOnly={route.categoryOnly} go={go} />;
+  else if (p === 'about') screen = <AboutScreen />;
+  else if (p === 'subscribe') screen = <SubscribeScreen />;
+  else if (p === 'imprint') screen = <ImprintScreen />;
+  else if (p === 'unsubscribe') screen = <UnsubscribeScreen />;
+  else if (p === 'notfound') screen = <NotFoundScreen />;
+  else screen = <HomeScreen category={route.category || 'all'} go={go} />;
+  return (
+    <>
+      <a className="ss-skip-link" href="#main" onClick={(e) => { e.preventDefault(); const m = document.getElementById('main'); if (m) m.focus(); }}>Skip to content</a>
+      <div className="ss-shell">
+        <KIT.TopBar active={active} nav={[{ id: 'home', label: 'Writing', href: '#/' }, { id: 'about', label: 'About', href: '#/about' }]} homeHref="#/" subscribeHref="#/subscribe" theme={theme} onThemeChange={setTheme} query={p === 'search' && !route.categoryOnly ? route.query : ''} onSearch={(q) => go('search', { query: q })} />
+        <main id="main" tabIndex={-1} className="ss-main" style={{ outline: 'none' }} data-screen-label={(SCREENS.find((s) => s[1] === p) || [0, 0, 'Not found'])[2]}>
+          <div className="ss-main__inner">{screen}</div>
+        </main>
+        <KIT.Footer imprintHref="#/imprint" />
+        <KIT.SideNav active={active} items={[{ id: 'home', label: 'Writing', icon: 'home', href: '#/' }, { id: 'search', label: 'Search', icon: 'search', href: '#/search' }, { id: 'about', label: 'About', icon: 'about', href: '#/about' }, { id: 'subscribe', label: 'Subscribe', icon: 'subscribe', href: '#/subscribe' }]} />
+      </div>
+      {switcher}
+    </>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

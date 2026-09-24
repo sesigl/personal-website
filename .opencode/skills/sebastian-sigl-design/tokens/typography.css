@@ -1,0 +1,37 @@
+/* Type — Geist for everything readable, Geist Mono for meta, labels, numbers and code. */
+:root{
+--font-display:'Geist',ui-sans-serif,system-ui,sans-serif;   /* headings, titles */
+--font-body:'Geist',ui-sans-serif,system-ui,sans-serif;      /* UI + reading text */
+--font-mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace; /* meta, kickers, tags, code */
+
+--fw-regular:400;/* @kind font */--fw-medium:500;/* @kind font */--fw-semibold:600;/* @kind font */--fw-display:600;/* @kind font */--fw-bold:700;/* @kind font */
+
+--fs-2xs:.6875rem;--lh-2xs:1.4;/* @kind font */  /* 11px mono tags */
+--fs-xs:.75rem;  --lh-xs:1.5;/* @kind font */    /* 12px mono meta */
+--fs-sm:.875rem; --lh-sm:1.55;/* @kind font */
+--fs-base:1rem;  --lh-base:1.55;/* @kind font */
+--fs-lg:1.125rem;--lh-lg:1.55;/* @kind font */
+--fs-xl:1.25rem; --lh-xl:1.3;/* @kind font */    /* list titles */
+--fs-2xl:1.5rem; --lh-2xl:1.25;/* @kind font */
+--fs-3xl:2rem;   --lh-3xl:1.15;/* @kind font */
+--fs-4xl:2.75rem;--lh-4xl:1.06;/* @kind font */
+--fs-5xl:3.5rem; --lh-5xl:1.04;/* @kind font */
+
+--tracking-display:-0.035em;/* @kind font */--tracking-title:-0.015em;/* @kind font */--tracking-body:-0.005em;/* @kind font */--tracking-normal:0;/* @kind font */--tracking-mono:.02em;/* @kind font */--tracking-caps:.04em;/* @kind font */
+
+/* Reading */
+--fs-prose:1.125rem;/* @kind font */  /* 18px article body */
+--lh-prose:1.72;/* @kind font */
+--measure:68ch;/* @kind spacing */
+
+/* Semantic roles (mobile first; fluid) */
+--type-display-size:clamp(2.125rem,5vw,3.5rem);/* @kind font */
+--type-h1-size:clamp(2rem,4.2vw,2.75rem);--type-h1-lh:1.08;/* @kind font */
+--type-h2-size:clamp(1.5rem,2.6vw,2rem);--type-h2-lh:1.18;/* @kind font */
+--type-h3-size:1.375rem;--type-h3-lh:1.3;/* @kind font */
+--type-h4-size:1.125rem;--type-h4-lh:1.35;/* @kind font */
+--type-section-size:var(--fs-xl);
+--type-card-title-size:var(--fs-lg);
+--type-lede-size:var(--fs-lg);
+--type-meta-size:var(--fs-xs);
+}

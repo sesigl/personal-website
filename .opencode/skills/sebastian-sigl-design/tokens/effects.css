@@ -1,0 +1,15 @@
+/* Shadows are rare (popovers, media); structure comes from hairlines. Motion is short and linear-ish. */
+:root{
+--shadow-sm:0 1px 2px rgb(14 14 13 / .06);
+--shadow-pop:0 12px 32px -8px rgb(14 14 13 / .18),0 2px 6px rgb(14 14 13 / .06);
+--shadow-focus:0 0 0 3px var(--accent-soft);
+--blur-header:10px;/* @kind other */
+
+--duration-fast:120ms;/* @kind other */
+--duration-base:160ms;/* @kind other */
+--duration-slow:240ms;/* @kind other */
+--ease-standard:cubic-bezier(.2,0,0,1);/* @kind other */
+--ease-out:cubic-bezier(0,0,.2,1);/* @kind other */
+}
+[data-theme="dark"]{--shadow-pop:0 12px 32px -8px rgb(0 0 0 / .6),0 0 0 1px var(--stone-800)}
+@media (prefers-reduced-motion:reduce){:root{--duration-fast:0ms;/* @kind other */--duration-base:0ms;/* @kind other */--duration-slow:0ms;/* @kind other */}}

@@ -1,0 +1,27 @@
+/* 4px spacing scale + the framed-index layout measurements. */
+:root{
+--space-0-5:2px;--space-1:4px;--space-1-5:6px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;--space-12:48px;--space-16:64px;--space-18:72px;--space-20:80px;
+
+--layout-max:1200px;/* @kind spacing */          /* framed column with hairline edges */
+--layout-content-max:1200px;/* @kind spacing */
+--layout-column-max:680px;/* @kind spacing */      /* reading column */
+--layout-sidebar-w:300px;/* @kind spacing */       /* newsletter / widgets */
+--layout-toc-w:180px;/* @kind spacing */           /* article table of contents */
+--layout-header-h:60px;/* @kind spacing */
+--layout-tabbar-h:60px;/* @kind spacing */         /* mobile bottom nav */
+--layout-gutter:24px;/* @kind spacing */
+--layout-gap:32px;/* @kind spacing */
+--layout-search-max:260px;/* @kind spacing */
+
+--hit-target-min:44px;/* @kind spacing */
+
+--radius-xs:2px;   /* inline code, checkbox */
+--radius-sm:3px;   /* tags, chips, kbd */
+--radius-md:4px;   /* buttons, inputs, cards, images */
+--radius-lg:6px;   /* large media */
+--radius-full:9999px; /* avatars only */
+
+--border-width:1px;/* @kind spacing */
+--avatar-ring:2px;/* @kind spacing */
+}
+@media (max-width:640px){:root{--layout-gutter:16px}}

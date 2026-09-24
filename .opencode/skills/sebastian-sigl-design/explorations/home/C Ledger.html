@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Home · Direction C · Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f3ee;--ink:#15150f;--ink2:#51514a;--ink3:#86867c;--line:#d9d8cf;--acc:oklch(0.88 0.19 118);--acc-ink:oklch(0.5 0.13 125);--on-acc:#15150f;--sans:"Hanken Grotesk",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;--serif:"Newsreader",Georgia,serif;color-scheme:light}
+[data-theme="dark"]{--bg:#121310;--ink:#ecebe3;--ink2:#a9a99e;--ink3:#74746a;--line:#2a2b25;--acc:oklch(0.88 0.19 118);--acc-ink:oklch(0.88 0.17 118);color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none}a:hover{color:var(--acc-ink)}:focus-visible{outline:2px solid var(--acc-ink);outline-offset:2px}
+.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:12px;background:var(--acc);color:var(--on-acc);padding:8px 12px;z-index:9}
+.mono{font:500 11px/1.4 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink3)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+.cols{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px}
+header{border-bottom:1px solid var(--ink)}header .wrap{display:flex;align-items:center;gap:28px;height:64px}
+.name{font:700 17px var(--sans);letter-spacing:-.02em}.name span{font:500 11px var(--mono);color:var(--ink3);margin-left:8px;letter-spacing:.04em}
+nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0}nav a{font:500 12px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink2);padding:8px 0;border-bottom:2px solid transparent}nav a[aria-current]{color:var(--ink);border-color:var(--acc)}
+.sp{flex:1}
+.icon{display:inline-grid;place-items:center;width:40px;height:40px;border:1px solid var(--line);background:none;color:var(--ink);cursor:pointer;border-radius:0}.icon:hover{border-color:var(--ink)}
+.cta{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;background:var(--acc);color:var(--on-acc);border:0;font:600 14px var(--sans);cursor:pointer}.cta:hover{background:var(--ink);color:var(--bg)}
+.intro{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+.intro h1{grid-column:1/10;font:600 clamp(36px,6vw,76px)/.98 var(--sans);letter-spacing:-.045em;margin:16px 0 24px;text-wrap:balance}
+.intro h1 em{font:italic 400 1em var(--serif);letter-spacing:-.02em}
+.intro .lead{grid-column:1/7;color:var(--ink2);font-size:18px;margin:0;text-wrap:pretty}
+.intro .spec{grid-column:9/13;align-self:end;border-top:1px solid var(--ink);font:13px/1.9 var(--mono)}
+.intro .spec div{display:flex;justify-content:space-between;border-bottom:1px solid var(--line)}.intro .spec span:first-child{color:var(--ink3)}
+.toolbar{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);flex-wrap:wrap;position:sticky;top:0;background:var(--bg);z-index:3}
+.seg{display:flex;border:1px solid var(--ink)}.seg button{font:500 12px var(--mono);text-transform:uppercase;letter-spacing:.05em;padding:0 14px;height:36px;border:0;background:none;color:var(--ink);cursor:pointer}.seg button+button{border-left:1px solid var(--ink)}.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.q{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--ink);height:36px;min-width:240px}.q input{border:0;background:none;font:15px var(--sans);color:var(--ink);outline:none;flex:1;min-width:0}.q:focus-within{border-color:var(--acc-ink)}
+kbd{font:11px var(--mono);color:var(--ink3)}
+.year{padding:32px 0 8px}.year>.y{grid-column:1/3;font:600 40px/1 var(--sans);letter-spacing:-.04em;position:sticky;top:76px;align-self:start}
+.year ol{grid-column:3/13;list-style:none;margin:0;padding:0}
+.e{display:grid;grid-template-columns:72px minmax(0,1fr) 180px;gap:24px;padding:22px 0;border-top:1px solid var(--line);position:relative}
+.e:first-child{border-top:1px solid var(--ink)}
+.e .dt{font:500 12px/1.9 var(--mono);color:var(--ink3);text-transform:uppercase}
+.e h3{font:600 23px/1.22 var(--sans);letter-spacing:-.02em;margin:0 0 8px;text-wrap:pretty}.e h3 a::after{content:"";position:absolute;inset:0}
+.e:hover h3{text-decoration:underline;text-decoration-color:var(--acc);text-decoration-thickness:3px;text-underline-offset:4px}
+.e p{margin:0;color:var(--ink2);max-width:62ch}
+.e .side{font:12px/1.9 var(--mono);color:var(--ink2);display:flex;flex-direction:column;align-items:flex-start}
+.e .side .c{background:var(--acc);color:var(--on-acc);padding:0 6px;text-transform:uppercase;font-weight:500;letter-spacing:.04em}
+.e .side .m{display:flex;gap:10px;flex-wrap:wrap}.e .side .m span::before{content:"▸ ";color:var(--acc-ink)}
+.news{margin:48px 0;border:1px solid var(--ink);padding:32px}.news h2{grid-column:1/7;font:600 32px/1.1 var(--sans);letter-spacing:-.03em;margin:8px 0 0}
+.news form{grid-column:7/13;display:flex;flex-direction:column;gap:10px;justify-content:end}.news .f{display:flex;gap:0}.news input{flex:1;min-width:0;height:48px;border:1px solid var(--ink);border-right:0;padding:0 14px;font:16px var(--sans);background:var(--bg);color:var(--ink)}.news input:focus{outline:none;box-shadow:inset 0 0 0 1px var(--acc-ink)}.news .cta{height:48px}
+.msg{font:12px var(--mono);color:var(--acc-ink);min-height:16px}
+.empty{padding:48px 0;color:var(--ink2)}
+footer{border-top:1px solid var(--ink)}footer .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:20px;padding-bottom:28px;flex-wrap:wrap}footer ul{display:flex;gap:20px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+@media(max-width:900px){.intro h1,.intro .lead,.intro .spec{grid-column:1/-1}.intro .spec{margin-top:32px}.year>.y{grid-column:1/-1;position:static;margin-bottom:12px;font-size:28px}.year ol{grid-column:1/-1}.e{grid-template-columns:minmax(0,1fr);gap:8px}.e .dt{order:-1}.e .side{flex-direction:row;gap:12px;flex-wrap:wrap}.news h2,.news form{grid-column:1/-1}.news form{margin-top:20px}}
+@media(max-width:640px){.wrap{padding:0 18px}nav{display:none}.q{min-width:0;flex:1}.cta .l{display:none}.news{padding:20px}}
+</style></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="wrap"><a class="name" href="#">Sebastian Sigl<span>/ writing</span></a><nav aria-label="Primary"><ul><li><a href="#" aria-current="page">Writing</a></li><li><a href="#">About</a></li><li><a href="#">Subscribe</a></li></ul></nav><span class="sp"></span>
+<button class="icon" data-theme-toggle aria-pressed="false" aria-label="Toggle dark mode"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"></path></svg></button><a class="cta" href="#news">Subscribe<span class="l"> →</span></a></div></header>
+<main id="main"><div class="wrap">
+<section class="intro cols"><div class="mono" style="grid-column:1/-1">Engineering log · Est. 2023</div><h1>Field notes on software, <em>systems</em> and the people who build them.</h1><p class="lead">Staff Engineer at Adevinta, working on search for Kleinanzeigen. I write about AI-augmented engineering and technical leadership.</p>
+<div class="spec"><div><span>articles</span><span id="n"></span></div><div><span>topics</span><span>tech, leadership</span></div><div><span>formats</span><span>text, podcast, video</span></div><div><span>cadence</span><span>~ monthly</span></div></div></section>
+<div class="toolbar"><div class="seg" role="group" aria-label="Filter by topic"><button data-cat="all" aria-pressed="true">All</button><button data-cat="tech" aria-pressed="false">Tech</button><button data-cat="leadership" aria-pressed="false">Leadership</button></div>
+<form class="q" role="search" data-search-form><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><label class="skip" for="q">Search articles</label><input id="q" data-search placeholder="Search the log"><kbd>⌘K</kbd></form><span class="sp"></span><span class="mono" id="res" aria-live="polite"></span></div>
+<div id="log"></div>
+<section class="news cols" id="news" aria-labelledby="nh"><div style="grid-column:1/7"><div class="mono">Newsletter</div><h2 id="nh">Get the next entry by email.</h2></div><form data-sub><label class="mono" for="em">Email address</label><div class="f"><input id="em" type="email" required placeholder="you@company.com" autocomplete="email"><button class="cta">Subscribe</button></div><div class="msg" data-sub-msg role="status"></div></form></section>
+</div></main>
+<footer><div class="wrap"><span class="mono">© 2026 Sebastian Sigl</span><ul class="mono"><li><a href="#">GitHub ↗</a></li><li><a href="#">LinkedIn ↗</a></li><li><a href="#">X ↗</a></li><li><a href="#">Patreon ↗</a></li><li><a href="#">Imprint</a></li></ul></div></footer>
+<script src="../../ui_kits/website/data.js"></script><script src="shared.js"></script><script>
+HX.theme('hx-c-theme');document.getElementById('n').textContent=SS_DATA.posts.length;
+HX.filterable((ps,{q})=>{document.getElementById('res').textContent=ps.length+' entries';
+const by={};ps.forEach(p=>(by[p.date.slice(0,4)]=by[p.date.slice(0,4)]||[]).push(p));
+const ys=Object.keys(by).sort().reverse();
+document.getElementById('log').innerHTML=ys.length?ys.map(y=>`<section class="year cols" aria-label="${y}"><div class="y">${y}</div><ol>${by[y].map(p=>`<li class="e"><time class="dt" datetime="${p.date}">${HX.fmt(p.date,'short')}</time><div><h3><a href="#">${HX.esc(p.title)}</a></h3><p>${HX.esc(p.description)}</p></div><div class="side"><span class="c">${p.category}</span><span>${p.readingTime} min read</span>${HX.media(p).length?`<span class="m">${HX.media(p).map(m=>`<span>${HX.MEDIA_LABEL[m]}</span>`).join('')}</span>`:''}</div></li>`).join('')}</ol></section>`).join(''):`<p class="empty">Nothing in the log matches “${HX.esc(q)}”.</p>`;});
+</script></body></html>

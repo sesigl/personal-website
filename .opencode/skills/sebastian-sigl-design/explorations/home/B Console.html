@@ -1,0 +1,75 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Home · Direction B · Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f7f6;--panel:#ffffff;--ink:#101413;--ink2:#4c5552;--ink3:#7d8683;--line:#dfe3e1;--line2:#c9cfcc;--acc:oklch(0.6 0.13 165);--acc-ink:oklch(0.48 0.11 165);--acc-bg:oklch(0.95 0.035 165);--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--serif:"IBM Plex Serif",Georgia,serif;color-scheme:light}
+[data-theme="dark"]{--bg:#0b0e0d;--panel:#111514;--ink:#e8eeeb;--ink2:#a4aeaa;--ink3:#6f7a76;--line:#1f2624;--line2:#2e3734;--acc:oklch(0.78 0.14 165);--acc-ink:oklch(0.8 0.13 165);--acc-bg:oklch(0.26 0.05 165);color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--ink);font:400 15px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}a:hover{color:var(--acc-ink)}:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:12px;background:var(--acc);color:#fff;padding:8px 12px;z-index:9}
+.mono{font:12px/1.4 var(--mono);color:var(--ink3)}
+.app{display:grid;grid-template-columns:264px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;border-right:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;padding:20px;gap:24px;overflow:auto}
+.id{display:flex;gap:12px;align-items:center}.id img{width:40px;height:40px;border-radius:6px;object-fit:cover;background:var(--line)}.id b{display:block;font:600 15px var(--sans)}
+.search{display:flex;align-items:center;gap:8px;height:36px;padding:0 10px;border:1px solid var(--line2);border-radius:6px;background:var(--bg)}.search:focus-within{border-color:var(--acc)}
+.search input{border:0;background:none;color:var(--ink);font:14px var(--sans);flex:1;outline:none;min-width:0}kbd{font:11px var(--mono);color:var(--ink3);border:1px solid var(--line2);border-radius:4px;padding:0 5px}
+.grp h2{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin:0 0 8px}
+.grp ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.item{display:flex;align-items:center;gap:10px;width:100%;min-height:36px;padding:0 10px;border-radius:6px;border:0;background:none;color:var(--ink2);font:500 14px var(--sans);cursor:pointer;text-align:left}
+.item:hover{background:var(--bg);color:var(--ink)}.item[aria-current="page"],.item[aria-pressed="true"]{background:var(--acc-bg);color:var(--acc-ink)}
+.item .ct{margin-left:auto;font:12px var(--mono);color:var(--ink3)}.item .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5}
+.sub{margin-top:auto;border:1px solid var(--line);border-radius:8px;padding:14px;background:var(--bg)}
+.sub p{margin:6px 0 10px;font-size:13px;color:var(--ink2)}.sub input{width:100%;height:36px;border:1px solid var(--line2);border-radius:6px;padding:0 10px;font:14px var(--sans);background:var(--panel);color:var(--ink)}.sub input:focus{outline:none;border-color:var(--acc)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 14px;border-radius:6px;border:1px solid var(--line2);background:var(--panel);color:var(--ink);font:500 14px var(--sans);cursor:pointer}.btn:hover{border-color:var(--ink3)}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff;width:100%;margin-top:8px}[data-theme="dark"] .btn.pri{color:#06110d}.btn.pri:hover{filter:brightness(1.08)}
+.msg{font:12px var(--mono);color:var(--acc-ink);min-height:14px;margin-top:6px}
+.top{display:flex;align-items:center;gap:12px;height:56px;padding:0 32px;border-bottom:1px solid var(--line);position:sticky;top:0;background:color-mix(in oklab,var(--bg) 90%,transparent);backdrop-filter:blur(8px);z-index:4}
+.crumb{font:13px var(--mono);color:var(--ink3)}.crumb b{color:var(--ink);font-weight:500}
+.content{padding:32px;max-width:1080px}
+.tagrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.feat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);position:relative}
+.feat img{width:100%;height:100%;object-fit:cover;min-height:280px;display:block;background:var(--line)}
+.feat .in{padding:28px;display:flex;flex-direction:column;gap:12px}
+.feat h1{font:500 28px/1.2 var(--serif);letter-spacing:-.01em;margin:0;text-wrap:balance}.feat h1 a::after{content:"";position:absolute;inset:0}
+.feat p{margin:0;color:var(--ink2);text-wrap:pretty}
+.kv{display:flex;gap:16px;flex-wrap:wrap;font:12px var(--mono);color:var(--ink3);margin-top:auto;padding-top:12px;border-top:1px dashed var(--line2)}.kv span b{color:var(--ink);font-weight:500}
+.badge{font:500 11px var(--mono);padding:2px 8px;border-radius:999px;background:var(--acc-bg);color:var(--acc-ink);text-transform:lowercase}
+.badge.o{background:none;border:1px solid var(--line2);color:var(--ink2)}
+.head{display:flex;align-items:baseline;justify-content:space-between;margin:40px 0 16px;gap:12px}.head h2{font:600 16px var(--sans);margin:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:20px;display:flex;flex-direction:column;gap:10px;position:relative;transition:border-color .15s}
+.card:hover{border-color:var(--acc)}.card h3{font:600 17px/1.35 var(--sans);margin:0;text-wrap:pretty}.card h3 a::after{content:"";position:absolute;inset:0}
+.card p{margin:0;color:var(--ink2);font-size:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card .top2{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.empty{padding:40px;border:1px dashed var(--line2);border-radius:10px;color:var(--ink2);text-align:center}
+.mbar{display:none}
+@media(max-width:900px){.app{grid-template-columns:1fr}.side{display:none}.mbar{display:flex}.top{padding:0 16px}.content{padding:20px 16px}.feat{grid-template-columns:1fr}.feat img{min-height:180px;max-height:220px}.grid{grid-template-columns:1fr}
+.mbar{position:fixed;bottom:0;left:0;right:0;z-index:6;background:var(--panel);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}.mbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:56px;justify-content:center;font:500 11px var(--mono);color:var(--ink3)}.mbar a[aria-current]{color:var(--acc-ink)}body{padding-bottom:64px}
+.mfilter{display:flex!important}}
+.mfilter{display:none;gap:8px;margin-bottom:16px;overflow:auto}.mfilter .item{width:auto;border:1px solid var(--line2);min-height:36px}
+</style></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="app">
+<aside class="side" aria-label="Site"><div class="id"><img src="../../assets/images/me.png" alt=""><div><b>Sebastian Sigl</b><span class="mono">staff engineer</span></div></div>
+<form class="search" role="search" data-search-form><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><label class="skip" for="q">Search articles</label><input id="q" data-search placeholder="Search"><kbd>⌘K</kbd></form>
+<nav class="grp" aria-label="Primary"><h2>Site</h2><ul><li><a class="item" href="#" aria-current="page"><span class="dot"></span>Writing</a></li><li><a class="item" href="#"><span class="dot"></span>About</a></li><li><a class="item" href="#"><span class="dot"></span>Subscribe</a></li></ul></nav>
+<div class="grp" role="group" aria-label="Topics"><h2>Topics</h2><ul><li><button class="item" data-cat="all" aria-pressed="true">All articles<span class="ct"></span></button></li><li><button class="item" data-cat="tech" aria-pressed="false">Tech<span class="ct"></span></button></li><li><button class="item" data-cat="leadership" aria-pressed="false">Leadership<span class="ct"></span></button></li></ul></div>
+<div class="grp"><h2>Elsewhere</h2><ul><li><a class="item" href="#">GitHub<span class="ct">↗</span></a></li><li><a class="item" href="#">LinkedIn<span class="ct">↗</span></a></li><li><a class="item" href="#">Patreon<span class="ct">↗</span></a></li></ul></div>
+<form class="sub" data-sub><div class="mono">$ subscribe --monthly</div><p>New articles in your inbox. Unsubscribe anytime.</p><label class="skip" for="em">Email address</label><input id="em" type="email" required placeholder="you@company.com" autocomplete="email"><button class="btn pri">Subscribe</button><div class="msg" data-sub-msg role="status"></div></form>
+</aside>
+<div><div class="top"><span class="crumb">~/<b>writing</b></span><span style="flex:1"></span><span class="mono" id="res" aria-live="polite"></span><button class="btn" data-theme-toggle aria-pressed="false" aria-label="Toggle dark mode"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"></path></svg><span data-theme-label>Light</span></button></div>
+<main id="main" class="content">
+<div class="mfilter" role="group" aria-label="Topics"><button class="item" data-cat="all" aria-pressed="true">All</button><button class="item" data-cat="tech" aria-pressed="false">Tech</button><button class="item" data-cat="leadership" aria-pressed="false">Leadership</button></div>
+<div id="feat"></div>
+<div class="head"><h2>All writing</h2><span class="mono">sorted by date ↓</span></div>
+<div class="grid" id="grid"></div>
+</main>
+<footer class="content mono" style="padding-top:0">© 2026 Sebastian Sigl · <a href="#">Imprint</a></footer></div></div>
+<nav class="mbar" aria-label="Primary mobile"><a href="#" aria-current="page">Writing</a><a href="#">Search</a><a href="#">About</a><a href="#">Subscribe</a></nav>
+<script src="../../ui_kits/website/data.js"></script><script src="shared.js"></script><script>
+HX.theme('hx-b-theme');
+document.querySelectorAll('.side [data-cat] .ct').forEach(s=>s.textContent=HX.count(s.parentNode.dataset.cat));
+const badges=p=>`<span class="badge">${p.category}</span>${HX.media(p).map(m=>`<span class="badge o">${HX.MEDIA_LABEL[m].toLowerCase()}</span>`).join('')}`;
+HX.filterable((ps,{q})=>{document.getElementById('res').textContent=ps.length+' / '+SS_DATA.posts.length;
+const [f,...rest]=ps;
+document.getElementById('feat').innerHTML=f?`<article class="feat"><img src="${f.image}" alt=""><div class="in"><div class="tagrow"><span class="mono">latest</span>${badges(f)}</div><h1><a href="#">${HX.esc(f.title)}</a></h1><p>${HX.esc(f.description)}</p><div class="kv"><span>date <b>${f.date}</b></span><span>read <b>${f.readingTime} min</b></span></div></div></article>`:'<div class="empty">No articles match “'+HX.esc(q)+'”.</div>';
+document.getElementById('grid').innerHTML=rest.map(p=>`<article class="card"><div class="top2">${badges(p)}</div><h3><a href="#">${HX.esc(p.title)}</a></h3><p>${HX.esc(p.description)}</p><div class="kv"><span>${p.date}</span><span>${p.readingTime} min</span></div></article>`).join('');});
+</script></body></html>
