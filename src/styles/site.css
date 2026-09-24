@@ -1,0 +1,18 @@
+/* Site-only rules. The design system owns colours, type, components and layout;
+   this file holds the few things that are specific to this site. */
+
+/* Shiki (Astro's code highlighter) writes an inline background colour on <pre>.
+   The design system wants dark code blocks in both themes, so pin the page
+   colour to the design system token. */
+.ss-prose pre.astro-code {
+	background-color: var(--surface-code) !important;
+}
+
+/* Mermaid diagrams are rendered by astro-mermaid into a figure-less block.
+   Keep them inside the reading measure and give them a hairline frame. */
+.ss-prose .mermaid {
+	border: 1px solid var(--border-default);
+	border-radius: var(--radius-md);
+	padding: 16px;
+	overflow-x: auto;
+}

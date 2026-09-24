@@ -1,0 +1,4 @@
+/* Tailwind entry. Loaded before the design system so design system rules win,
+   and before the utilities so utility classes can still override when needed. */
+@tailwind base;
+@tailwind components;
