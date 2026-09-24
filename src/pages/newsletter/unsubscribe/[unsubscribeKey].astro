@@ -2,41 +2,47 @@
 import Layout from "../../../layouts/Layout.astro";
 import NewsletterApplicationService from "../../../lib/application/NewsletterApplicationService";
 
+export const prerender = false;
 
 const unsubscribeKey = Astro.params.unsubscribeKey as string;
 
 const newsletterApplicationService = new NewsletterApplicationService();
 
 try {
-    await newsletterApplicationService.removeFromNewsletter(unsubscribeKey)
+	await newsletterApplicationService.removeFromNewsletter(unsubscribeKey);
 } catch (error) {
-    console.error("Error while unsubscribing: \n", error);
+	console.error("Error while unsubscribing: \n", error);
 }
-
-
-export const prerender = false;
 ---
-<Layout active="Unknown" title="Unsubscribe">
-    <div
-    class="grow md:flex space-y-8 md:space-y-0 md:space-x-8 pt-12 md:pt-16 pb-16 md:pb-20"
+
+<Layout
+	active={undefined}
+	title="Unsubscribe"
+	description="You have successfully unsubscribed from the Sebastian Sigl newsletter."
 >
-    <div class="grow">
-        <div class="max-w-[700px]">
-            <section>
-                <h1 class="h1 font-aspekta mb-5">Unsubscribe Successful 👋</h1><div
-                    class="text-slate-500 dark:text-slate-400 space-y-8"
-                >
-                    <div class="space-y-4">
-                        <p>You have successfully unsubscribed from my newsletter. Thank you for your support so far! If you have any questions or feedback, feel free to reach out at 
-                            <br /><br />
-                            feedback@sebastiansigl.com
-                            <br /><br />
-                            
-                            or connect with me on my social media pages listed below. I appreciate your time and hope to hear from you again.</p>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-</div>
+	<div class="ss-page ss-page--single">
+		<div class="ss-page__col">
+			<section class="ss-stack-6 ss-page__narrow">
+				<div class="ss-kicker">Newsletter</div>
+				<h1 class="ss-h1">Unsubscribe successful</h1>
+				<div class="ss-alert ss-alert--success" role="status">
+					You won't receive further emails.
+				</div>
+				<div class="ss-muted ss-stack-4">
+					<p>
+						You have successfully unsubscribed from my newsletter. Thank you for
+						your support so far! If you have any questions or feedback, feel free to
+						reach out at <a href="mailto:feedback@sebastiansigl.com"
+							>feedback@sebastiansigl.com</a
+						> or connect with me on my social media pages listed below.
+					</p>
+					<p>I appreciate your time and hope to hear from you again.</p>
+				</div>
+				<div class="ss-row" style="gap:8px">
+					<a class="ss-btn ss-btn--secondary" href="/subscribe">Resubscribe</a>
+					<a class="ss-btn ss-btn--ghost" href="/">Back to articles</a>
+				</div>
+			</section>
+		</div>
+	</div>
 </Layout>

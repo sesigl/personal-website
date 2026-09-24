@@ -1,6 +1,50 @@
 ---
-import Editor from '../../components/admin/Editor';
-export const prerender = false;
+import Editor from "../../components/admin/Editor";
+import "../../styles/style.css";
 
+export const prerender = false;
 ---
-<Editor client:only/>
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>Newsletter admin | Sebastian Sigl</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+		/>
+		<script is:inline>
+			(function () {
+				var stored = localStorage.getItem("dark-mode");
+				var dark =
+					stored === null
+						? window.matchMedia("(prefers-color-scheme: dark)").matches
+						: stored === "true";
+				document.documentElement.setAttribute(
+					"data-theme",
+					dark ? "dark" : "light",
+				);
+				document.documentElement.classList.toggle("dark", dark);
+			})();
+		</script>
+	</head>
+	<body style="min-height:100vh;background:var(--bg-page)">
+		<header class="ss-topbar">
+			<div class="ss-topbar__inner">
+				<a class="ss-brand" href="/">
+					<span class="ss-brand__mark" aria-hidden="true"></span>sebastian.sigl
+				</a>
+				<span class="ss-kicker">/ newsletter</span>
+				<span class="ss-badge ss-badge--neutral">Admin</span>
+				<span style="flex:1"></span>
+				<a class="ss-btn ss-btn--ghost ss-btn--sm" href="/">View site</a>
+			</div>
+		</header>
+		<Editor client:only="react" />
+	</body>
+</html>

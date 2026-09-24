@@ -1,0 +1,25 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+	active={undefined}
+	title="Page not found"
+	description="The page you are looking for doesn't exist or has moved."
+>
+	<div class="ss-page ss-page--single">
+		<div class="ss-page__col">
+			<section class="ss-stack-6 ss-page__narrow">
+				<div class="ss-kicker">Error 404</div>
+				<h1 class="ss-h1">Page not found</h1>
+				<p class="ss-muted">
+					The page you are looking for doesn't exist or has moved.
+				</p>
+				<div class="ss-row" style="gap:8px">
+					<a class="ss-btn ss-btn--primary" href="/">Back to articles</a>
+					<a class="ss-btn ss-btn--secondary" href="/search">Search</a>
+				</div>
+			</section>
+		</div>
+	</div>
+</Layout>
