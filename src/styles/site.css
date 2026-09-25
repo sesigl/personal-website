@@ -41,6 +41,12 @@
 	overflow-wrap: anywhere;
 }
 
+/* Wide tables scroll inside their own block instead of widening the page. */
+.ss-prose table {
+	display: block;
+	overflow-x: auto;
+}
+
 /* Widget proof rows (avatar stack + text) wrap instead of overlapping when the
    text is long and the sidebar is narrow. */
 .ss-widget__foot {

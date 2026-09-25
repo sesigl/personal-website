@@ -31,6 +31,14 @@ export default defineConfig({
     //    mode: 'standalone',
     //}),
     vite: {
+        resolve: {
+            // The Yoopta email editor bundles its own React; keep one copy in
+            // the dev server so the admin island mounts reliably.
+            dedupe: ['react', 'react-dom'],
+        },
+        optimizeDeps: {
+            include: ['@yoopta/email-builder'],
+        },
         ssr: {
             noExternal: ['astro', '@astrojs/mdx', '@astrojs/sitemap', '@astrojs/tailwind', '@astrojs/react']
         }
