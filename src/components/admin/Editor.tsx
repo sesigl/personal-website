@@ -239,7 +239,7 @@ export default function EmailBuilderExample() {
 
     let emailContentWithStyledDivs = emailContentFromPlugin.replace(buttonRegex, (match, buttonContent) => {
         // Define styles for the replacement div
-        const divStyles = `margin-top: .5rem; margin-left: 0px; display: inline-flex; cursor: pointer; justify-content: center; border-radius: 0.375rem; transition: all 0.2s; border-width: 0px; background-color: #EF4444; color: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); padding: 0.5rem 1rem 0.5rem 1rem; font-size: 0.875rem;`;
+        const divStyles = `margin-top: .5rem; margin-left: 0px; display: inline-flex; cursor: pointer; justify-content: center; border-radius: 0.375rem; transition: all 0.2s; border-width: 0px; background-color: #c9461a; color: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); padding: 0.5rem 1rem 0.5rem 1rem; font-size: 0.875rem;`;
 
         // Style the <a> tag inside the button content - simplified regex for debugging
         const styledButtonContent = buttonContent.replace(

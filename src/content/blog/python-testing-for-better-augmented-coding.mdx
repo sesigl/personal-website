@@ -27,7 +27,7 @@ How do we reclaim control? How do we build a safety net strong enough to catch A
 
 The answer lies in elevating our testing strategy from a simple quality check to a core architectural principle. This post outlines how to build that net with tests that are **type-safe**, **behavior-driven**, and **resilient to change**—whether that change comes from a human or a Large Language Model (LLM).
 
-### 1. Test the Contract, Not the Implementation
+## Test the Contract, Not the Implementation
 
 In the rush to ship, it's tempting to write tests that mirror the internal structure of our code. An AI assistant will happily generate these for us, checking that a specific helper function was called or that an internal state variable was set. This creates a hidden trap: the tests become brittle and resist change. A superficial refactor triggers a cascade of failures, even when the user-facing behavior is correct. Your test suite should be a stabilizing force, not an anchor resisting change.
 
@@ -58,7 +58,7 @@ def test_processing_empty_dict_returns_default_result():
 
 **Why it matters:** Behavior-first tests fail only when the contract with the user (or another system) is broken. In a world where an LLM can refactor an entire module in seconds, this resilience is no longer a "nice-to-have." It's essential for survival.
 
-### 2\. Decouple Your Code with Dependency Injection
+## Decouple Your Code with Dependency Injection
 
 AI assistants often produce tightly coupled code—a service class creating its own database client, for example. This makes it impossible to isolate logic for testing without spinning up heavy, slow dependencies like a real database. The solution is to invert control.
 
@@ -90,7 +90,7 @@ class UserService:
 
 **Why it matters:** Dependency Injection (DI) is the gateway to fast, deterministic tests. You can inject a lightweight `FakeDatabase` that runs in-memory, making your test suite orders of magnitude faster. More importantly, it enforces a separation of concerns that makes the codebase easier for both humans and AI agents to reason about and modify safely.
 
-### 3\. Use Test Doubles That Don't Lie
+## Use Test Doubles That Don't Lie
 
 Standard mocks are dangerous because they are too flexible. They will happily accept calls to non-existent methods or with incorrect arguments. When an AI tool refactors a class—renaming a method or changing its signature—a mock-based test may continue to pass silently, masking a critical bug. Your test doubles must honor the contract of the real object.
 
@@ -121,7 +121,7 @@ mock_service.do_work("correct_arg")
 
 **Why it matters:** This is your static defense against API drift. In an AI-augmented codebase where interfaces can change rapidly, `autospec` and type-checked fakes provide a crucial safety rail. They ensure that your tests are validating against reality, preventing time-wasting false positives.
 
-### 4\. Enforce Reality with Static Contracts
+## Enforce Reality with Static Contracts
 
 The biggest risk with AI-generated code is not that it won't compile, but that it won't compose correctly. An LLM might generate a client whose `charge` method takes `amount_cents: int` while your service calls it with `amount: float`. Without an explicit contract, this mismatch only reveals itself at runtime.
 
@@ -156,7 +156,7 @@ def test_checkout_charges_correct_amount() -> None:
 
 **Why it matters:** Protocols and static type checking create a verifiable system of contracts. If an AI refactors a component in a way that breaks the contract, your CI/CD pipeline will fail *before* the code is merged, not after it's deployed.
 
-### 5. Enforce Architectural Boundaries with Automated Rules
+## Enforce Architectural Boundaries with Automated Rules
 
 The most insidious risk in AI-assisted development isn't syntax errors—it's architectural erosion. When an LLM generates a quick fix, it might take the path of least resistance: importing a private `_internal.py` module, creating a circular dependency, or bypassing your carefully designed layer boundaries. These violations accumulate silently until your clean architecture becomes unmaintainable spaghetti.
 
@@ -217,7 +217,7 @@ def test_layered_architecture():
 
 **Why it matters:** In the age of AI-generated code, architectural rules are your guardrails against structural chaos. They prevent the accumulation of technical debt by catching violations the moment they're introduced, whether by human oversight or LLM shortcuts. When your CI fails because someone imported a private module, you've just prevented weeks of future debugging.
 
-### Your Modern Python Quality Stack
+## Your Modern Python Quality Stack
 
 Principles are powerful, but they are only effective when enforced by the right tools. Moving from theory to practice is easier than ever with a modern, integrated toolchain. Here is the state-of-the-art stack to build the safety net we've discussed.
 
@@ -242,7 +242,7 @@ Principles are powerful, but they are only effective when enforced by the right 
 
 These tools work together to create an automated, multi-layered safety net that makes the principles in this article a daily reality for your team. When your CI pipeline includes type checking, architectural validation, and comprehensive test coverage, you can embrace AI-assisted development with confidence, knowing that quality violations will be caught before they reach production.
 
-### Final Thoughts: Code Fast, Ship Safe
+## Final Thoughts: Code Fast, Ship Safe
 
 AI coding assistants are here to stay. They are fundamentally changing the economics of software creation. Resisting them is futile; ignoring their side effects is irresponsible.
 

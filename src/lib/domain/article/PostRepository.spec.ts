@@ -81,6 +81,13 @@ describe("PostRepository", () => {
     expect(posts.every((p) => p.data.category === "tech"));
   });
 
+  it("finds posts by category name in a full-text search", async () => {
+    const posts = await postRepository.findPostByQuery("leadership");
+
+    expect(posts.length).greaterThan(0);
+    expect(posts.every((p) => p.data.category === "leadership")).toBe(true);
+  });
+
   function expectSortedDesc(dates: Date[]) {
     let lastDate: Date | null = null;
     for (let date of dates) {

@@ -203,12 +203,18 @@ export default class PostRepository {
   async findPostByQuery(query: string, isCategoryOnly = false) {
     const posts = await this.findPosts();
 
-    const postKeys = Object.keys(posts[0] ?? {});
-
     const options = {
       includeScore: true,
-      // Search in `author` and in `tags` array
-      keys: isCategoryOnly ? ["data.category"] : postKeys,
+      // Loose enough for typos, strict enough that fuzzy noise does not
+      // outrank the real matches the design system's search reference finds.
+      threshold: 0.3,
+      ignoreLocation: true,
+      // Category-only search is used by the topic links; the full-text search
+      // covers the same fields the design system's search reference does
+      // (title, description, category) plus the slug so keyword URLs match.
+      keys: isCategoryOnly
+        ? ["data.category"]
+        : ["data.title", "data.description", "data.category", "id", "data.slug"],
     };
 
     const fuse = new Fuse(posts, options);

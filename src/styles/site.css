@@ -20,13 +20,17 @@
 	background-color: var(--surface-code) !important;
 }
 
-/* Mermaid diagrams are rendered by astro-mermaid into a figure-less block.
-   Keep them inside the reading measure and give them a hairline frame. */
-.ss-prose .mermaid {
-	border: 1px solid var(--border-default);
-	border-radius: var(--radius-md);
-	padding: 16px;
+/* Mermaid diagrams (astro-mermaid) render into a flex `pre.mermaid`. Show them
+   at their natural size so the labels stay legible; the block scrolls sideways
+   instead of scaling the diagram down to fit. */
+.ss-prose pre.mermaid {
 	overflow-x: auto;
+	justify-content: center;
+	justify-content: safe center;
+}
+.ss-prose pre.mermaid svg {
+	flex-shrink: 0;
+	max-width: none;
 }
 
 /* Long URLs and identifiers in prose must wrap instead of widening the page. */
@@ -37,10 +41,11 @@
 	overflow-wrap: anywhere;
 }
 
-/* Newsletter editor (Yoopta). The email preview is a light surface, so its ink
-   stays dark in both themes; the editor and its portals get their own scoped
-   colour context. The editor can also be wider than a phone screen, so it
-   scrolls inside its wrapper instead of widening the page. */
+/* Newsletter editor (Yoopta). The email preview is a light surface, so the
+   canvas keeps light-theme ink in both themes. The editor chrome (header,
+   segmented control) follows the site theme, and the floating toolbars sit on
+   white, so they keep dark ink. The editor can also be wider than a phone
+   screen, so it scrolls inside its wrapper instead of widening the page. */
 .newsletter-editor {
 	overflow-x: auto;
 	min-width: 0;
@@ -49,7 +54,20 @@
 .newsletter-admin > * {
 	min-width: 0;
 }
-#yoopta-email-builder,
+#yoopta-email-builder > main {
+	color-scheme: light;
+	color: #26251f;
+}
+#yoopta-email-builder > main :is(h1, h2, h3, h4, h5, h6) {
+	color: #0e0e0d;
+}
+#yoopta-email-builder > header [role='group'] button {
+	color: var(--text-muted);
+}
+#yoopta-email-builder > header [role='group'] button[data-state='on'] {
+	background: #fff;
+	color: #26251f;
+}
 .yoopta-toolbar-root,
 .yoopta-action-menu-list,
 .yoopta-link-tool {

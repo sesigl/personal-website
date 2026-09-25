@@ -14,7 +14,13 @@ import node from '@astrojs/node';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://www.sebastiansigl.com',
-    integrations: [mermaid({ theme: 'default', autoTheme: true }), mdx(), sitemap(), tailwind({ applyBaseStyles: false }), react()],
+    integrations: [mermaid({
+        theme: 'default',
+        autoTheme: true,
+        // Show flowcharts at their natural size; the code block scrolls instead
+        // of scaling a wide diagram down until the labels are unreadable.
+        mermaidConfig: { flowchart: { useMaxWidth: false } },
+    }), mdx(), sitemap(), tailwind({ applyBaseStyles: false }), react()],
     adapter: vercel({
         imageService: true,
         webAnalytics: {

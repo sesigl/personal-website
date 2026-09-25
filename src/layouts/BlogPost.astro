@@ -29,9 +29,17 @@ const { Content, headings } = await render({
 	data: data,
 });
 
-const toc = headings
-	.filter((heading) => heading.depth === 2)
-	.map((heading) => ({ id: heading.slug, label: heading.text }));
+// Articles whose sections are marked up as h3 (or that only carry the generated
+// "Footnotes" h2) still get a useful table of contents: fall back to h3.
+const h2Headings = headings.filter((heading) => heading.depth === 2);
+const tocHeadings =
+	h2Headings.length > 1
+		? h2Headings
+		: headings.filter(
+				(heading) => heading.depth === 3 || heading.slug === "footnote-label",
+			);
+
+const toc = tocHeadings.map((heading) => ({ id: heading.slug, label: heading.text }));
 
 const readingTime = data.readingTimeInMinutes ?? 10;
 const postUrl = `${BASE_URL}/posts/${data.slug}`;
