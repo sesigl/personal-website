@@ -192,8 +192,8 @@ const newsletterTemplateDefault = {
         props: {
           href: "https://www.sebastiansigl.com/blog/systems-thinking-in-software-engineering",
           color: "#fff",
-          backgroundColor: "#000",
-          variant: "destructive",
+          backgroundColor: "#c9461a",
+          variant: "default",
           size: "default",
         },
         children: [
@@ -316,8 +316,8 @@ const newsletterTemplateDefault = {
         props: {
           href: "https://www.sebastiansigl.com/blog/beyond-autocomplete-agentic-coding-1",
           color: "#fff",
-          backgroundColor: "#000",
-          variant: "destructive",
+          backgroundColor: "#c9461a",
+          variant: "default",
           size: "default",
         },
         children: [

@@ -41,6 +41,15 @@
 	overflow-wrap: anywhere;
 }
 
+/* Widget proof rows (avatar stack + text) wrap instead of overlapping when the
+   text is long and the sidebar is narrow. */
+.ss-widget__foot {
+	flex-wrap: wrap;
+}
+.ss-widget__foot .ss-avatars {
+	flex-shrink: 0;
+}
+
 /* Newsletter editor (Yoopta). The email preview is a light surface, so the
    canvas keeps light-theme ink in both themes. The editor chrome (header,
    segmented control) follows the site theme, and the floating toolbars sit on
@@ -60,6 +69,12 @@
 }
 #yoopta-email-builder > main :is(h1, h2, h3, h4, h5, h6) {
 	color: #0e0e0d;
+}
+/* The email export turns every CTA into a solid accent button; mirror that in
+   the canvas and the preview so the editor matches the sent email. */
+#yoopta-email-builder main .yoopta-button-plugin button {
+	background-color: var(--accent-solid) !important;
+	color: #fff !important;
 }
 #yoopta-email-builder > header [role='group'] button {
 	color: var(--text-muted);

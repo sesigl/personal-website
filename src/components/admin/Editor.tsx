@@ -90,7 +90,10 @@ async function getYooptaEmailEditorOptions(): Promise<YooptaEmailEditorOptions> 
             img { -ms-interpolation-mode: bicubic; }
             * { font-family: Inconsolata,Arial,sans-serif; }
             table { border-collapse: collapse; border-spacing: 0; }
-            button { border: 2px solid #000; }
+            /* Scope the button rules to email body buttons: the template styles
+               are also injected into the editor page, and the site chrome must
+               keep its own button styling. */
+            button[data-meta-align] { border: 2px solid #000; background-color: #c9461a !important; color: #fff !important; }
           `,
           },
         ],
@@ -164,12 +167,43 @@ export default function EmailBuilderExample() {
     localStorage.setItem(STORAGE_KEYS.CAMPAIGN_TITLE, campaignTitle);
   }, [campaignTitle]);
 
+  // The editor content lives in localStorage; initialise the editor once.
   useEffect(() => {
     getYooptaEmailEditorOptions().then((yooptaEmailEditorOptions) => {
       setEditorOptions(yooptaEmailEditorOptions);
       setEditor(createYooptaEmailEditor(yooptaEmailEditorOptions));
     });
   }, []);
+
+  // Yoopta's Preview tab renders the raw document in a same-origin iframe and
+  // paints CTAs from its own variant palette. The sent email paints every CTA
+  // in the accent colour, so mirror that inside the preview document.
+  useEffect(() => {
+    if (!editor) return;
+    const applyAccentCta = (iframe: HTMLIFrameElement) => {
+      const doc = iframe.contentDocument;
+      if (!doc?.head || doc.getElementById("ss-email-cta")) return;
+      const style = doc.createElement("style");
+      style.id = "ss-email-cta";
+      style.textContent =
+        "button[data-meta-align] { background-color: #c9461a !important; color: #fff !important; }";
+      doc.head.appendChild(style);
+    };
+    const patchPreview = () => {
+      const iframe = document.querySelector<HTMLIFrameElement>("#yoopta-email-builder iframe");
+      if (!iframe) return;
+      if (!iframe.dataset.accentCtaBound) {
+        iframe.dataset.accentCtaBound = "true";
+        iframe.addEventListener("load", () => applyAccentCta(iframe));
+      }
+      applyAccentCta(iframe);
+    };
+    const root = document.getElementById("yoopta-email-builder");
+    const observer = new MutationObserver(patchPreview);
+    observer.observe(root ?? document.body, { childList: true, subtree: true });
+    patchPreview();
+    return () => observer.disconnect();
+  }, [editor]);
 
   // Initialize value from localStorage or use default
   const [value, setValue] = useState<any>(() => {
