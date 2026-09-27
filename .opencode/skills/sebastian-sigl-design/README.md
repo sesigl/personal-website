@@ -19,7 +19,7 @@ The owner asked for a best-in-class, serious rework. Three directions were explo
 - **Structure from hairlines**: a 1200px frame with 1px edges; rows and columns separated by lines, not cards and shadows.
 - **Navigation**: the left icon rail is gone. A sticky top bar carries wordmark, links, ⌘K search, theme and Subscribe; on mobile a labelled bottom tab bar takes over.
 - **Article index**: rows with running number, ISO date, title, description, topic + format tags, reading time. The whole row is the link.
-- **Reading** is the flagship: 2px progress bar, numbered sticky table of contents, 18px/1.72 prose at 68ch, numbered h2s, dark code blocks, companion-format buttons, next-article card, end-of-article signup.
+- **Reading** is the flagship: 2px progress bar, numbered sticky table of contents, 18px/1.72 prose at 68ch, numbered h2s (number in a column beside the heading on wide screens, above it on narrow ones), dark code blocks, companion-format buttons, next-article card, end-of-article signup.
 - Removed: the ±1° tilted cards, the rotated highlighter swash, pill shapes, emoji in headlines.
 - Kept from the rework before this one: AA contrast everywhere, real labels, skip link, visible focus, `aria-current`, 36–60px targets, reduced motion.
 

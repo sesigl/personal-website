@@ -102,9 +102,17 @@ a.ss-tag--muted:hover{color:var(--text-strong)}
 .ss-prose{color:var(--text-body);font-size:var(--fs-prose);line-height:var(--lh-prose);max-width:var(--measure);counter-reset:ss-h2}
 .ss-prose>*+*{margin-top:1.15em}
 .ss-prose p{text-wrap:pretty}
-.ss-prose h2{font-size:clamp(1.375rem,2.4vw,1.625rem);line-height:1.25;letter-spacing:-.02em;margin-top:2.2em;scroll-margin-top:calc(var(--layout-header-h) + 24px)}
+/* Anchor offsets come from html{scroll-padding-top} in base.css, which already
+   clears the sticky header. Headings must not add their own scroll-margin, or
+   the two offsets add up. */
+.ss-prose h2{font-size:clamp(1.375rem,2.4vw,1.625rem);line-height:1.25;letter-spacing:-.02em;margin-top:2.2em}
 .ss-prose h2::before{counter-increment:ss-h2;content:counter(ss-h2,decimal-leading-zero);display:block;font:var(--fw-medium) var(--fs-xs)/1 var(--font-mono);letter-spacing:var(--tracking-caps);color:var(--accent-text);margin-bottom:10px}
-.ss-prose h3{font-size:var(--fs-xl);line-height:1.35;margin-top:1.8em;scroll-margin-top:calc(var(--layout-header-h) + 24px)}
+/* Numbered sections: when the numbered TOC is visible next to the article
+   (above 1100px), the number moves into a column beside the heading — the same
+   row grammar as the TOC and index lists. Below that width it stacks above the
+   heading, so the full measure stays available for the heading text. */
+@media (min-width:1101px){.ss-prose h2{display:grid;grid-template-columns:24px minmax(0,1fr);column-gap:12px;align-items:baseline}.ss-prose h2::before{margin-bottom:0}}
+.ss-prose h3{font-size:var(--fs-xl);line-height:1.35;margin-top:1.8em}
 .ss-prose h2+*,.ss-prose h3+*{margin-top:.6em}
 .ss-prose a{color:var(--text-strong);text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:1.5px;text-underline-offset:3px}
 .ss-prose a:hover{color:var(--accent-text)}
