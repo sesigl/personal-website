@@ -13,9 +13,9 @@ yarn-error.log*
 pnpm-debug.log*
 
 
-# environment variables
-.env
-.env.production
+# environment variables (keep .env.test tracked; it holds fake values only)
+.env*
+!.env.test
 
 # macOS-specific files
 .DS_Store
