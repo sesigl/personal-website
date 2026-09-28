@@ -5,6 +5,8 @@ interface Item {
 	role: string;
 	org: string;
 	logo?: string;
+	/** Logo fills the whole tile, for logos with their own background. */
+	logoFill?: boolean;
 	description?: string;
 }
 
@@ -24,7 +26,7 @@ const { items = [] } = Astro.props;
 				</div>
 				<div>
 					<div class="ss-timeline__head">
-						<div class="ss-timeline__logo">
+						<div class={item.logoFill ? "ss-timeline__logo ss-timeline__logo--fill" : "ss-timeline__logo"}>
 							{item.logo ? <img src={item.logo} alt="" /> : null}
 						</div>
 						<div>
