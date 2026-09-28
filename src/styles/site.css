@@ -20,9 +20,10 @@
 	background-color: var(--surface-code) !important;
 }
 
-/* Mermaid diagrams (astro-mermaid) render into a flex `pre.mermaid`. Show them
-   at their natural size so the labels stay legible; the block scrolls sideways
-   instead of scaling the diagram down to fit. */
+/* Mermaid diagrams (astro-mermaid) render into a flex `pre.mermaid`, and mermaid
+   writes their natural pixel size onto the <svg>. Show them at that natural size
+   on small screens so the labels stay legible; the block scrolls sideways instead
+   of scaling a wide diagram down until the text is unreadable. */
 .ss-prose pre.mermaid {
 	overflow-x: auto;
 	justify-content: center;
@@ -31,6 +32,57 @@
 .ss-prose pre.mermaid svg {
 	flex-shrink: 0;
 	max-width: none;
+}
+
+/* On desktop the numbered TOC takes the left gutter of the article grid and the
+   sidebar takes the right column. An article that has a diagram frees the right
+   column, so the diagram can use the full frame width and sit centred instead of
+   hanging to one side. The outline stays sticky, and fades out while a diagram is
+   on screen (script in BlogPost.astro) so it never sits behind the diagram.
+   Everything sits behind one `:has()` check, so a browser without `:has()` keeps
+   the previous behaviour: sticky side columns, diagram scrolls in the measure. */
+@media (min-width: 1101px) {
+	.ss-page:has(.ss-prose pre.mermaid) .ss-page__sticky {
+		position: static;
+	}
+	/* 40px is the .ss-article column gap; 32px is the .ss-page__col right
+	   padding. The block then spans the frame content width, and the pre's page
+	   background hides the hairline it crosses. */
+	.ss-page:has(.ss-prose pre.mermaid) .ss-prose pre.mermaid {
+		margin-left: calc(-1 * (var(--layout-toc-w) + 40px));
+		margin-right: calc(-1 * (var(--layout-sidebar-w) + 32px));
+		background-color: var(--bg-page);
+	}
+	.ss-page:has(.ss-prose pre.mermaid) .ss-prose pre.mermaid svg {
+		max-width: 100%;
+		height: auto;
+	}
+	/* BlogPost.astro adds this class while a diagram is in the viewport. */
+	.ss-article--diagram-inview .ss-article__toc {
+		opacity: 0;
+		pointer-events: none;
+	}
+}
+
+/* Fade the outline in and out instead of snapping it. */
+.ss-article__toc {
+	transition: opacity var(--duration-base) var(--ease-standard);
+}
+
+/* Tailwind Preflight resets every `ul` and `ol` to `list-style: none`. The design
+   system expects normal markers (it colours `::marker` with the accent), so
+   restore them for article prose. */
+.ss-prose ul {
+	list-style-type: disc;
+}
+.ss-prose ol {
+	list-style-type: decimal;
+}
+.ss-prose li > ul {
+	list-style-type: circle;
+}
+.ss-prose li > ol {
+	list-style-type: lower-alpha;
 }
 
 /* Long URLs and identifiers in prose must wrap instead of widening the page. */

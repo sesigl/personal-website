@@ -31,14 +31,16 @@ const { items = [], title = 'On this page' } = Astro.props;
 }
 
 <script>
-	// Highlight the section that is currently in view.
+	// Highlight the section that is currently in view. Nothing is highlighted
+	// until the reader reaches the first section, so the intro does not mark
+	// chapter one as active while there is still header content above it.
 	document.querySelectorAll<HTMLElement>('.ss-toc').forEach((toc) => {
 		const links = Array.from(toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
 		if (!links.length) return;
 
 		const offset = 120;
 		const onScroll = () => {
-			let current = links[0].hash;
+			let current: string | null = null;
 			for (const link of links) {
 				const target = document.getElementById(link.hash.slice(1));
 				if (target && target.getBoundingClientRect().top - offset <= 0) {

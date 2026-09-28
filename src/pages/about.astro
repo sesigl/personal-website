@@ -4,17 +4,17 @@ import WidgetNewsletter from "../components/WidgetNewsletter.astro";
 import Layout from "../layouts/Layout.astro";
 
 const seoMetaDescriptionForAbout =
-	"Sebastian Sigl is a seasoned software engineer with over 18 years of experience across various domains. In recent years, his focus has been on high-load server-side projects, data- and machine-learning-driven applications, and platform development, where he loves tinkering with infrastructure, containers, and Cloud Native technologies.";
+	"Sebastian Sigl is a Staff Engineer at Adevinta, working on search and relevance for Kleinanzeigen. With over 18 years of experience, he builds high-load systems, data- and machine-learning-driven applications, and platforms, and loves tinkering with infrastructure, containers, and Cloud Native technologies.";
 
 const experience = [
 	{
 		start: "Dec 2022",
 		end: "Present",
-		role: "MTS 2, Software Engineer",
+		role: "Staff Engineer (MTS 2)",
 		org: "Adevinta",
 		logo: "/images/logos/adevinta.png",
 		description:
-			"As a Staff Engineer at Adevinta, I am responsible for creating an exceptional search experience for advertising in Germany, seamlessly integrated into Kleinanzeigen, the largest German marketplace, with millions of monthly active users. Beyond delivering state-of-the-art solutions using the latest technologies, I also lead cross-team initiatives and empower multiple teams to succeed. I am committed to fostering a strong engineering culture within our advertising department, ensuring that our approach meets and exceeds the needs of our users while driving innovation and collaboration across the organization.",
+			"As a Staff Engineer at Adevinta, I work on Kleinanzeigen Search, the search behind Germany's largest marketplace. My focus is entirely on search relevance, and I lead the migration from Elasticsearch to Vespa, from relevance and architecture through to production. Before that, I led multiple teams in advertising, where I built a greenfield retail media system for first-party advertising on Elasticsearch. I also drive our AI-assisted development efforts, building the tooling and training that help engineers move faster, and I serve on our architecture board.",
 	},
 	{
 		start: "Oct 2018",
@@ -23,7 +23,7 @@ const experience = [
 		org: "eBay",
 		logo: "/images/logos/ebay.png",
 		description:
-			"As a senior Full-Stack Engineer and later as a tech-lead for advertising, I had the privilege of leading a talented team in the development of a cutting-edge global advertising configuration management system. With scalability and flexibility at the forefront of our approach, our system empowered yield experts to optimize revenue while maintaining maximum control.",
+			"As a senior Full-Stack Engineer and later tech lead for advertising, I led a team that built a global advertising configuration system. It was the tool yield experts used to manage campaigns and optimize revenue, with the flexibility and control they needed.",
 	},
 	{
 		start: "Oct 2016",
@@ -32,7 +32,7 @@ const experience = [
 		org: "MisterSpex",
 		logo: "/images/logos/mister-spex.png",
 		description:
-			"As a Senior Full-Stack Engineer, I had the privilege of leading a team that spearheaded the evolution of essential features in our system. One of our most noteworthy accomplishments was the creation of an innovative augmented reality application that enabled our customers to virtually try on glasses. This technology played a pivotal role in transforming our primarily brick and mortar business into a digital-first enterprise.",
+			"As a Senior Full-Stack Engineer, I led a team that built an augmented reality try-on so customers could virtually try on glasses. It helped turn a mostly brick-and-mortar retailer into a digital-first business.",
 	},
 	{
 		start: "Oct 2014",
@@ -41,7 +41,7 @@ const experience = [
 		org: "Sopra Steria",
 		logo: "/images/logos/sopra-steria.png",
 		description:
-			"As a Mid-Level Full-Stack Engineer, I had the opportunity to modernize a Java-Swing Application. With great attention to detail, I focused on extracting both frontend and backend components, resulting in a significant improvement in backend performance and frontend user-experience. Through advocating for a test-first mentality, I ensured that the components were not only successfully extracted from a big monolith but were also easier to change and caused fewer defects.",
+			"I modernized a legacy Java Swing application, splitting the frontend and backend out of a large monolith. Backend performance and the frontend experience both improved, and I drove a test-first approach so the extracted components were easier to change and caused fewer defects.",
 	},
 	{
 		start: "Oct 2005",
@@ -50,7 +50,7 @@ const experience = [
 		org: "Self-Employed",
 		logo: "/images/logos/freelance.png",
 		description:
-			"From my teenage years onwards, coding has been my passion. At the age of 17, I took on the ambitious project of creating a Facebook clone for Turkey - a significant accomplishment that marked the beginning of my journey as a developer. Since then, I have continued to hone my skills by working for various companies on a contractual basis, all while pursuing my education.",
+			"From my teenage years onwards, coding has been my passion. At 17 I built a social network for the Turkish market, which marked the start of my journey as a developer. Since then I have kept honing my skills with contract work for various companies, all while pursuing my education.",
 	},
 ];
 ---
@@ -65,9 +65,9 @@ const experience = [
 						Hi. I'm Sebastian <span class="ss-hl">@sesigl</span> Sigl.
 					</h1>
 					<p class="ss-lede" style="max-width:60ch">
-						Staff Engineer at Adevinta, supporting the teams behind search on
-						Kleinanzeigen. 18+ years building high-load systems, data products and
-						platforms.
+						Staff Engineer at Adevinta, working on search and relevance for
+						Kleinanzeigen, Germany's largest marketplace. 18+ years building
+						high-load systems, data products and platforms.
 					</p>
 					<img
 						src="/images/about_v3.png"
@@ -83,15 +83,18 @@ const experience = [
 					</div>
 					<div class="ss-muted ss-stack-4" style="max-width:68ch">
 						<p>
-							I am a seasoned software engineer with over 18 years of experience
-							across various domains. In recent years, my focus has been on
-							high-load server-side projects, data- and machine-learning-driven
-							applications, and platform development, where I love tinkering with
-							infrastructure, containers, and Cloud Native technologies.
+							I am a software engineer with over 18 years of experience across
+							various domains. In recent years my focus has been on search
+							platforms, high-load server-side projects, and data- and
+							machine-learning-driven applications. I love tinkering with
+							infrastructure, containers, and Cloud Native technologies, and
+							lately I spend a lot of my time on how AI changes the way we build
+							software.
 						</p>
 						<p>
-							While there isn't a Wikipedia page about me (sorry folks!), a media
-							bio is available below.
+							I write and speak about search, platform engineering, and
+							AI-assisted development. This site collects what I build and what I
+							learn along the way.
 						</p>
 					</div>
 				</section>
@@ -103,39 +106,35 @@ const experience = [
 					</div>
 					<div class="ss-muted ss-stack-4" style="max-width:68ch">
 						<p>
-							As a Staff Engineer at Adevinta, I have the honor of supporting
-							multiple teams dedicated to delivering the best possible content
-							based on first and third-party data. My primary focus is to support
-							teams providing users with personalized content maximizing relevancy
-							and revenue. I am privileged to empower multiple teams in{" "}
+							As a Staff Engineer at Adevinta, I work on Kleinanzeigen Search,
+							where my focus is entirely on search relevance. I lead its migration
+							from Elasticsearch to Vespa together with multiple teams across{" "}
 							<a href="https://www.kleinanzeigen.de/" target="_blank" rel="noopener noreferrer"
 								>Kleinanzeigen</a
 							>
-							, one of the largest and most renowned classifieds market in the
-							world. Together, we aim to set new standards in user experience and
-							drive impactful innovations within the industry.
+							, one of the largest classifieds marketplaces in the world.
 						</p>
 						<p>
-							As a result of the integration of various classifieds enterprises
-							under <a href="https://www.adevinta.com" target="_blank" rel="noopener noreferrer"
+							Before that, I led multiple teams in advertising, where I built a
+							greenfield retail media system for first-party advertising on
+							Elasticsearch. I also spend a lot of time on AI, making it a
+							practical part of how our engineers build software.
+						</p>
+						<p>
+							Kleinanzeigen is part of{" "}
+							<a href="https://www.adevinta.com" target="_blank" rel="noopener noreferrer"
 								>Adevinta</a
-							>, we have emerged as the preeminent global leader in facilitating
-							environmentally-conscious transactions of second-hand goods.
+							>, which brings several classifieds businesses together. That scale
+							is part of why the search work here is interesting.
 						</p>
 						<p>
-							Technology is my driving force, and I firmly believe that anyone with
-							a passion for it can learn to code. As a fervent advocate of this
-							ideology, my heart lies in <a
-								href="https://twitter.com/sesigl"
+							Technology is my driving force, and I believe anyone with a passion
+							for it can learn to code. That is why I create <a
+								href="https://x.com/sesigl"
 								target="_blank"
-								rel="noopener noreferrer">content creation</a
-							>. It affords me the opportunity to connect with like-minded
-							individuals, stay up-to-date with the latest industry trends, and
-							witness the growth of other tech enthusiasts - often younger
-							generations - as they embark on their journey in this dynamic field.
-							I am deeply inspired by the idea that we all stand on the shoulders
-							of giants, and take great pride in observing the exponential
-							expansion of our community.
+								rel="noopener noreferrer">content</a
+							>: writing, talks, and mentoring for people earlier in their careers.
+							It keeps me sharp and connects me to the wider engineering community.
 						</p>
 					</div>
 				</section>
@@ -155,14 +154,12 @@ const experience = [
 						<h2 id="connect" class="ss-section-title">Let's Connect</h2>
 					</div>
 					<p class="ss-muted" style="max-width:68ch">
-						I'm excited to connect with others via <a
+						I am happy to talk about projects, ideas, or roles. Reach me by <a
 							href="mailto:support@sebastiansigl.com">email</a
-						> and <a href="https://x.com/sesigl" target="_blank" rel="noopener noreferrer"
+						> or on <a href="https://x.com/sesigl" target="_blank" rel="noopener noreferrer"
 							>X</a
-						> to chat about projects and ideas. Currently, I'm not taking on
-						freelance projects, but I am open to hearing about potential
-						opportunities, discussing them with you and then potentially
-						collaborating if it's a good fit.
+						>. I am not taking on freelance work right now, but I am always open
+						to the right conversation.
 					</p>
 				</section>
 			</div>

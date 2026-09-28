@@ -131,3 +131,24 @@ const nextPost =
 		</aside>
 	</div>
 </Layout>
+
+<script>
+	// Fade the sticky outline out while a diagram is on screen, so a full-width
+	// diagram never sits behind it.
+	const article = document.querySelector('.ss-article');
+	const diagrams = document.querySelectorAll('.ss-prose pre.mermaid');
+	if (article && diagrams.length && 'IntersectionObserver' in window) {
+		const visible = new Set<Element>();
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) visible.add(entry.target);
+					else visible.delete(entry.target);
+				}
+				article.classList.toggle('ss-article--diagram-inview', visible.size > 0);
+			},
+			{ rootMargin: '-60px 0px 0px 0px' },
+		);
+		diagrams.forEach((diagram) => observer.observe(diagram));
+	}
+</script>
