@@ -22,15 +22,12 @@ const uid = id ?? `newsletter-form-${Math.random().toString(36).slice(2, 8)}`;
 const emailId = `${uid}-email`;
 
 const inline = layout === 'inline';
-const formStyle = inline
-	? 'display:flex;flex-wrap:wrap;gap:8px;max-width:448px'
-	: 'display:flex;flex-direction:column;gap:8px';
 const buttonCls = inline ? 'ss-btn ss-btn--primary' : 'ss-btn ss-btn--primary ss-btn--sm ss-btn--block';
 ---
 
-<div class:list={['js-newsletter-root', className]}>
-	<form id={uid} style={formStyle}>
-		<div style={inline ? 'flex:1 1 220px' : undefined}>
+<div class:list={['js-newsletter-root', 'ss-subscribe', inline && 'ss-subscribe--inline', className]}>
+	<form id={uid} class="ss-subscribe__form">
+		<div class="ss-subscribe__field">
 			<label class="ss-sr-only" for={emailId}>Your email</label>
 			<input
 				id={emailId}
@@ -46,22 +43,25 @@ const buttonCls = inline ? 'ss-btn ss-btn--primary' : 'ss-btn ss-btn--primary ss
 		<button
 			class={buttonCls}
 			type="submit"
-			style={inline ? 'min-height:40px' : undefined}
 			data-testid={testIds ? 'subscribe-form-button' : undefined}
 		>
 			{buttonLabel}
 		</button>
 	</form>
-	<p
-		class="ss-alert ss-alert--success js-newsletter-success hidden"
+	<div
+		class="ss-subscribe-note js-newsletter-status"
 		role="status"
-		style="justify-content:center"
+		tabindex="-1"
+		hidden
 	>
-		<strong>Thanks for subscribing!</strong>
-	</p>
-	<p class="ss-field__error js-newsletter-error hidden" role="alert">
-		Something went wrong. Please try again.
-	</p>
+		<span class="ss-subscribe-note__mark" aria-hidden="true"></span>
+		<div class="ss-subscribe-note__copy">
+			<p class="ss-subscribe-note__title js-newsletter-status-title">Thanks for subscribing.</p>
+			<p class="ss-subscribe-note__text js-newsletter-status-text">
+				You're on the list. New articles land in your inbox.
+			</p>
+		</div>
+	</div>
 </div>
 
 <script>

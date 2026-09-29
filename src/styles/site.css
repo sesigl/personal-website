@@ -147,3 +147,84 @@
 	color-scheme: light;
 	color: #26251f;
 }
+
+/* Newsletter signup status. The same panel replaces the form after a new
+   subscription and after a duplicate address. A failed submit keeps the form
+   and shows the panel under it. Hairline + signal square, not an admin alert. */
+.ss-subscribe {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+.ss-subscribe--inline {
+	max-width: 448px;
+}
+.ss-subscribe__form {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+.ss-subscribe__form[hidden] {
+	display: none;
+}
+.ss-subscribe--inline .ss-subscribe__form {
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.ss-subscribe--inline .ss-subscribe__form button {
+	min-height: 40px;
+}
+.ss-subscribe__field {
+	min-width: 0;
+}
+.ss-subscribe--inline .ss-subscribe__field {
+	flex: 1 1 220px;
+}
+.ss-subscribe-note {
+	display: flex;
+	gap: 12px;
+	align-items: flex-start;
+	padding: 16px;
+	border: 1px solid var(--border-default);
+	border-radius: var(--radius-md);
+	background: var(--surface-raised);
+}
+.ss-subscribe-note[hidden] {
+	display: none;
+}
+.ss-subscribe-note:focus {
+	outline: none;
+}
+.ss-subscribe-note:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+}
+.ss-subscribe-note__mark {
+	width: 10px;
+	height: 10px;
+	margin-top: 6px;
+	background: var(--accent);
+	flex-shrink: 0;
+}
+.ss-subscribe-note[data-state="error"] .ss-subscribe-note__mark {
+	background: var(--text-faint);
+}
+.ss-subscribe-note__copy {
+	min-width: 0;
+}
+.ss-subscribe-note__title,
+.ss-subscribe-note__text {
+	margin: 0;
+}
+.ss-subscribe-note__title {
+	font: var(--fw-semibold) var(--fs-sm) / var(--lh-sm) var(--font-body);
+	letter-spacing: var(--tracking-body);
+	color: var(--text-strong);
+}
+.ss-subscribe-note__text {
+	margin-top: 2px;
+	font-size: var(--fs-sm);
+	line-height: var(--lh-sm);
+	color: var(--text-muted);
+	overflow-wrap: anywhere;
+}

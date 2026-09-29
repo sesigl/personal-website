@@ -1,4 +1,4 @@
-import { defineAction } from 'astro:actions';
+import { ActionError, defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 import { subscribeToNewsletter } from './subscribeToNewsletter';
 import { sendNewsletter } from './admin/sendNewsletter';
@@ -44,10 +44,16 @@ export const server = {
                 console.error(error);
 
                 if (isDuplicateKeyError(error)) {
-                    throw new Error('Email already exists');
-                } else {
-                    throw new Error('Something went wrong');
+                    throw new ActionError({
+                        code: 'CONFLICT',
+                        message: "You're already subscribed.",
+                    });
                 }
+
+                throw new ActionError({
+                    code: 'INTERNAL_SERVER_ERROR',
+                    message: 'Something went wrong. Please try again.',
+                });
             }
         }
     }),
