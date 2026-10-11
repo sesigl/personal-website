@@ -1,4 +1,5 @@
 ---
+import appIcon from '../images/social/app.svg';
 import spotifyIcon from '../images/social/spotify.svg';
 import podcastIcon from '../images/social/podcast.svg';
 import youtubeIcon from '../images/social/youtube.svg';
@@ -7,6 +8,7 @@ import flashcardsIcon from '../images/social/flashcards.svg';
 import quizIcon from '../images/social/quiz.svg';
 
 interface Props {
+	app?: string;
 	spotify?: string;
 	podcast?: string;
 	youtube?: string;
@@ -15,10 +17,11 @@ interface Props {
 	quiz?: string;
 }
 
-const { spotify, podcast, youtube, infographic, flashcards, quiz } = Astro.props;
+const { app, spotify, podcast, youtube, infographic, flashcards, quiz } = Astro.props;
 
 // External formats open in a new tab; flashcards and quiz are pages of this site.
 const links = [
+	{ href: app, src: appIcon.src, label: 'App', sr: 'Open the interactive app', external: true },
 	{ href: spotify, src: spotifyIcon.src, label: 'Podcast', sr: 'Listen on Spotify', external: true },
 	{ href: podcast, src: podcastIcon.src, label: 'Podcast', sr: 'Listen to the podcast', external: true },
 	{ href: youtube, src: youtubeIcon.src, label: 'Video', sr: 'Watch on YouTube', external: true },

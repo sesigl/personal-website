@@ -59,8 +59,8 @@ categories.forEach((currentCategory) => {
 });
 
 const withMedia = posts.filter((post) => {
-	const { spotifyLink, youtubeLink, infographicLink } = post.data;
-	return Boolean(spotifyLink || youtubeLink || infographicLink);
+	const { appLink, spotifyLink, youtubeLink, infographicLink } = post.data;
+	return Boolean(appLink || spotifyLink || youtubeLink || infographicLink);
 }).length;
 
 const fmtLong = (date: Date) =>
@@ -181,6 +181,7 @@ const projects = [
 										post.data.link
 											? undefined
 											: {
+													app: post.data.appLink,
 													spotify: post.data.spotifyLink,
 													podcast: post.data.podcastLink,
 													youtube: post.data.youtubeLink,

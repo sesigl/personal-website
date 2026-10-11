@@ -20,6 +20,8 @@ const blog = defineCollection({
 		// Any podcast that is not on Spotify, e.g. a NotebookLM audio overview.
 		podcastLink: z.optional(z.string().url()),
 		infographicLink: z.optional(z.string()),
+		// Interactive companion app for the post.
+		appLink: z.optional(z.string().url()),
 		youtubeLink: z.optional(z.string()),
 		category: z.enum(['tech', 'leadership']),
 	}),

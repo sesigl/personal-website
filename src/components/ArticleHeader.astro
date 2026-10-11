@@ -10,6 +10,7 @@ interface Props {
 	readingTime: number;
 	category?: string;
 	url: string;
+	app?: string;
 	spotify?: string;
 	podcast?: string;
 	youtube?: string;
@@ -25,6 +26,7 @@ const {
 	readingTime,
 	category,
 	url,
+	app,
 	spotify,
 	podcast,
 	youtube,
@@ -58,6 +60,7 @@ const longDate = date
 	{description ? <p class="ss-article-head__lede">{description}</p> : null}
 	<div class="ss-article-head__bar">
 		<MediaLinks
+			app={app}
 			spotify={spotify}
 			podcast={podcast}
 			youtube={youtube}

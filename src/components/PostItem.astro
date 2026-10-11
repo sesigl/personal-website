@@ -2,6 +2,7 @@
 import Tag from './Tag.astro';
 
 const MEDIA: Record<string, string> = {
+	app: 'App',
 	spotify: 'Podcast',
 	podcast: 'Podcast',
 	youtube: 'Video',
@@ -18,6 +19,7 @@ interface Props {
 	href: string;
 	category?: string;
 	media?: {
+		app?: string;
 		spotify?: string;
 		podcast?: string;
 		youtube?: string;
