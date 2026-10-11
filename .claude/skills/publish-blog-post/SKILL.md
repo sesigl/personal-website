@@ -73,6 +73,16 @@ When flashcards or a quiz exist, the article also shows a "Test yourself" box at
   ```
 - Files in `public/` are not optimized. Keep them small.
 
+### What to ask in flashcards and quizzes
+
+Test the ideas a reader should keep after a week, not details they can look up.
+
+- Ask about concepts, decisions and reasons: "why", "when", "what do you do first", "what is the risk".
+- Prefer scenarios: "Your team wants to add X. What do you do first?" A scenario tests if the reader can apply the idea.
+- Do not ask the reader to recall exact numbers from the article (dataset sizes, scores, worked-example results). A number is acceptable inside a scenario, or in a small exercise the reader can reason through without the article.
+- One card or question per key idea. Cover the whole article, not one section.
+- Quiz options: keep all options about the same length. The correct option must not be the longest or the most detailed one. Every wrong option must be a real misconception, not a joke.
+
 ### Flashcards (strict format)
 
 ```yaml

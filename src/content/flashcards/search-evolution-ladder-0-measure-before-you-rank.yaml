@@ -1,23 +1,25 @@
 # Flashcards for /blog/search-evolution-ladder-0-measure-before-you-rank
 # Format: see .claude/skills/publish-blog-post/SKILL.md
 cards:
-  - front: What do you define before you change the ranker?
-    back: A query set and which results are relevant. Add intent and persona when the query is ambiguous, as with "Golf".
-  - front: What is offline evaluation?
-    back: Testing the search against a curated set of queries and judged results before the change reaches users.
-  - front: Which dataset does this series use?
-    back: "WANDS: 42,994 products, 480 queries, and 233,448 labels. The app evaluates 246 queries."
-  - front: How are the three labels graded?
-    back: Exact = 3, Partial = 1, Irrelevant = 0. Another product may need a different mapping.
-  - front: What gains do those grades become?
-    back: "`2^grade - 1` gives Exact 7, Partial 1, and Irrelevant 0."
-  - front: Why include relevant products the ranker misses?
-    back: Otherwise a system can look perfect by finding one good result and missing the others.
-  - front: What do DCG 5.35, IDCG 8.13, and NDCG 0.66 mean?
-    back: The returned order scores 5.35. The ideal order scores 8.13. Their ratio is 0.66.
-  - front: What happens when the Exact product is missing?
-    back: NDCG falls to 0.20. The ideal score still includes that product.
-  - front: What is 0.393?
-    back: Chapter 1's mean NDCG@10 over 246 queries. It is the baseline, not a success rate.
-  - front: What else belongs beside the relevance score?
-    back: Weaker queries, MRR, Recall@50, response time, and cost. A first relevant result at rank 2 contributes MRR 0.5.
+  - front: What is the first thing to build before you try to improve a search system?
+    back: A judged test set. Write down a set of real queries and decide which results are relevant for each one. Without it, you cannot tell if a change made search better or worse.
+  - front: What is offline evaluation, and why is it so useful?
+    back: You score the search against judged queries before users see the change. It is fast and repeatable, so you (or an AI agent) can try many ideas and keep only the ones that measurably help.
+  - front: How do you judge an ambiguous query such as "golf"?
+    back: Write down the intent and the persona behind it. A car buyer and a sports fan need different results. Without context, there is no single correct answer to judge against.
+  - front: Why is the weight of "Exact" versus "Partial" a product decision?
+    back: The weights say how much more useful a perfect match is to your users than a close one. Choose them for your domain. The metric follows that choice.
+  - front: Why must the test set include good results that the ranker never returns?
+    back: If you judge only what the ranker shows, a system that returns one good result and misses all others looks perfect. The ideal ranking must contain everything relevant.
+  - front: What does NDCG reward that a simple "count of good results" does not?
+    back: Order. A good result at the top counts more than the same result further down, and the score compares your ranking with the best possible ranking for that query.
+  - front: "Exercise: two rankings contain the same ten products, in a different order. Which metric can tell them apart: NDCG@10 or Recall@50?"
+    back: NDCG@10. Recall only asks which relevant products were found, not where they are. NDCG gives more credit when the good products are near the top.
+  - front: Why can a higher average score still be a bad change?
+    back: The average can hide queries that got much worse. Look at the queries that lost, find what they have in common, and fix or limit the change for them.
+  - front: Which questions do MRR and Recall@50 answer?
+    back: "MRR: how high is the first good result? Recall@50: how many of the good results did we find at all? They can move in opposite directions, so look at both."
+  - front: What must you check next to relevance before you ship a ranking change?
+    back: Response time (the slow requests, such as p95, not only the median) and cost. A more relevant search that is too slow or too expensive still fails users and the business.
+  - front: How do you decide what to improve next in your search?
+    back: Look at the weakest queries and find why they fail. Let those failures choose the next technique, not a fixed list of methods.

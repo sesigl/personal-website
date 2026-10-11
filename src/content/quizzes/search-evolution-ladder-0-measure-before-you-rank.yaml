@@ -1,59 +1,67 @@
 # Quiz for /blog/search-evolution-ladder-0-measure-before-you-rank
 # Format: see .claude/skills/publish-blog-post/SKILL.md
 questions:
-  - question: What is the first step before you improve the ranker?
+  - question: Your team wants to add vector search next sprint. Nobody has measured the current search yet. What do you do first?
     options:
-      - Add a new model
-      - Define queries and judge relevance
-      - Sort every result newest first
-      - Lower the p95 target
-    answer: Define queries and judge relevance
-    explanation: The post starts with a judged query set. The ranker comes after that.
-  - question: What does an ambiguous query need?
+      - Add vector search and watch the click rate after release
+      - Build a set of judged queries and score the current search
+      - Ask users in a survey whether search feels better afterwards
+      - Tune the index for speed so the new feature fits the budget
+    answer: Build a set of judged queries and score the current search
+    explanation: Without a baseline on judged queries, you cannot tell if vector search helps, hurts, or only changes which queries fail.
+  - question: A colleague judges the query "golf" and asks which results count as relevant. What is the best answer?
     options:
-      - Only the matching keyword
-      - Intent and persona
-      - A higher price
-      - More than ten results
-    answer: Intent and persona
-    explanation: '"Golf" has no single truth without context about the user.'
-  - question: Which grade-to-gain mapping does this example use?
+      - Every product whose title contains the word "golf"
+      - The products that users clicked most often for it
+      - Write down the intent and persona first, then judge
+      - Remove it from the test set, because it has no single answer
+    answer: Write down the intent and persona first, then judge
+    explanation: Ambiguous queries are common in real traffic. Add context such as intent and persona so the judgment is consistent and close to what real users want.
+  - question: Your judges labelled only the products that the current ranker returns. What is the risk?
     options:
-      - Exact 3→3, Partial 1→1
-      - Exact 3→7, Partial 1→1, Irrelevant 0→0
-      - Exact 1→7, Partial 0→1
-      - Every label gets gain 1
-    answer: Exact 3→7, Partial 1→1, Irrelevant 0→0
-    explanation: Gain is `2^grade - 1`. The mapping is a choice, not a law.
-  - question: Why can judging only returned products mislead you?
+      - The scores become too low to compare two rankers
+      - A ranker that misses many good products can still look perfect
+      - NDCG can no longer be calculated for those queries
+      - The judges spend too much time on irrelevant products
+    answer: A ranker that misses many good products can still look perfect
+    explanation: The ideal ranking must include relevant products the ranker never shows. Otherwise missing results cost nothing in the score.
+  - question: A new ranker returns the same good products as before, but moves the best one from position 8 to position 1. What happens to NDCG@10?
     options:
-      - The ideal score becomes too large
-      - A system can look perfect while missing relevant products
-      - NDCG cannot be calculated
-      - Recall counts only irrelevant products
-    answer: A system can look perfect while missing relevant products
-    explanation: The answer key must include relevant products the ranker misses.
-  - question: What is NDCG in the four-product example?
-    options: ["5.35", "8.13", "0.66", "0.393"]
-    answer: "0.66"
-    explanation: 5.35 / 8.13 = 0.66. The first two numbers are DCG and IDCG.
-  - question: The Exact product is missing. What happens?
+      - It stays the same, because the same products are found
+      - It goes up, because good results near the top count more
+      - It goes down, because the order changed
+      - It cannot change unless new products appear
+    answer: It goes up, because good results near the top count more
+    explanation: NDCG discounts each result by its position. The same product is worth more at the top than further down.
+  - question: A change raises the mean NDCG, but many queries with more than three words get clearly worse. What is a good next step?
     options:
-      - NDCG rises because fewer results are easier
-      - NDCG falls to 0.20
-      - NDCG stays 1.00
-      - The query is removed
-    answer: NDCG falls to 0.20
-    explanation: The ideal ranking still includes the missing product.
-  - question: What does 0.393 mean?
+      - Ship it, because the mean is what users feel
+      - Reject it, because any query that gets worse is a blocker
+      - Study the losing queries, adapt the change for them, measure again
+      - Remove long queries from the test set, because they are rare
+    answer: Study the losing queries, adapt the change for them, measure again
+    explanation: An average hides losers. For example, you could apply the change only to short queries. Studying the weak queries often shows a pattern you can fix, and that gives an even better result.
+  - question: Users say the right product is somewhere on the page, but rarely the first result. Which metric best tracks this problem?
     options:
-      - 39.3% of searches succeeded
-      - The Chapter 1 mean NDCG@10 over 246 queries
-      - The p95 response time
-      - Recall@50 for one query
-    answer: The Chapter 1 mean NDCG@10 over 246 queries
-    explanation: It is the baseline mean, not a success rate.
-  - question: A first relevant result at rank 2 contributes what to MRR?
-    options: ["0.20", "0.50", "0.66", "2.00"]
-    answer: "0.50"
-    explanation: MRR uses 1 divided by that rank. Relevance, time, and cost still need a joint decision.
+      - Recall@50
+      - Mean reciprocal rank (MRR)
+      - Median response time
+      - Number of indexed products
+    answer: Mean reciprocal rank (MRR)
+    explanation: MRR measures how high the first good result appears. Recall@50 only tells you that good results were found somewhere in the top 50.
+  - question: A reranking model improves relevance a little, but doubles p95 response time and the compute bill. How do you decide?
+    options:
+      - Ship it, because relevance is what users notice first
+      - Drop it, because speed always matters more than relevance
+      - Weigh relevance, latency and cost together, and look for a cheaper way
+      - Check only the median time, because p95 is just outliers
+    answer: Weigh relevance, latency and cost together, and look for a cheaper way
+    explanation: Search is a trade-off. A better ranking that is too slow or too expensive can lose users and money.
+  - question: Why is offline evaluation especially useful when you work with AI coding agents?
+    options:
+      - It lets the agent skip human relevance judgments completely
+      - It gives the agent a repeatable score to test each change against
+      - It makes the agent's code changes run faster in production
+      - It is the only way an agent can read the search index
+    answer: It gives the agent a repeatable score to test each change against
+    explanation: A judged test set turns "does this look better?" into a number an agent can optimize, before any change reaches users.
