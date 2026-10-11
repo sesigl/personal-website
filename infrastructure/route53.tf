@@ -121,6 +121,15 @@ resource "aws_route53_record" "cname_roastmycode" {
   records = ["b1dbe3c13e29928f.vercel-dns-017.com."]
 }
 
+# search evolution explorer subdomain (Vercel project: search-evolution-explorer)
+resource "aws_route53_record" "cname_search_evolution_explorer" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "search-evolution-explorer"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["6ec390d811e1c341.vercel-dns-017.com."]
+}
+
 resource "aws_route53_record" "dev_drill_a" {
   zone_id = aws_route53_zone.dev_drill.zone_id
   name    = ""
