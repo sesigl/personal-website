@@ -1,0 +1,23 @@
+# Flashcards for /blog/search-evolution-ladder-0-measure-before-you-rank
+# Format: see .claude/skills/publish-blog-post/SKILL.md
+cards:
+  - front: What do you define before you change the ranker?
+    back: A query set and which results are relevant. Add intent and persona when the query is ambiguous, as with "Golf".
+  - front: What is offline evaluation?
+    back: Testing the search against a curated set of queries and judged results before the change reaches users.
+  - front: Which dataset does this series use?
+    back: "WANDS: 42,994 products, 480 queries, and 233,448 labels. The app evaluates 246 queries."
+  - front: How are the three labels graded?
+    back: Exact = 3, Partial = 1, Irrelevant = 0. Another product may need a different mapping.
+  - front: What gains do those grades become?
+    back: "`2^grade - 1` gives Exact 7, Partial 1, and Irrelevant 0."
+  - front: Why include relevant products the ranker misses?
+    back: Otherwise a system can look perfect by finding one good result and missing the others.
+  - front: What do DCG 5.35, IDCG 8.13, and NDCG 0.66 mean?
+    back: The returned order scores 5.35. The ideal order scores 8.13. Their ratio is 0.66.
+  - front: What happens when the Exact product is missing?
+    back: NDCG falls to 0.20. The ideal score still includes that product.
+  - front: What is 0.393?
+    back: Chapter 1's mean NDCG@10 over 246 queries. It is the baseline, not a success rate.
+  - front: What else belongs beside the relevance score?
+    back: Weaker queries, MRR, Recall@50, response time, and cost. A first relevant result at rank 2 contributes MRR 0.5.

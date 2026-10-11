@@ -1,0 +1,59 @@
+# Quiz for /blog/search-evolution-ladder-0-measure-before-you-rank
+# Format: see .claude/skills/publish-blog-post/SKILL.md
+questions:
+  - question: What is the first step before you improve the ranker?
+    options:
+      - Add a new model
+      - Define queries and judge relevance
+      - Sort every result newest first
+      - Lower the p95 target
+    answer: Define queries and judge relevance
+    explanation: The post starts with a judged query set. The ranker comes after that.
+  - question: What does an ambiguous query need?
+    options:
+      - Only the matching keyword
+      - Intent and persona
+      - A higher price
+      - More than ten results
+    answer: Intent and persona
+    explanation: '"Golf" has no single truth without context about the user.'
+  - question: Which grade-to-gain mapping does this example use?
+    options:
+      - Exact 3→3, Partial 1→1
+      - Exact 3→7, Partial 1→1, Irrelevant 0→0
+      - Exact 1→7, Partial 0→1
+      - Every label gets gain 1
+    answer: Exact 3→7, Partial 1→1, Irrelevant 0→0
+    explanation: Gain is `2^grade - 1`. The mapping is a choice, not a law.
+  - question: Why can judging only returned products mislead you?
+    options:
+      - The ideal score becomes too large
+      - A system can look perfect while missing relevant products
+      - NDCG cannot be calculated
+      - Recall counts only irrelevant products
+    answer: A system can look perfect while missing relevant products
+    explanation: The answer key must include relevant products the ranker misses.
+  - question: What is NDCG in the four-product example?
+    options: ["5.35", "8.13", "0.66", "0.393"]
+    answer: "0.66"
+    explanation: 5.35 / 8.13 = 0.66. The first two numbers are DCG and IDCG.
+  - question: The Exact product is missing. What happens?
+    options:
+      - NDCG rises because fewer results are easier
+      - NDCG falls to 0.20
+      - NDCG stays 1.00
+      - The query is removed
+    answer: NDCG falls to 0.20
+    explanation: The ideal ranking still includes the missing product.
+  - question: What does 0.393 mean?
+    options:
+      - 39.3% of searches succeeded
+      - The Chapter 1 mean NDCG@10 over 246 queries
+      - The p95 response time
+      - Recall@50 for one query
+    answer: The Chapter 1 mean NDCG@10 over 246 queries
+    explanation: It is the baseline mean, not a success rate.
+  - question: A first relevant result at rank 2 contributes what to MRR?
+    options: ["0.20", "0.50", "0.66", "2.00"]
+    answer: "0.50"
+    explanation: MRR uses 1 divided by that rank. Relevance, time, and cost still need a joint decision.
