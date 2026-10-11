@@ -1,0 +1,64 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import BackButton from "../BackButton.astro";
+import { flashcardsPath, quizPath } from "../../lib/domain/study/StudyRepository";
+import "./study.css";
+
+interface Props {
+	post: CollectionEntry<"blog">;
+	kind: "flashcards" | "quiz";
+	count: number;
+	hasFlashcards: boolean;
+	hasQuiz: boolean;
+}
+
+const { post, kind, count, hasFlashcards, hasQuiz } = Astro.props;
+const articleHref = `/blog/${post.data.slug}`;
+const label = kind === "flashcards" ? "Flashcards" : "Quiz";
+const lede =
+	kind === "flashcards"
+		? `${count} cards on the key ideas of this article. Flip each card, rate yourself, and repeat the ones you still learn. Your progress stays in this browser.`
+		: `${count} questions on the key ideas of this article, each with an explanation.`;
+---
+
+<Layout
+	active="home"
+	title={`${label}: ${post.data.title}`}
+	description={`${label} for "${post.data.title}". ${post.data.description}`}
+	previewImage={post.data.heroImage}
+>
+	<div class="ss-page ss-page--single">
+		<div class="ss-page__col ss-study-page">
+			<div style="margin-bottom:24px"><BackButton href={articleHref} label="Back to the article" /></div>
+			<header class="ss-study-page__head">
+				<p class="ss-kicker" style="margin:0">{label} · Study the article</p>
+				<h1 class="ss-h2 ss-study-page__title">
+					<a href={articleHref} style="color:inherit">{post.data.title}</a>
+				</h1>
+				<p class="ss-muted" style="margin:0">{lede}</p>
+				<nav class="ss-study-page__switch" aria-label="Study formats">
+					{hasFlashcards ? (
+						<a class="ss-btn ss-btn--sm ss-btn--secondary" href={flashcardsPath(post.data.slug)} aria-current={kind === "flashcards" ? "page" : undefined}>
+							Flashcards
+						</a>
+					) : null}
+					{hasQuiz ? (
+						<a class="ss-btn ss-btn--sm ss-btn--secondary" href={quizPath(post.data.slug)} aria-current={kind === "quiz" ? "page" : undefined}>
+							Quiz
+						</a>
+					) : null}
+				</nav>
+			</header>
+			<slot />
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.ss-study-page__switch a[aria-current="page"] {
+		border-color: var(--text-strong);
+		background: var(--text-strong);
+		color: var(--bg-page);
+	}
+</style>

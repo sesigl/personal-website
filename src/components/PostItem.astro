@@ -3,8 +3,11 @@ import Tag from './Tag.astro';
 
 const MEDIA: Record<string, string> = {
 	spotify: 'Podcast',
+	podcast: 'Podcast',
 	youtube: 'Video',
 	infographic: 'Infographic',
+	flashcards: 'Flashcards',
+	quiz: 'Quiz',
 };
 
 interface Props {
@@ -14,7 +17,14 @@ interface Props {
 	readingTime?: number;
 	href: string;
 	category?: string;
-	media?: { spotify?: string; youtube?: string; infographic?: string };
+	media?: {
+		spotify?: string;
+		podcast?: string;
+		youtube?: string;
+		infographic?: string;
+		flashcards?: string;
+		quiz?: string;
+	};
 	index?: number;
 	showTags?: boolean;
 	headingLevel?: 2 | 3;
@@ -35,7 +45,9 @@ const {
 
 const H = `h${headingLevel}` as 'h3';
 const iso = typeof date === 'string' ? date.slice(0, 10) : date.toISOString().slice(0, 10);
-const formats = media ? Object.keys(MEDIA).filter((key) => media[key as keyof typeof media]) : [];
+const formats = media
+	? [...new Set(Object.keys(MEDIA).filter((key) => media[key as keyof typeof media]).map((key) => MEDIA[key]))]
+	: [];
 const cls = ['ss-post', index == null && 'ss-post--no-index'].filter(Boolean).join(' ');
 ---
 
@@ -48,7 +60,7 @@ const cls = ['ss-post', index == null && 'ss-post--no-index'].filter(Boolean).jo
 		{showTags && (category || formats.length) ? (
 			<div class="ss-post__tags">
 				{category ? <Tag href={`/search?q=${category}&categoryOnly`}>{category}</Tag> : null}
-				{formats.map((format) => <Tag variant="muted">{MEDIA[format]}</Tag>)}
+				{formats.map((format) => <Tag variant="muted">{format}</Tag>)}
 			</div>
 		) : null}
 	</div>

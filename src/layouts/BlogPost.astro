@@ -11,6 +11,8 @@ import WidgetNewsletter from "../components/WidgetNewsletter.astro";
 import WidgetPosts from "../components/WidgetPosts.astro";
 import { BASE_URL } from "../consts";
 import PostRepository from "../lib/domain/article/PostRepository";
+import StudyRepository from "../lib/domain/study/StudyRepository";
+import "../components/study/study.css";
 import Layout from "./Layout.astro";
 
 type Props = CollectionEntry<"blog">;
@@ -42,6 +44,7 @@ const tocHeadings =
 const toc = tocHeadings.map((heading) => ({ id: heading.slug, label: heading.text }));
 
 const readingTime = data.readingTimeInMinutes ?? 10;
+const studyLinks = await new StudyRepository().findLinks(data.slug);
 const postUrl = `${BASE_URL}/posts/${data.slug}`;
 
 // "Next article" walks the internal archive only, newest to oldest, and wraps.
@@ -78,13 +81,39 @@ const nextPost =
 						category={data.category}
 						url={postUrl}
 						spotify={data.spotifyLink}
+						podcast={data.podcastLink}
 						youtube={data.youtubeLink}
 						infographic={data.infographicLink}
+						flashcards={studyLinks.flashcards}
+						quiz={studyLinks.quiz}
 					/>
 					<div class="ss-prose">
 						<Content />
 					</div>
 					<footer class="ss-article-foot">
+						{
+							studyLinks.flashcards || studyLinks.quiz ? (
+								<section class="ss-card ss-study-cta" aria-labelledby="study-cta">
+									<div class="ss-kicker">Test yourself</div>
+									<h2 id="study-cta" class="ss-h4">Check what stuck from this article.</h2>
+									<p class="ss-muted">
+										{studyLinks.flashcards && studyLinks.quiz
+											? "Repeat the key ideas with flashcards, then take the short quiz."
+											: studyLinks.flashcards
+												? "Repeat the key ideas with flashcards."
+												: "Take the short quiz on the key ideas."}
+									</p>
+									<div class="ss-study-actions">
+										{studyLinks.flashcards ? (
+											<a class="ss-btn ss-btn--secondary" href={studyLinks.flashcards}>Flashcards</a>
+										) : null}
+										{studyLinks.quiz ? (
+											<a class="ss-btn ss-btn--primary" href={studyLinks.quiz}>Take the quiz</a>
+										) : null}
+									</div>
+								</section>
+							) : null
+						}
 						<div
 							class="ss-row"
 							style="justify-content:space-between;padding-top:20px;border-top:1px solid var(--border-default)"

@@ -1,0 +1,43 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Flashcards from "../../../components/study/Flashcards";
+import StudyPage from "../../../components/study/StudyPage.astro";
+import StudyRepository, { quizPath } from "../../../lib/domain/study/StudyRepository";
+
+export async function getStaticPaths() {
+	const studyRepository = new StudyRepository();
+	const [posts, decks, quizzes] = await Promise.all([
+		getCollection("blog"),
+		studyRepository.findFlashcardDecks(),
+		studyRepository.findQuizzes(),
+	]);
+	studyRepository.assertEveryStudySetHasAPost(decks.map((deck) => deck.id), posts, "flashcards");
+	const quizIds = new Set(quizzes.map((quiz) => quiz.id));
+	return decks.map((deck) => ({
+		params: { slug: deck.id },
+		props: {
+			deck,
+			post: posts.find((post) => post.data.slug === deck.id)!,
+			hasQuiz: quizIds.has(deck.id),
+		},
+	}));
+}
+
+interface Props {
+	deck: CollectionEntry<"flashcards">;
+	post: CollectionEntry<"blog">;
+	hasQuiz: boolean;
+}
+
+const { deck, post, hasQuiz } = Astro.props;
+---
+
+<StudyPage post={post} kind="flashcards" count={deck.data.cards.length} hasFlashcards={true} hasQuiz={hasQuiz}>
+	<Flashcards
+		client:load
+		cards={deck.data.cards}
+		storageKey={`study:flashcards:${deck.id}`}
+		quizHref={hasQuiz ? quizPath(deck.id) : undefined}
+		articleHref={`/blog/${post.data.slug}`}
+	/>
+</StudyPage>
