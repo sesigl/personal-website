@@ -3,6 +3,7 @@ import { defineConfig, envField } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import mermaid from 'astro-mermaid';
+import rehypeLinksInNewTab from './src/markdown/rehypeLinksInNewTab.mjs';
 
 import tailwind from '@astrojs/tailwind';
 
@@ -14,6 +15,9 @@ import node from '@astrojs/node';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://www.sebastiansigl.com',
+    markdown: {
+        rehypePlugins: [rehypeLinksInNewTab],
+    },
     integrations: [mermaid({
         theme: 'default',
         autoTheme: true,
