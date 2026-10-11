@@ -11,8 +11,11 @@ interface Props {
 	category?: string;
 	url: string;
 	spotify?: string;
+	podcast?: string;
 	youtube?: string;
 	infographic?: string;
+	flashcards?: string;
+	quiz?: string;
 }
 
 const {
@@ -23,8 +26,11 @@ const {
 	category,
 	url,
 	spotify,
+	podcast,
 	youtube,
 	infographic,
+	flashcards,
+	quiz,
 } = Astro.props;
 
 const iso = date.toISOString();
@@ -51,7 +57,14 @@ const longDate = date
 	<h1 class="ss-h1 ss-article-head__title">{title}</h1>
 	{description ? <p class="ss-article-head__lede">{description}</p> : null}
 	<div class="ss-article-head__bar">
-		<MediaLinks spotify={spotify} youtube={youtube} infographic={infographic} />
+		<MediaLinks
+			spotify={spotify}
+			podcast={podcast}
+			youtube={youtube}
+			infographic={infographic}
+			flashcards={flashcards}
+			quiz={quiz}
+		/>
 		<ShareButtons url={url} title={title} />
 	</div>
 </header>

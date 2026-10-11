@@ -7,6 +7,7 @@ import TalkCard from "../components/TalkCard.astro";
 import WidgetBook from "../components/WidgetBook.astro";
 import WidgetNewsletter from "../components/WidgetNewsletter.astro";
 import PostRepository from "../lib/domain/article/PostRepository";
+import StudyRepository from "../lib/domain/study/StudyRepository";
 import Layout from "./Layout.astro";
 
 const postRepository = new PostRepository();
@@ -38,6 +39,7 @@ export function getUniqueCategories(
 const { category } = Astro.props;
 
 const posts = await postRepository.findPosts();
+const studyLinksByPostSlug = await new StudyRepository().findLinksByPostSlug();
 
 const categories: Set<string> = posts.reduce((acc, post) => {
 	acc.add(post.data.category);
@@ -180,8 +182,10 @@ const projects = [
 											? undefined
 											: {
 													spotify: post.data.spotifyLink,
+													podcast: post.data.podcastLink,
 													youtube: post.data.youtubeLink,
 													infographic: post.data.infographicLink,
+													...studyLinksByPostSlug.get(post.data.slug),
 												}
 									}
 									index={posts.length - posts.indexOf(post)}

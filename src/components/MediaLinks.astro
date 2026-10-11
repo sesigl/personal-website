@@ -1,36 +1,57 @@
 ---
 import spotifyIcon from '../images/social/spotify.svg';
+import podcastIcon from '../images/social/podcast.svg';
 import youtubeIcon from '../images/social/youtube.svg';
 import infographicIcon from '../images/social/infographic.svg';
+import flashcardsIcon from '../images/social/flashcards.svg';
+import quizIcon from '../images/social/quiz.svg';
 
 interface Props {
 	spotify?: string;
+	podcast?: string;
 	youtube?: string;
 	infographic?: string;
+	flashcards?: string;
+	quiz?: string;
 }
 
-const { spotify, youtube, infographic } = Astro.props;
+const { spotify, podcast, youtube, infographic, flashcards, quiz } = Astro.props;
 
+// External formats open in a new tab; flashcards and quiz are pages of this site.
 const links = [
-	{ href: spotify, src: spotifyIcon.src, label: 'Podcast', sr: 'Listen on Spotify' },
-	{ href: youtube, src: youtubeIcon.src, label: 'Video', sr: 'Watch on YouTube' },
-	{ href: infographic, src: infographicIcon.src, label: 'Infographic', sr: 'Open infographic' },
+	{ href: spotify, src: spotifyIcon.src, label: 'Podcast', sr: 'Listen on Spotify', external: true },
+	{ href: podcast, src: podcastIcon.src, label: 'Podcast', sr: 'Listen to the podcast', external: true },
+	{ href: youtube, src: youtubeIcon.src, label: 'Video', sr: 'Watch on YouTube', external: true },
+	{ href: infographic, src: infographicIcon.src, label: 'Infographic', sr: 'Open infographic', external: true },
+	{ href: flashcards, src: flashcardsIcon.src, label: 'Flashcards', sr: 'Practice with flashcards', external: false },
+	{ href: quiz, src: quizIcon.src, label: 'Quiz', sr: 'Test yourself with a quiz', external: false },
 ].filter((link) => link.href && link.href !== '#');
 ---
 
 {
 	links.length ? (
 		<ul class="ss-media-links" aria-label="Also available as" style="list-style:none;margin:0;padding:0">
-			{links.map((link) => (
-				<li>
-					<a class="ss-media-link" href={link.href} target="_blank" rel="noopener noreferrer">
-						<img src={link.src} alt="" width="16" height="16" />
-						{link.label}
-						<span class="ss-media-link__ext" aria-hidden="true">↗</span>
-						<span class="ss-sr-only"> — {link.sr} (opens in a new tab)</span>
-					</a>
-				</li>
-			))}
+			{links.map((link) =>
+				link.external ? (
+					<li>
+						<a class="ss-media-link" href={link.href} target="_blank" rel="noopener noreferrer">
+							<img src={link.src} alt="" width="16" height="16" />
+							{link.label}
+							<span class="ss-media-link__ext" aria-hidden="true">↗</span>
+							<span class="ss-sr-only"> — {link.sr} (opens in a new tab)</span>
+						</a>
+					</li>
+				) : (
+					<li>
+						<a class="ss-media-link" href={link.href}>
+							<img src={link.src} alt="" width="16" height="16" />
+							{link.label}
+							<span class="ss-media-link__ext" aria-hidden="true">→</span>
+							<span class="ss-sr-only"> — {link.sr}</span>
+						</a>
+					</li>
+				),
+			)}
 		</ul>
 	) : null
 }
