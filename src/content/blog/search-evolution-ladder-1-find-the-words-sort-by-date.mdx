@@ -148,23 +148,11 @@ A simple search is useful because its behavior is easy to explain.
 
 If a relevant listing is missing, we can inspect the matching rule. If it appears too far down, we know the date determined its position. As we add features, we can ask whether they found more useful candidates, improved their order, or did both.
 
-In the [companion app](https://search-evolution-explorer.sebastiansigl.com/), this baseline reaches **NDCG@10 of 0.393** across 246 judged queries. Its posting dates are generated because the WANDS dataset has no real ones, so the score gives us a reproducible starting point. It doesn't tell us how much real marketplace buyers value freshness.
+In the [companion app](https://search-evolution-explorer.sebastiansigl.com/), this baseline reaches **NDCG@10 of 0.393** across 246 judged queries. Its posting dates are generated because the WANDS dataset has no real ones, so the score gives us a reproducible starting point.
 
 And 0.393 doesn't mean that 39.3 percent of users succeeded. As we discussed in Part 0, NDCG measures the quality of an ordering against relevance judgments. Business outcomes still need their own measurement.
 
 The purpose of a baseline is to give the next change something concrete to beat.
-
-## A live catalog keeps changing
-
-So far, we've treated the catalog as if it stands still. A real marketplace doesn't.
-
-Sellers publish listings, change descriptions and mark items as sold. Every change needs to reach the searchable index. Otherwise, a buyer can miss something that just arrived or find something that is no longer available.
-
-This introduces another kind of freshness: how up to date the index is.
-
-Sorting by the newest posting date won't help if new listings take an hour to become searchable. Matching, ordering and index updates each contribute to what buyers actually experience.
-
-We don't need to solve all of that in the first chapter. But we should recognize that building an index is the beginning of an ongoing process.
 
 ## What's next
 

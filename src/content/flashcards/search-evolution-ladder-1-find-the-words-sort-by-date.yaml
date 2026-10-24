@@ -29,5 +29,3 @@ cards:
     back: "The words can appear in unrelated places. A red sofa whose description mentions \"a blue one\" matches \"blue sofa\", and even the exact phrase can be a sofa cover."
   - front: What does a phrase query need that a basic word-to-ID index lacks?
     back: Token positions. Without them, the index cannot tell adjacent words from words far apart.
-  - front: Why does sorting by the newest posting date not guarantee fresh results?
-    back: The index itself must be up to date. If new listings take an hour to become searchable, or sold items stay in the index, buyers still see stale results.
