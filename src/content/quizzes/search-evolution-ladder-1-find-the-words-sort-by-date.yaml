@@ -1,0 +1,71 @@
+# Quiz for /blog/search-evolution-ladder-1-find-the-words-sort-by-date
+# Format: see .claude/skills/publish-blog-post/SKILL.md
+questions:
+  - question: Your catalog grows from a thousand to a million listings and search gets slow. Each request scans every description. What helps first?
+    options:
+      - Build an inverted index before requests arrive
+      - Sort all listings by date once per request
+      - Cache the ten newest listings for every user
+      - Shorten every description to its first sentence
+    answer: Build an inverted index before requests arrive
+    explanation: The index moves the work of reading listings into a preparation step. A request then only looks up its words.
+  - question: "\"blue\" maps to listings {12, 35, 88} and \"sofa\" to {12, 88, 91}. Which listings match a query that requires both words?"
+    options: ["12 and 88", "12, 35, 88 and 91", "35 and 91", "Only 12"]
+    answer: "12 and 88"
+    explanation: Requiring both words means intersecting the postings lists. Only 12 and 88 appear in both. They are candidates, not ranked yet.
+  - question: Many relevant products for "pool floats" contain "float" but not "floats". You tune the ranking formula. What happens to those products?
+    options:
+      - They move up when their recency score is high
+      - They stay missing, because matching excluded them
+      - They appear further down the result list
+      - They appear only for buyers who scroll far enough
+    answer: They stay missing, because matching excluded them
+    explanation: Ranking only orders candidates. To find these products, you have to change matching, for example with stemming.
+  - question: Your search requires every query word. A buyer adds one word that no listing contains. What is the result?
+    options:
+      - The results ignore the unknown word
+      - The results contain no products at all
+      - The results get ranked by the known words only
+      - The results show the newest listings instead
+    answer: The results contain no products at all
+    explanation: The intersection with an empty postings list is empty. Relaxing this rule requires deciding which words may be missing.
+  - question: You replace `1 / (1 + ageInDays)` with another strictly decreasing function of age. Recency is the only score. What changes?
+    options:
+      - The result order, because old listings decay faster
+      - Nothing in the order, apart from ties
+      - The candidate set, because old listings drop out
+      - The NDCG, because the scores have new values
+    answer: Nothing in the order, apart from ties
+    explanation: Any strictly decreasing function sorts the newest first. The shape only matters when you add recency to other scores.
+  - question: A recency ranker shows a weak match posted today above a perfect match from 100 days ago. Why?
+    options:
+      - The perfect match has fewer query words in its text
+      - The ranker has no signal for how well a listing matches
+      - The index stores the older listing in a later list
+      - The perfect match was excluded during matching
+    answer: The ranker has no signal for how well a listing matches
+    explanation: Both listings are candidates. The recency score only knows their age, so the newer one wins.
+  - question: You rank by the last edit date. What can a seller do?
+    options:
+      - Make an old listing look fresh by fixing a typo
+      - Hide a listing from the inverted index entirely
+      - Add synonyms that the index will expand at query time
+      - Lower the NDCG of the competing listings
+    answer: Make an old listing look fresh by fixing a typo
+    explanation: Define which date counts before you tune the formula. Otherwise sellers game freshness with small edits.
+  - question: Why keep a recency search with a low NDCG as a baseline?
+    options:
+      - It shows the share of users who found a product
+      - It is the order every later change is compared against
+      - It is the best ranker for most product queries
+      - It removes the need for judged queries later on
+    answer: It is the order every later change is compared against
+    explanation: A simple, fixed baseline makes it easy to tell whether a change found new candidates, reordered them, or both. NDCG is not a user success rate.
+  - question: "For \"blue sofa\", a red sofa whose description says \"we bought a blue one\" matches. Why?"
+    options:
+      - The index found both words, not how they relate
+      - The ranker scored the red sofa as more relevant
+      - The tokenizer turned "red" into "blue"
+      - The newest listing always matches every query
+    answer: The index found both words, not how they relate
+    explanation: A basic word-to-ID lookup has no positions. A text match is evidence of relevance, not proof of it.

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Find the Words, Then Sort by Date – Infographic | Sebastian Sigl</title>
+	<meta name="description" content="A study sheet for the simplest useful search: build an inverted index, intersect the lists, treat a match as evidence, sort newest first and remember what matching excludes.">
+	<style>
+		:root { --paper: #f4efe4; --ink: #26211b; --muted: #5c5347; --line: #d8ccb8; --accent: #b03c12; }
+		@media (prefers-color-scheme: dark) {
+			:root { --paper: #171715; --ink: #f6f6f3; --muted: #b0aea4; --line: #3a3932; --accent: #f5a47f; }
+		}
+		* { box-sizing: border-box; }
+		body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 "Helvetica Neue", Arial, sans-serif; }
+		main { width: min(1280px, 100%); margin: 0 auto; padding: 24px 16px 48px; }
+		.top { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
+		.kicker { margin: 0; color: var(--muted); font: 600 12px/1.4 ui-monospace, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; }
+		h1 { margin: 4px 0 0; font: 700 clamp(22px, 3vw, 32px)/1.15 Georgia, serif; }
+		a { color: var(--accent); }
+		figure { margin: 0; }
+		img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; background: #f4efe4; }
+		figcaption { margin-top: 8px; color: var(--muted); font-size: 14px; }
+		details { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 16px; }
+		summary { cursor: pointer; font-weight: 600; }
+		ol { padding-left: 20px; }
+		li { margin: 8px 0; }
+	</style>
+</head>
+<body>
+<main>
+	<div class="top">
+		<div>
+			<p class="kicker">The Search Evolution Ladder · Part 1 · Infographic</p>
+			<h1>Find the words, then sort by date</h1>
+		</div>
+		<a href="/blog/search-evolution-ladder-1-find-the-words-sort-by-date">← Read the article</a>
+	</div>
+	<figure>
+		<a href="/infographics/search-evolution-ladder-1-find-the-words-sort-by-date.webp" title="Open the full-size image">
+			<img
+				src="/infographics/search-evolution-ladder-1-find-the-words-sort-by-date.webp"
+				width="1536" height="1024"
+				alt="Study sheet with five panels: build an inverted index ahead of time, look up the query words and intersect the lists, a text match is evidence of relevance but not proof, sort the matches newest first, and matching can exclude good listings. The full text is in the text version below the image.">
+		</a>
+		<figcaption>A study sheet for your first search. Select the image to open it at full size.</figcaption>
+	</figure>
+	<details>
+		<summary>Text version</summary>
+		<ol>
+			<li><strong>Build an inverted index ahead of time.</strong> Read each listing once and record the words it contains. The index maps each word to the listings that have that word.</li>
+			<li><strong>Look up the query words and intersect the lists.</strong> For "modern sofa", get the listings for each word and keep only the ones that appear in both lists. Matches are candidates, not yet ranked.</li>
+			<li><strong>A text match is evidence of relevance, not proof.</strong> A modern sofa and a modern sofa bed both match "modern sofa", but the sofa bed is a different product.</li>
+			<li><strong>Sort the matches by date, newest first.</strong> This helps people who check for new listings, but it doesn't consider how well a listing fits the query.</li>
+			<li><strong>Matching can exclude good listings.</strong> A listing without all the exact query words won't appear, even if it's a great fit: a different word ("couch" vs. "sofa"), a different word ending ("sofas" vs. "sofa") or a related word ("sectional"). No amount of sorting or ranking can bring back a listing that matching excluded.</li>
+		</ol>
+		<p>Matching decides what appears. Ordering decides what comes first.</p>
+	</details>
+</main>
+</body>
+</html>

@@ -5,6 +5,8 @@ description: Publish a blog post on sebastiansigl.com (this Astro repo) with all
 
 # Publish a blog post
 
+For the text itself (voice, structure, examples), follow the `blog-writing-style` skill first.
+
 A post is one MDX file plus optional companion files. Everything in `src/content/blog/` is published on the next deploy. There is no draft flag.
 
 ## 1. Files and locations
