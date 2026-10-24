@@ -1,0 +1,193 @@
+---
+title: "The Search Evolution Ladder, Part 1: Find the Words, Then Sort by Date"
+pubDate: "2026-10-24"
+description: "How an inverted index finds matching listings, why newest first can be a useful starting point, and what this simple search misses."
+category: "tech"
+slug: "search-evolution-ladder-1-find-the-words-sort-by-date"
+readingTimeInMinutes: 6
+appLink: "https://search-evolution-explorer.sebastiansigl.com/"
+heroImage: "/src/images/blog/posts/search-evolution/01-recency/hero.jpg"
+---
+
+![Three index cards on a wooden desk labelled sofa, couch and lamp. Strings run from each card to numbered paper tags with miniature sofas and lamps.](../../images/blog/posts/search-evolution/01-recency/hero.jpg)
+
+In [Part 0](/blog/search-evolution-ladder-0-measure-before-you-rank), we wrote down what a good result means and learned how to measure a ranking with NDCG. Now let's build our first search.
+
+We'll start with something simple: find listings that contain the query words, then put the newest ones first. The poor man's recency search.
+
+That might sound too simple. But imagine checking a marketplace every morning for a used bike. You already looked through yesterday's listings. What you want to know is what arrived overnight. Newest first makes sense.
+
+Now imagine you need a particular replacement part. A listing from three months ago might be exactly right. Something posted five minutes ago might be useless.
+
+Both are reasonable ways to use search. They just ask different things of the result order.
+
+Before we make search smarter, we need to understand two jobs: **which listings get into the results**, and **which ones appear at the top**.
+
+## Find the words without reading everything
+
+Suppose we have a million listings and someone searches for "blue sofa".
+
+We could read every title and description, check whether both words appear, and keep the matches. It would work. But when the next person searches for "wooden table", we'd read the same million listings again.
+
+Most of that work is unnecessary. We already had the text when the seller published the listing. Why not record its words then?
+
+That's the idea behind an **inverted index**[^1].
+
+Normally, we think of a listing as pointing to its words. Listing 12 contains "blue", "sofa" and "comfortable". An inverted index turns that relationship around: each word points to the listings that contain it.
+
+Each collection of listing IDs is called a **postings list**.
+
+For "blue sofa", we look up "blue" and "sofa". If we require both words, we keep the IDs that appear in both lists. This operation is an intersection.
+
+![Four listings: #12 Blue sofa, #35 Blue lamp, #88 Blue corner sofa and #91 Red sofa. The word "blue" points to 12, 35 and 88, and "sofa" points to 12, 88 and 91. For the query "blue sofa", only 12 and 88 appear in both lists.](../../images/blog/posts/search-evolution/01-recency/inverted-index.jpg)
+
+*Look up each word, then keep the listing IDs that appear in both lists. The blue lamp and red sofa each match only one word, so neither survives.*
+
+We haven't decided whether listing 12 is better than listing 88. We only know that both passed our matching rule. They are now **candidates**.
+
+The useful shift is where the work happens. We process the text when we build or update the index. At search time, we look up words and combine their postings lists.
+
+Common words can still produce enormous lists. Production engines use compression and efficient ways to skip through them. When several words are required, starting with the rarest one can reduce the work: it gives us fewer candidates to check against the others.
+
+For now, the main idea is enough. We no longer need to read every listing's text for every search.
+
+## What does "contains the words" actually mean?
+
+Let's stay with "blue sofa".
+
+Before looking anything up, a search engine breaks text into searchable units called **tokens**. In a simple setup, those are roughly words and numbers. We usually normalize them too, for example by turning "Blue" into "blue", so capitalization doesn't prevent a match.
+
+The details matter. Is "second-hand" one token or two? What happens to an apostrophe? Different languages need different decisions[^2]. The query and the listing text need compatible processing, or we can miss matches before the search has really started.
+
+For this first step, we'll keep the rule simple: every query token must appear in the listing.
+
+That sounds sensible, but notice what it does and doesn't promise.
+
+A listing titled "Blue sofa, barely used" passes.
+
+So does a listing titled "Red sofa" with the description "Selling this because we bought a blue one."
+
+Both contain "blue" and "sofa". Only one is a blue sofa.
+
+Finding words doesn't tell us how those words relate to each other. Requiring them to appear next to each other would be a phrase query, which needs information about their positions. An inverted index can store positions, but a basic word-to-ID lookup doesn't.
+
+Even phrase matching only gets us so far. "Blue sofa cover" contains the exact phrase, but the buyer may want the sofa itself.
+
+This is an early lesson in search: **a text match is evidence of relevance, not proof of it.**
+
+## The results we never get to rank
+
+Exact-token matching has another weakness. Buyers and sellers don't always use the same words.
+
+A buyer searches for "couch". The seller wrote "sofa". Both mean the same thing in this situation, but our index has separate entries for the two words. Without a rule connecting them, that listing never becomes a candidate.
+
+Word endings cause similar problems. A search for "pool floats" won't match a listing containing only "pool float" if we treat "floats" and "float" as different tokens.
+
+We can have a catalog full of useful products and still return very little.
+
+Requiring every word makes this more noticeable as queries get longer. Suppose someone searches for "comfortable blue sofa". A seller might describe the color, dimensions and condition without ever using "comfortable". Our rule excludes the listing anyway.
+
+We could accept listings containing only some of the words. But which words are safe to lose?
+
+Dropping "comfortable" might be fine. Dropping "sofa" could fill the results with blue cushions, chairs and curtains.
+
+We'll return to these decisions later in the series. For now, remember this:
+
+**No ranking formula can promote a listing that matching has already excluded.**
+
+When search results are disappointing, it's tempting to adjust the ranking. First check whether the products you wanted were candidates at all.
+
+## Put the newest match first
+
+Once we have our candidates, we need an order.
+
+For newest first, we can sort directly by posting date. That's all we need.
+
+We can also express freshness as a score. One simple formula is:
+
+`recency = 1 / (1 + ageInDays)`
+
+It gives us:
+
+| Listing age | Recency score |
+|---|---|
+| Posted today, age 0 days | 1.00 |
+| 1 day | 0.50 |
+| 10 days | 0.09 |
+| 100 days | 0.01 |
+
+As age increases, the score decreases. Sorting by this score therefore gives the same order as sorting by date, assuming we use the same timestamp precision and tie-breaking rule.
+
+Why introduce a score at all? Later, we may want to combine freshness with other signals. Then the shape of the curve matters: it determines how quickly the freshness contribution fades.
+
+For now, it doesn't change who comes first. Any strictly decreasing function of age gives the same order.
+
+Let's return to our sofas. The barely used blue sofa was posted ten days ago. The red sofa whose description mentions a blue replacement was posted this morning.
+
+Both pass matching. The red one comes first.
+
+Now add a third listing: "Blue couch", also posted today. It could be exactly what the buyer wants, but without "sofa" anywhere in its searchable text, it never reaches the ordering step.
+
+![For the query "blue sofa", the blue couch posted today is excluded because it misses "sofa". The blue sofa from ten days ago and the red sofa posted today, whose description mentions a blue one, both match. Ordered newest first, the red sofa comes first and the blue sofa second.](../../images/blog/posts/search-evolution/01-recency/matching-then-ordering.jpg)
+
+*Matching decides what can appear. Ordering decides what appears first. The blue couch is lost during matching; the older blue sofa loses its position during ordering.*
+
+Our search is doing exactly what we asked. It found the words and sorted by date. We simply haven't given it any way to prefer the listing that better answers the query.
+
+## When newest first is useful
+
+Freshness can be valuable in a marketplace. A buyer watching a busy category may want to discover new listings before someone else buys them. For that person, repeatedly showing an older, highly relevant listing can be frustrating. They've already seen it.
+
+But freshness is still an assumption about what matters to the buyer.
+
+An older listing isn't necessarily worse. A newly posted listing isn't necessarily available. And neither date tells us whether the item is the right model, the right size or even the right kind of product.
+
+This is why newest first can be a useful sorting option without being the best default for every search.
+
+There's also a product decision hiding inside the word "newest": which date do we mean?
+
+The original posting time? The last edit? The last paid bump?
+
+If every edit resets the date, fixing a typo can move a listing above everything posted since it first appeared. That might be intentional, but it should be a deliberate policy. A scoring formula can't make that decision for us.
+
+## Keep a baseline you can learn from
+
+A simple search is useful because its behavior is easy to explain.
+
+If a relevant listing is missing, we can inspect the matching rule. If it appears too far down, we know the date determined its position. As we add features, we can ask whether they found more useful candidates, improved their order, or did both.
+
+In the [companion app](https://search-evolution-explorer.sebastiansigl.com/), this baseline reaches **NDCG@10 of 0.393** across 246 judged queries. Its posting dates are generated because the WANDS dataset has no real ones, so the score gives us a reproducible starting point. It doesn't tell us how much real marketplace buyers value freshness.
+
+And 0.393 doesn't mean that 39.3 percent of users succeeded. As we discussed in Part 0, NDCG measures the quality of an ordering against relevance judgments. Business outcomes still need their own measurement.
+
+The purpose of a baseline is to give the next change something concrete to beat.
+
+## A live catalog keeps changing
+
+So far, we've treated the catalog as if it stands still. A real marketplace doesn't.
+
+Sellers publish listings, change descriptions and mark items as sold. Every change needs to reach the searchable index. Otherwise, a buyer can miss something that just arrived or find something that is no longer available.
+
+This introduces another kind of freshness: how up to date the index is.
+
+Sorting by the newest posting date won't help if new listings take an hour to become searchable. Matching, ordering and index updates each contribute to what buyers actually experience.
+
+We don't need to solve all of that in the first chapter. But we should recognize that building an index is the beginning of an ongoing process.
+
+## What's next
+
+We now have a search that can find words efficiently and put the newest matches first. We also know where it struggles: different vocabulary, word endings and queries that require too much.
+
+The next chapter improves matching. Stemming and synonym expansion help connect what buyers type with what sellers write. We'll keep the order newest first so we can see what the matching change achieves on its own.
+
+If you'd like to explore this baseline, read the [companion app's recency chapter](https://search-evolution-explorer.sebastiansigl.com/level/level-1-recency), then search for ["couch"](https://search-evolution-explorer.sebastiansigl.com/search?q=couch&level=level-1-recency) and ["sofa"](https://search-evolution-explorer.sebastiansigl.com/search?q=sofa&level=level-1-recency). Think about how much overlap you would expect between those searches.
+
+That gap between the words people use and the things they mean is our next problem to solve.
+
+Happy searching :)
+
+---
+
+[^1]: Manning, Raghavan and Schütze explain inverted indexes and postings-list intersection in chapter 1, "Boolean retrieval", of "Introduction to Information Retrieval" (Cambridge University Press, 2008): https://doi.org/10.1017/CBO9780511809071
+
+[^2]: The same book discusses word boundaries, punctuation and language-specific choices in section 2.2.1, "Tokenization".

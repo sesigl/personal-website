@@ -1,0 +1,33 @@
+# Flashcards for /blog/search-evolution-ladder-1-find-the-words-sort-by-date
+# Format: see .claude/skills/publish-blog-post/SKILL.md
+cards:
+  - front: Which two jobs does a search system do that are easy to confuse?
+    back: Finding the products that match a query, and deciding where to show them. Matching builds the candidate set, ranking orders it.
+  - front: What does an inverted index store?
+    back: A dictionary from each word to the IDs of the listings that contain it. Each collection of IDs is a postings list.
+  - front: Why is an inverted index faster than scanning every listing?
+    back: It reads the listings once in a preparation step. A request only looks up its words instead of reading every listing's text again.
+  - front: How do you find listings that contain all query words with an inverted index?
+    back: Intersect the postings lists of the words. Only IDs present in every list survive.
+  - front: Why can no ranking formula fix a product that matching excluded?
+    back: Ranking only orders candidates. A product that never entered the candidate set has no position to move up from.
+  - front: "Exercise: a buyer searches \"couch\" and a seller wrote \"sofa\". What happens with exact-token matching?"
+    back: The buyer never sees the listing, unless it also contains "couch" somewhere. Stemming and synonyms address this gap.
+  - front: What is the risk of requiring every query word?
+    back: One unknown or rare word empties the candidate set, even when the other words would find useful products.
+  - front: Why is relaxing "all words must match" not trivial?
+    back: You must decide which missing words you can tolerate. Dropping a color changes less than dropping the product type.
+  - front: Why does the exact shape of a recency curve not matter when you only sort by recency?
+    back: Any strictly decreasing function of age gives the same newest-first order. The shape matters once recency is combined with other scores.
+  - front: What is the weakness of a pure recency ranker?
+    back: It has no signal for how well a listing answers the query. A weak match posted today beats a perfect match from last quarter.
+  - front: Why keep a weak baseline such as recency search?
+    back: It gives every later change a fixed point to compare against, and its simplicity shows whether a change found new candidates, reordered them, or both.
+  - front: Which date policy question must you answer before tuning a recency formula?
+    back: Which date counts, the original posting, the last edit or a paid bump. With edit time, a seller can make an old listing look fresh by fixing a typo.
+  - front: Why is a text match evidence of relevance but not proof?
+    back: "The words can appear in unrelated places. A red sofa whose description mentions \"a blue one\" matches \"blue sofa\", and even the exact phrase can be a sofa cover."
+  - front: What does a phrase query need that a basic word-to-ID index lacks?
+    back: Token positions. Without them, the index cannot tell adjacent words from words far apart.
+  - front: Why does sorting by the newest posting date not guarantee fresh results?
+    back: The index itself must be up to date. If new listings take an hour to become searchable, or sold items stay in the index, buyers still see stale results.
