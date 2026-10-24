@@ -5,7 +5,7 @@ description: Write or edit a blog post for sebastiansigl.com in Sebastian's voic
 
 # Write a blog post in Sebastian's style
 
-These rules come from the author's own edits to drafts. When he edits a draft, compare it with the previous version and add the new preference here.
+These rules come from the author's own edits to drafts (Search Evolution Ladder parts 0 and 1). When he edits a draft, compare it with the previous version and add the new preference here.
 
 ## Voice
 
@@ -17,6 +17,7 @@ These rules come from the author's own edits to drafts. When he edits a draft, c
 
 ## Structure
 
+- In a series opener, start with your own experience and why you write about it ("Since 2025 I have been working on search systems…").
 - Start with a scenario the reader knows, such as checking a marketplace every morning. Bring in the theory after it.
 - Use one running example through the whole post, such as "blue sofa". Add a new example only when it shows something the running example can't.
 - Give the scale first, so the reader feels the problem: "Consider having millions of listings in our catalog."
@@ -41,6 +42,15 @@ These rules come from the author's own edits to drafts. When he edits a draft, c
 
 ## Links and sources
 
+- Link the companion app where the text first mentions it, not only at the end.
 - Check that every link opens before you publish. If a source site is down, cite a stable identifier such as a DOI instead.
 - Link app pages that do what the text says. If the text says "search for couch", link the search for "couch", not a page without a search box.
 - Keep footnotes short: author, title, chapter or section, and one link.
+
+## Flashcards and quizzes
+
+Follow the format rules in the publish-blog-post skill. For the wording:
+
+- Write full sentences that give the reason and the consequence: "A judged test set. … Without it, you cannot tell if a change made search better or worse."
+- Ask "what do you do first", "why" and "what is the risk", not "what is 0.393" or "which dataset".
+- Update the cards when the post changes. Delete a card whose section is gone, and change an example when the post's running example changes.
