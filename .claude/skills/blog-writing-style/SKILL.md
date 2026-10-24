@@ -5,7 +5,7 @@ description: Write or edit a blog post for sebastiansigl.com in Sebastian's voic
 
 # Write a blog post in Sebastian's style
 
-These rules come from the author's own edits to drafts (Search Evolution Ladder parts 0 and 1). When he edits a draft, compare it with the previous version and add the new preference here.
+These rules come from the author's own edits to drafts (Search Evolution Ladder parts 0 and 1). When the author edits a draft, compare it with the previous version and add the new preference here.
 
 ## Voice
 
