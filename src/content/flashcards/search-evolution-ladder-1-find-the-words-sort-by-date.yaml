@@ -25,3 +25,9 @@ cards:
     back: It gives every later change a fixed point to compare against, and its simplicity shows whether a change found new candidates, reordered them, or both.
   - front: Which date policy question must you answer before tuning a recency formula?
     back: Which date counts, the original posting, the last edit or a paid bump. With edit time, a seller can make an old listing look fresh by fixing a typo.
+  - front: Why is a text match evidence of relevance but not proof?
+    back: "The words can appear in unrelated places. A red sofa whose description mentions \"a blue one\" matches \"blue sofa\", and even the exact phrase can be a sofa cover."
+  - front: What does a phrase query need that a basic word-to-ID index lacks?
+    back: Token positions. Without them, the index cannot tell adjacent words from words far apart.
+  - front: Why does sorting by the newest posting date not guarantee fresh results?
+    back: The index itself must be up to date. If new listings take an hour to become searchable, or sold items stay in the index, buyers still see stale results.

@@ -9,10 +9,10 @@ questions:
       - Shorten every description to its first sentence
     answer: Build an inverted index before requests arrive
     explanation: The index moves the work of reading listings into a preparation step. A request then only looks up its words.
-  - question: "\"sofa\" maps to listings {12, 88} and \"couch\" to {88, 91}. Which listings match a query that requires both words?"
-    options: ["88", "12, 88, 91", "12, 91", "None"]
-    answer: "88"
-    explanation: Requiring both words means intersecting the postings lists. Only 88 appears in both.
+  - question: "\"blue\" maps to listings {12, 35, 88} and \"sofa\" to {12, 88, 91}. Which listings match a query that requires both words?"
+    options: ["12 and 88", "12, 35, 88 and 91", "35 and 91", "Only 12"]
+    answer: "12 and 88"
+    explanation: Requiring both words means intersecting the postings lists. Only 12 and 88 appear in both. They are candidates, not ranked yet.
   - question: Many relevant products for "pool floats" contain "float" but not "floats". You tune the ranking formula. What happens to those products?
     options:
       - They move up when their recency score is high
@@ -61,3 +61,11 @@ questions:
       - It removes the need for judged queries later on
     answer: It is the order every later change is compared against
     explanation: A simple, fixed baseline makes it easy to tell whether a change found new candidates, reordered them, or both. NDCG is not a user success rate.
+  - question: "For \"blue sofa\", a red sofa whose description says \"we bought a blue one\" matches. Why?"
+    options:
+      - The index found both words, not how they relate
+      - The ranker scored the red sofa as more relevant
+      - The tokenizer turned "red" into "blue"
+      - The newest listing always matches every query
+    answer: The index found both words, not how they relate
+    explanation: A basic word-to-ID lookup has no positions. A text match is evidence of relevance, not proof of it.
