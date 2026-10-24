@@ -29,25 +29,23 @@ Suppose we have a million listings and someone searches for "blue sofa".
 
 We could read every title and description, check whether both words appear, and keep the matches. It would work. But when the next person searches for "wooden table", we'd read the same million listings again.
 
-Most of that work is unnecessary. We already had the text when the seller published the listing. Why not record its words then?
+Most of that work is unnecessary. We already had the text when the seller published the listing. We just need to store it in a more efficient way.
 
 That's the idea behind an **inverted index**[^1].
 
-Normally, we think of a listing as pointing to its words. Listing 12 contains "blue", "sofa" and "comfortable". An inverted index turns that relationship around: each word points to the listings that contain it.
+Normally, we think of a listing as pointing to its words. A listing "blue sofa comfortable" contains "blue", "sofa" and "comfortable". An inverted index turns that relationship around: each word points to the listings that contain it.
 
 Each collection of listing IDs is called a **postings list**.
 
-For "blue sofa", we look up "blue" and "sofa". If we require both words, we keep the IDs that appear in both lists. This operation is an intersection.
+For "blue sofa", we look up "blue" and "sofa". So we operate on sets and can use set operations. For example, if we require both words, we keep the IDs that appear in both lists, which is called an intersection.
 
 ![Four listings: #12 Blue sofa, #35 Blue lamp, #88 Blue corner sofa and #91 Red sofa. The word "blue" points to 12, 35 and 88, and "sofa" points to 12, 88 and 91. For the query "blue sofa", only 12 and 88 appear in both lists.](../../images/blog/posts/search-evolution/01-recency/inverted-index.jpg)
 
-*Look up each word, then keep the listing IDs that appear in both lists. The blue lamp and red sofa each match only one word, so neither survives.*
+We haven't decided whether one listing is better than another. We only know that both passed our matching rule. They are now **candidates**.
 
-We haven't decided whether listing 12 is better than listing 88. We only know that both passed our matching rule. They are now **candidates**.
+We benefit if we start separating where the work happens. We process the text when we build or update the index. At search time, we look up words and combine their postings lists.
 
-The useful shift is where the work happens. We process the text when we build or update the index. At search time, we look up words and combine their postings lists.
-
-Common words can still produce enormous lists. Production engines use compression and efficient ways to skip through them. When several words are required, starting with the rarest one can reduce the work: it gives us fewer candidates to check against the others.
+Consider having millions of listings in our catalog. Common words can still produce enormous lists. Production engines use compression and other efficient ways to skip through them. When several words are required, one smart optimization is starting with the rarest one to reduce work: it gives us fewer candidates to check against the others.
 
 For now, the main idea is enough. We no longer need to read every listing's text for every search.
 
@@ -57,21 +55,17 @@ Let's stay with "blue sofa".
 
 Before looking anything up, a search engine breaks text into searchable units called **tokens**. In a simple setup, those are roughly words and numbers. We usually normalize them too, for example by turning "Blue" into "blue", so capitalization doesn't prevent a match.
 
-The details matter. Is "second-hand" one token or two? What happens to an apostrophe? Different languages need different decisions[^2]. The query and the listing text need compatible processing, or we can miss matches before the search has really started.
+The devil is in the detail. Is "second-hand" one token or two? What happens to an apostrophe? Different languages need different decisions[^2]. The query and the listing text need compatible processing, or we can miss matches and our search starts to feel broken.
 
 For this first step, we'll keep the rule simple: every query token must appear in the listing.
 
 That sounds sensible, but notice what it does and doesn't promise.
 
-A listing titled "Blue sofa, barely used" passes.
-
-So does a listing titled "Red sofa" with the description "Selling this because we bought a blue one."
-
-Both contain "blue" and "sofa". Only one is a blue sofa.
+A listing titled "Blue sofa, barely used" cannot go wrong with a simple strict match-all search strategy. But a listing titled "Red sofa" with the description "Selling this because we bought a blue one." causes issues. A search that indexes titles and descriptions matches both on "blue" and "sofa". But only one is a blue sofa.
 
 Finding words doesn't tell us how those words relate to each other. Requiring them to appear next to each other would be a phrase query, which needs information about their positions. An inverted index can store positions, but a basic word-to-ID lookup doesn't.
 
-Even phrase matching only gets us so far. "Blue sofa cover" contains the exact phrase, but the buyer may want the sofa itself.
+Even phrase matching is not a solution that makes all searches work. A listing titled "Blue sofa cover" contains the exact phrase "blue sofa", which is a very different search intent.
 
 This is an early lesson in search: **a text match is evidence of relevance, not proof of it.**
 
@@ -125,8 +119,6 @@ For now, it doesn't change who comes first. Any strictly decreasing function of 
 Let's return to our sofas. The barely used blue sofa was posted ten days ago. The red sofa whose description mentions a blue replacement was posted this morning.
 
 Both pass matching. The red one comes first.
-
-Now add a third listing: "Blue couch", also posted today. It could be exactly what the buyer wants, but without "sofa" anywhere in its searchable text, it never reaches the ordering step.
 
 ![For the query "blue sofa", the blue couch posted today is excluded because it misses "sofa". The blue sofa from ten days ago and the red sofa posted today, whose description mentions a blue one, both match. Ordered newest first, the red sofa comes first and the blue sofa second.](../../images/blog/posts/search-evolution/01-recency/matching-then-ordering.jpg)
 
