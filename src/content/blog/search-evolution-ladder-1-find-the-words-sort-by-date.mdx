@@ -27,11 +27,11 @@ Before we make search smarter, we need to understand two jobs: **which listings 
 
 ## Find the words without reading everything
 
-Suppose we have a million listings and someone searches for "blue sofa".
+Suppose we have millions of listings and someone searches for "blue sofa".
 
-We could read every title and description, check whether both words appear, and keep the matches. It would work. But when the next person searches for "wooden table", we'd read the same million listings again.
+We could read every title and description, check whether both words appear, and keep the matches. It would work. But when the next person searches for "wooden table", we'd read all of them again.
 
-Most of that work is unnecessary. We already had the text when the seller published the listing. We just need to store it in a more efficient way.
+Most of that work is unnecessary. We already had the text when the seller published the listing. We just need to store it in a structure that answers "which listings contain this word?" directly.
 
 That's the idea behind an **inverted index**[^1].
 
@@ -41,15 +41,17 @@ Each collection of listing IDs is called a **postings list**.
 
 For "blue sofa", we look up "blue" and "sofa". So we operate on sets and can use set operations. For example, if we require both words, we keep the IDs that appear in both lists, which is called an intersection.
 
+Postings lists are sorted by listing ID, so we can walk both lists side by side in a single pass. The work grows with the length of the two lists, not with the size of the catalog.
+
 ![Four listings: #12 Blue sofa, #35 Blue lamp, #88 Blue corner sofa and #91 Red sofa. The word "blue" points to 12, 35 and 88, and "sofa" points to 12, 88 and 91. For the query "blue sofa", only 12 and 88 appear in both lists.](../../images/blog/posts/search-evolution/01-recency/inverted-index.jpg)
 
 We haven't decided whether one listing is better than another. We only know that both passed our matching rule. They are now **candidates**.
 
-We benefit if we start separating where the work happens. We process the text when we build or update the index. At search time, we look up words and combine their postings lists.
+This splits the work into two phases. At **index time**, we process the text when a listing is published or updated. At **query time**, we only look up words and combine their postings lists.
 
-Consider having millions of listings in our catalog. Common words can still produce enormous lists. Production engines use compression and other efficient ways to skip through them. When several words are required, one smart optimization is starting with the rarest one to reduce work: it gives us fewer candidates to check against the others.
+Common words can still produce enormous lists. Production engines compress them and store skip pointers to jump over IDs that can't match. When several words are required, one smart optimization is starting with the rarest one to reduce work: it gives us fewer candidates to check against the others[^2].
 
-For now, the main idea is enough. We no longer need to read every listing's text for every search.
+For now, the main idea is enough. We no longer read every listing's text at query time.
 
 ## What does "contains the words" actually mean?
 
@@ -57,15 +59,15 @@ Let's stay with "blue sofa".
 
 Before looking anything up, a search engine breaks text into searchable units called **tokens**. In a simple setup, those are roughly words and numbers. We usually normalize them too, for example by turning "Blue" into "blue", so capitalization doesn't prevent a match.
 
-The devil is in the detail. Is "second-hand" one token or two? What happens to an apostrophe? Different languages need different decisions[^2]. The query and the listing text need compatible processing, or we can miss matches and our search starts to feel broken.
+The devil is in the detail. Is "second-hand" one token or two? What happens to an apostrophe? Different languages need different decisions. German writes "Ecksofa" as one word where English writes "corner sofa", so a search for "sofa" misses it unless we split compounds[^3]. The query and the listing text need compatible processing, or we can miss matches and our search starts to feel broken.
 
 For this first step, we'll keep the rule simple: every query token must appear in the listing.
 
 That sounds sensible, but notice what it does and doesn't promise.
 
-A listing titled "Blue sofa, barely used" cannot go wrong with a simple strict match-all search strategy. But a listing titled "Red sofa" with the description "Selling this because we bought a blue one." causes issues. A search that indexes titles and descriptions matches both on "blue" and "sofa". But only one is a blue sofa.
+A listing titled "Blue sofa, barely used" matches, and for the right reason. A listing titled "Red sofa" with the description "Selling this because we bought a blue one." matches too, because a search that indexes titles and descriptions finds both "blue" and "sofa". But only one is a blue sofa.
 
-Finding words doesn't tell us how those words relate to each other. Requiring them to appear next to each other would be a phrase query, which needs information about their positions. An inverted index can store positions, but a basic word-to-ID lookup doesn't.
+Finding words doesn't tell us how those words relate to each other. Requiring them to appear next to each other would be a phrase query, which needs information about their positions. An inverted index can store positions, but a basic word-to-ID lookup doesn't[^4].
 
 Even phrase matching is not a solution that makes all searches work. A listing titled "Blue sofa cover" contains the exact phrase "blue sofa", which is a very different search intent.
 
@@ -77,11 +79,11 @@ Exact-token matching has another weakness. Buyers and sellers don't always use t
 
 A buyer searches for "couch". The seller wrote "sofa". Both mean the same thing in this situation, but our index has separate entries for the two words. Without a rule connecting them, that listing never becomes a candidate.
 
-Word endings cause similar problems. A search for "pool floats" won't match a listing containing only "pool float" if we treat "floats" and "float" as different tokens.
+Word endings cause similar problems. A search for "blue sofas" won't match a listing containing only "blue sofa" if we treat "sofas" and "sofa" as different tokens.
 
 We can have a catalog full of useful products and still return very little.
 
-Requiring every word makes this more noticeable as queries get longer. Suppose someone searches for "comfortable blue sofa". A seller might describe the color, dimensions and condition without ever using "comfortable". Our rule excludes the listing anyway.
+Requiring every word makes this more noticeable as queries get longer. Suppose someone searches for "comfortable blue sofa". A seller might describe the color, dimensions and condition without ever using "comfortable". Our rule excludes the listing anyway. In the extreme, one query word that no listing contains leaves us with no results at all.
 
 We could accept listings containing only some of the words. But which words are safe to lose?
 
@@ -112,19 +114,19 @@ It gives us:
 | 10 days | 0.09 |
 | 100 days | 0.01 |
 
-As age increases, the score decreases. Sorting by this score therefore gives the same order as sorting by date, assuming we use the same timestamp precision and tie-breaking rule.
+The score falls as age grows, so sorting by it gives the same order as sorting by date. Any strictly decreasing function of age does.
+
+One catch: if we round the age down to whole days, every listing posted today scores 1.00. Sorting by date still tells them apart by the minute. The score doesn't. Then the tie-breaker decides the order, so we should pick it on purpose, for example the exact timestamp first, then the listing ID.
 
 Why introduce a score at all? Later, we may want to combine freshness with other signals. Then the shape of the curve matters: it determines how quickly the freshness contribution fades.
 
-For now, it doesn't change who comes first. Any strictly decreasing function of age gives the same order.
+Let's return to our sofas, now with posting dates. The barely used blue sofa was posted ten days ago. The red sofa whose description mentions a blue replacement was posted this morning. So was a listing titled "Blue couch".
 
-Let's return to our sofas. The barely used blue sofa was posted ten days ago. The red sofa whose description mentions a blue replacement was posted this morning.
-
-Both pass matching. The red one comes first.
+The blue couch never becomes a candidate, because it doesn't contain "sofa". The other two pass matching, and the red one comes first.
 
 ![For the query "blue sofa", the blue couch posted today is excluded because it misses "sofa". The blue sofa from ten days ago and the red sofa posted today, whose description mentions a blue one, both match. Ordered newest first, the red sofa comes first and the blue sofa second.](../../images/blog/posts/search-evolution/01-recency/matching-then-ordering.jpg)
 
-*Matching decides what can appear. Ordering decides what appears first. The blue couch is lost during matching; the older blue sofa loses its position during ordering.*
+The blue couch is lost during matching. The older blue sofa loses its position during ordering.
 
 Our search is doing exactly what we asked. It found the words and sorted by date. We simply haven't given it any way to prefer the listing that better answers the query.
 
@@ -150,17 +152,15 @@ A simple search is useful because its behavior is easy to explain.
 
 If a relevant listing is missing, we can inspect the matching rule. If it appears too far down, we know the date determined its position. As we add features, we can ask whether they found more useful candidates, improved their order, or did both.
 
-In the [companion app](https://search-evolution-explorer.sebastiansigl.com/), this baseline reaches **NDCG@10 of 0.393** across 246 judged queries. Its posting dates are generated because the WANDS dataset has no real ones, so the score gives us a reproducible starting point.
-
-And 0.393 doesn't mean that 39.3 percent of users succeeded. As we discussed in Part 0, NDCG measures the quality of an ordering against relevance judgments. Business outcomes still need their own measurement.
+In the [companion app](https://search-evolution-explorer.sebastiansigl.com/), this baseline reaches **NDCG@10 of 0.393** across 246 judged queries. The WANDS dataset has no dates, so the app derives one per listing from a hash of its ID: an age between 0 and 179 days, the same on every run. That makes the score reproducible. It also means the dates say nothing about relevance. Among the candidates, the order is effectively arbitrary, so 0.393 mostly tells us how good our matching is.
 
 The purpose of a baseline is to give the next change something concrete to beat.
 
 ## What's next
 
-We now have a search that can find words efficiently and put the newest matches first. We also know where it struggles: different vocabulary, word endings and queries that require too much.
+We now have a search that can find words efficiently and put the newest matches first. We also know where it struggles: different words for the same thing, different word endings and query words that a good listing doesn't contain.
 
-The next chapter improves matching. Stemming and synonym expansion help connect what buyers type with what sellers write. We'll keep the order newest first so we can see what the matching change achieves on its own.
+In Part 2, we improve matching. Stemming and synonym expansion help connect what buyers type with what sellers write. We'll keep the order newest first so we can see what the matching change achieves on its own.
 
 If you'd like to explore this baseline, read the [companion app's recency chapter](https://search-evolution-explorer.sebastiansigl.com/level/level-1-recency), then search for ["couch"](https://search-evolution-explorer.sebastiansigl.com/search?q=couch&level=level-1-recency) and ["sofa"](https://search-evolution-explorer.sebastiansigl.com/search?q=sofa&level=level-1-recency). Think about how much overlap you would expect between those searches.
 
@@ -170,6 +170,10 @@ Happy searching :)
 
 ---
 
-[^1]: Manning, Raghavan and Schütze explain inverted indexes and postings-list intersection in chapter 1, "Boolean retrieval", of "Introduction to Information Retrieval" (Cambridge University Press, 2008): https://doi.org/10.1017/CBO9780511809071
+[^1]: Christopher D. Manning, Prabhakar Raghavan, Hinrich Schütze. *Introduction to Information Retrieval*. Cambridge University Press, 2008. §1.2 "A first take at building an inverted index", §1.3 "Processing Boolean queries". https://doi.org/10.1017/CBO9780511809071
 
-[^2]: The same book discusses word boundaries, punctuation and language-specific choices in section 2.2.1, "Tokenization".
+[^2]: Manning et al. 2008, §1.3 "Processing Boolean queries", §2.3 "Faster postings list intersection via skip pointers", ch. 5 "Index compression". https://doi.org/10.1017/CBO9780511809071
+
+[^3]: Manning et al. 2008, §2.2.1 "Tokenization". https://doi.org/10.1017/CBO9780511809071
+
+[^4]: Manning et al. 2008, §2.4.2 "Positional indexes". https://doi.org/10.1017/CBO9780511809071

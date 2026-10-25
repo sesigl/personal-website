@@ -29,9 +29,9 @@ When you build your test dataset, include relevant products that the ranker miss
 
 ## Score the first ten results
 
-If you listen to any search-related conference talk, you will hear about **NDCG@10**, normalized discounted cumulative gain at ten[^3]. It measures the quality of the first ten results against the best possible top ten from the query's judgments. If your product benefits from looking at more results or using different weights, adjust the metric to reflect what your users need.
+If you listen to any search-related conference talk, you will hear about **NDCG@10**, normalized discounted cumulative gain at ten[^2]. It measures the quality of the first ten results against the best possible top ten from the query's judgments. If your product benefits from looking at more results or using different weights, adjust the metric to reflect what your users need.
 
-Let me do the grading "on paper". Start with the grade. Convert it to a gain using `2^grade - 1`. Exact becomes 7, Partial becomes 1 and Irrelevant becomes 0[^2]. This gives us a number to add, but position still matters. An Exact result at rank one should count for more than the same result at rank ten.
+Let me do the grading "on paper". Start with the grade. Convert it to a gain using `2^grade - 1`. Exact becomes 7, Partial becomes 1 and Irrelevant becomes 0[^3]. This gives us a number to add, but position still matters. An Exact result at rank one should count for more than the same result at rank ten.
 
 Discount each gain by dividing it by `log2(rank + 1)`, where `log2` is the base-two logarithm. Rank one keeps its full gain. Rank two keeps about 0.63 of it, rank three keeps 0.5 and rank four keeps about 0.43. Add the discounted gains in the first ten positions. That is discounted cumulative gain, or DCG@10.
 
@@ -80,7 +80,7 @@ The second ranking omits the Exact product. Its ideal score still includes that 
 
 An NDCG score of 1 means the returned top results are as good as the ideal ranking under these judgments.
 
-The app repeats this calculation at ten positions for each of the 246 queries, then takes the mean. Chapter 1's mean score of 0.393 is our baseline, which we will try to improve in the following chapters.
+The app repeats this calculation at ten positions for each of the 246 queries, then takes the mean. In Part 1, newest-first search scores a mean of 0.393. That's our baseline, which we will try to improve in the following parts.
 
 ![Returned order: Irrelevant, Exact, Partial, Partial. Ideal order: Exact, Partial, Partial, Irrelevant. Their discounted gains are 5.35 and 8.13, giving NDCG 0.66.](../../images/blog/posts/search-evolution/00-evaluation/ndcg-worked.png)
 
@@ -104,7 +104,7 @@ At the same time cost matters as well if you run search for millions of users. E
 
 We start by looking up words and sorting matches newest first. Then we handle different word forms, score text matches, correct typos and identify attributes such as brand and product type. We try rules for separating products from accessories, then combine several ranking signals and learn their weights from examples.
 
-The final three steps use models to find products with different wording, read a query and listing together, and learn from the catalog's relevance judgments. I use this order to explain the techniques step by step. For your search system, investigate the weak queries and use what you find to decide what to improve next[^5].
+The final three steps use models to find products with different wording, read a query and listing together, and learn from the catalog's relevance judgments. I use this order to explain the techniques step by step. For your search system, investigate the weak queries and use what you find to decide what to improve next[^4].
 
 You can compare the rankings in the [companion app's evaluation chapter](https://search-evolution-explorer.sebastiansigl.com/level/level-0-evaluation). Start with one query whose results you understand. Check its grades, calculate its score, then use the same process for the changes that follow.
 
@@ -112,10 +112,10 @@ Happy searching :)
 
 ---
 
-[^1]: WANDS is Wayfair's open product-search dataset: Chen et al., "WANDS: Dataset for Product Search Relevance Assessment" (ECIR 2022): https://doi.org/10.1007/978-3-030-99736-6_9 Data and MIT license: https://github.com/wayfair/WANDS
+[^1]: Yan Chen et al. "WANDS: Dataset for Product Search Relevance Assessment". In *ECIR 2022*. https://doi.org/10.1007/978-3-030-99736-6_9 Data (MIT license): https://github.com/wayfair/WANDS
 
-[^2]: The app uses exponential gains, `2^grade - 1`. Other grade mappings and gain functions change the relative reward for Exact and Partial results.
+[^2]: Kalervo Järvelin, Jaana Kekäläinen. "Cumulated gain-based evaluation of IR techniques". *ACM Transactions on Information Systems*, 2002. https://doi.org/10.1145/582415.582418
 
-[^3]: Järvelin and Kekäläinen, "Cumulated gain-based evaluation of IR techniques" (ACM TOIS, 2002): https://doi.org/10.1145/582415.582418
+[^3]: The app uses exponential gains, `2^grade - 1`. Other grade mappings and gain functions change the relative reward for Exact and Partial results.
 
-[^5]: Further reading: Manning, Raghavan and Schütze, "Introduction to Information Retrieval": https://nlp.stanford.edu/IR-book/ and Grainger, Turnbull and Irwin, "AI-Powered Search": https://www.manning.com/books/ai-powered-search
+[^4]: Further reading: Christopher D. Manning, Prabhakar Raghavan, Hinrich Schütze. *Introduction to Information Retrieval*. Cambridge University Press, 2008. https://doi.org/10.1017/CBO9780511809071; Trey Grainger, Doug Turnbull, Max Irwin. *AI-Powered Search*. Manning, 2025. https://www.manning.com/books/ai-powered-search

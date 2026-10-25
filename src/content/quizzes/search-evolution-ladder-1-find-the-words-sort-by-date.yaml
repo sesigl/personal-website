@@ -13,7 +13,7 @@ questions:
     options: ["12 and 88", "12, 35, 88 and 91", "35 and 91", "Only 12"]
     answer: "12 and 88"
     explanation: Requiring both words means intersecting the postings lists. Only 12 and 88 appear in both. They are candidates, not ranked yet.
-  - question: Many relevant products for "pool floats" contain "float" but not "floats". You tune the ranking formula. What happens to those products?
+  - question: Many relevant products for "blue sofas" contain "sofa" but not "sofas". You tune the ranking formula. What happens to those products?
     options:
       - They move up when their recency score is high
       - They stay missing, because matching excluded them
