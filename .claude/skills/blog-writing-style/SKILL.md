@@ -65,7 +65,8 @@ Write footnotes like a staff engineer cites a design doc: exact, verifiable, the
 
 ## Technical precision
 
-- State the condition under which a claim holds, concretely: "if we round age down to whole days, every listing posted today scores 1.00", not "assuming the same timestamp precision".
+- When a claim only holds under a condition, state the condition concretely, or drop the hedge if the condition doesn't matter for the post's point. Don't write a vague "assuming the same timestamp precision".
+- Precision serves the main idea, it doesn't compete with it. Leave out edge cases that pull the reader away from the section's point, such as tie-breaking rules in a post about matching versus ordering.
 - Name the mechanism that makes something cheap or correct: "postings lists are sorted by ID, so we walk both in one pass".
 - Use the established term and then keep using it: "index time" and "query time", not "where the work happens".
 - Before quoting a metric from the companion app, check how the app produces its inputs (synthetic data, fixed clocks, tie-breaking) and say what that means for the number: "the dates say nothing about relevance, so 0.393 mostly tells us how good our matching is".

@@ -116,8 +116,6 @@ It gives us:
 
 The score falls as age grows, so sorting by it gives the same order as sorting by date. Any strictly decreasing function of age does.
 
-One catch: if we round the age down to whole days, every listing posted today scores 1.00. Sorting by date still tells them apart by the minute. The score doesn't. Then the tie-breaker decides the order, so we should pick it on purpose, for example the exact timestamp first, then the listing ID.
-
 Why introduce a score at all? Later, we may want to combine freshness with other signals. Then the shape of the curve matters: it determines how quickly the freshness contribution fades.
 
 Let's return to our sofas, now with posting dates. The barely used blue sofa was posted ten days ago. The red sofa whose description mentions a blue replacement was posted this morning. So was a listing titled "Blue couch".

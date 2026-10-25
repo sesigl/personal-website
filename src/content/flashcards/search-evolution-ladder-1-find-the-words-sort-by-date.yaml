@@ -29,5 +29,3 @@ cards:
     back: "The words can appear in unrelated places. A red sofa whose description mentions \"a blue one\" matches \"blue sofa\", and even the exact phrase can be a sofa cover."
   - front: What does a phrase query need that a basic word-to-ID index lacks?
     back: Token positions. Without them, the index cannot tell adjacent words from words far apart.
-  - front: Why does a recency score in whole days need a deliberate tie-breaker?
-    back: Every listing posted the same day gets the same score. Without a defined tie-breaker, such as the exact timestamp and then the listing ID, their order is arbitrary and can change between runs.
