@@ -45,6 +45,8 @@ These rules come from the author's own edits to drafts (Search Evolution Ladder 
 - Link the companion app where the text first mentions it, not only at the end.
 - Check that every link opens before you publish. If a source site is down, cite a stable identifier such as a DOI instead.
 - Link app pages that do what the text says. If the text says "search for couch", link the search for "couch", not a page without a search box.
+- In the companion app, a chapter is `/search?level=<level-id>` (explanation, examples and a search box). `/level/<level-id>` is the annotated source code of that chapter. Link "the chapter" to the first, "the code" to the second.
+- Check what a link shows, not only that it returns 200: open the page and confirm it is the thing the sentence names. For bot-blocked publisher sites, confirm the DOI's title and authors with `curl -s https://api.crossref.org/works/<doi>`.
 ## Footnotes
 
 Write footnotes like a staff engineer cites a design doc: exact, verifiable, the same format every time.
