@@ -45,7 +45,32 @@ These rules come from the author's own edits to drafts (Search Evolution Ladder 
 - Link the companion app where the text first mentions it, not only at the end.
 - Check that every link opens before you publish. If a source site is down, cite a stable identifier such as a DOI instead.
 - Link app pages that do what the text says. If the text says "search for couch", link the search for "couch", not a page without a search box.
-- Keep footnotes short: author, title, chapter or section, and one link.
+## Footnotes
+
+Write footnotes like a staff engineer cites a design doc: exact, verifiable, the same format every time.
+
+- One footnote backs one claim. Put it right after the claim it supports, not at the start of the topic.
+- Number them `[^1]`, `[^2]`, … in the order they first appear in the text, with no gaps.
+- Use these formats exactly. List up to three authors with full names; for more, write the first author and "et al.".
+  - Book: `Christopher D. Manning, Prabhakar Raghavan, Hinrich Schütze. *Introduction to Information Retrieval*. Cambridge University Press, 2008. §2.2.1 "Tokenization". https://doi.org/10.1017/CBO9780511809071`
+  - Paper: `Kalervo Järvelin, Jaana Kekäläinen. "Cumulated gain-based evaluation of IR techniques". *ACM Transactions on Information Systems*, 2002. https://doi.org/10.1145/582415.582418`
+  - Conference paper: `Yan Chen et al. "WANDS: Dataset for Product Search Relevance Assessment". In *ECIR 2022*. https://doi.org/10.1007/978-3-030-99736-6_9`
+  - Same source again in the same post: `Manning et al. 2008, §2.4.2 "Positional indexes". https://doi.org/10.1017/CBO9780511809071`. Never write "ibid." or "the same book": footnotes get reordered.
+  - A note that explains a choice in the post (not a source) is one plain sentence without a citation.
+  - Several sources for further reading go in one footnote, separated by `;`.
+- Point to the exact place: section number and title (`§1.3 "Processing Boolean queries"`) or chapter (`ch. 5 "Index compression"`), copied from the source's table of contents. Not "chapter 1 explains …".
+- One link per source, a DOI when one exists. A dataset may add its data and license link.
+- Never cite a section, year, page or DOI you haven't checked. Resolve every DOI (`curl -sI https://doi.org/<doi>`). If you can't confirm a detail, leave it out.
+- Cite every technical claim a reader might want to check: data structures, algorithms, optimizations, metric definitions, datasets.
+
+## Technical precision
+
+- State the condition under which a claim holds, concretely: "if we round age down to whole days, every listing posted today scores 1.00", not "assuming the same timestamp precision".
+- Name the mechanism that makes something cheap or correct: "postings lists are sorted by ID, so we walk both in one pass".
+- Use the established term and then keep using it: "index time" and "query time", not "where the work happens".
+- Before quoting a metric from the companion app, check how the app produces its inputs (synthetic data, fixed clocks, tie-breaking) and say what that means for the number: "the dates say nothing about relevance, so 0.393 mostly tells us how good our matching is".
+- Don't overclaim. "Matches, and for the right reason", not "cannot go wrong".
+- Use one name for one thing across the series: "Part 1" for posts, "chapter" only for the app.
 
 ## Flashcards and quizzes
 
