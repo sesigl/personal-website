@@ -41,7 +41,15 @@ export default defineConfig({
             dedupe: ['react', 'react-dom'],
         },
         optimizeDeps: {
-            include: ['@yoopta/email-builder'],
+            include: [
+                'react',
+                'react-dom',
+                'react-dom/client',
+                'react/jsx-runtime',
+                'react/jsx-dev-runtime',
+                '@astrojs/react/client.js',
+                '@yoopta/email-builder',
+            ],
         },
         ssr: {
             noExternal: ['astro', '@astrojs/mdx', '@astrojs/sitemap', '@astrojs/tailwind', '@astrojs/react']
