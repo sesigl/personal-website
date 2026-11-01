@@ -1,0 +1,25 @@
+# Flashcards for /blog/search-evolution-ladder-2-meet-the-seller-halfway-on-words
+# Format: see .claude/skills/publish-blog-post/SKILL.md
+cards:
+  - front: Which three kinds of wording differences prevent exact-token matching from finding relevant listings?
+    back: Spelling or spacing variants ("mid-century" vs. "midcentury"), word endings ("sofas" vs. "sofa"), and synonyms ("couch" vs. "sofa").
+  - front: Why do we remove stop words like "the" and "in" before matching in an all-words-required search?
+    back: Requiring every query word would reject relevant listings just because the seller did not write a common filler word.
+  - front: When can removing stop words hurt search quality?
+    back: When the stop words carry the meaning of a phrase or title, such as "the who" or "to be or not to be".
+  - front: What does stemming do, and why does a stem not need to be a real word?
+    back: "Stemming strips common suffixes so related forms meet on the same token (such as `midcenturi`). It works as long as index and query produce the same stem."
+  - front: "How should a multi-word query like \"blue couch\" combine synonyms?"
+    back: Turn each query word into a group of alternatives (`["blue"]` and `["couch", "sofa"]`). Use OR (union) inside each group and AND (intersection) across groups.
+  - front: "Why must expanding \"couch\" to \"sofa\" not use OR across the whole query \"blue couch\"?"
+    back: Using OR across the whole query would make "blue" optional and return red sofas or any listing that only matches one part of the query.
+  - front: Why does the index store both the original normalized word and its stem at index time?
+    back: Storing both lets the system choose at query time whether to match only the exact word or also its stemmed forms, without rebuilding the index.
+  - front: Why expand synonyms at query time instead of writing them into the index at index time?
+    back: Query-time expansion keeps the index smaller and lets you add, fix or remove a bad synonym rule immediately without reindexing the catalog.
+  - front: What is the cost of expanding synonyms at query time?
+    back: Each query looks up and unions more postings lists, and multi-word synonyms can complicate scoring that depends on word rarity.
+  - front: How can user behavior help you discover synonym candidates, and why is it not enough on its own?
+    back: Query rephrasings and shared clicks suggest related words, but a user who searches "sofa" then "coffee table" changed intent rather than wording. A human still needs to review candidates.
+  - front: Why can turning on stemming and synonyms make some queries worse when sorting is still newest first?
+    back: Broadening matching admits weaker matches (such as "light blue towel" for "bathroom lighting"), and newest-first sorting puts a new weak match above an older exact match.
