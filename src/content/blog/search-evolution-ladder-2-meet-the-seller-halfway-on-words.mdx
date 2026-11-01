@@ -45,22 +45,17 @@ So each query word becomes a **group of alternatives**:
 
 A listing must match **at least one word in every group**. That means we combine postings lists with **OR (union)** inside each group, and combine the groups with **AND (intersection)**. Expanding "couch" does not make "blue" optional.
 
-Let's trace "blue couch" through our four listings from Part 1:
+Suppose our catalog has four listings: a barely used blue sofa, a blue couch, a red sofa whose description mentions buying a blue one, and a blue lamp.
 
-- **#12**: "Blue sofa, barely used" (posted 10 days ago)
-- **#35**: "Blue lamp" (posted today)
-- **#88**: "Blue couch" (posted today)
-- **#91**: "Red sofa", whose description mentions "we bought a blue one" (posted today)
+![For the query "blue couch", Group 1 looks up blue (12, 35, 88, 91) and Group 2 unions couch (88) and sofa (12, 91) into 12, 88, 91. Intersecting both groups keeps the blue sofa, the blue couch and the red sofa, and excludes the blue lamp.](../../images/blog/posts/search-evolution/02-normalization/group-lookup.jpg)
 
-![For the query "blue couch", Group 1 looks up blue (12, 35, 88, 91) and Group 2 unions couch (88) and sofa (12, 91) into 12, 88, 91. Intersecting both groups keeps 12, 88 and 91, and excludes 35 Blue lamp.](../../images/blog/posts/search-evolution/02-normalization/group-lookup.jpg)
-
-In Part 1, "blue couch" only matched `#88`. Now it also finds `#12` (the blue sofa) and `#91`, while still excluding `#35` (the blue lamp).
+In Part 1, a search for "blue couch" matched only the blue couch. With "couch" expanded to include "sofa", the seating group finds the blue couch, the blue sofa and the red sofa. Intersecting that group with "blue" keeps all three, while still excluding the blue lamp.
 
 ## What happens at index time vs. query time?
 
 For the query and the listing to meet, both sides have to speak the same normalized language.
 
-In the [companion app](https://search-evolution-explorer.sebastiansigl.com/), when we build the index (**index time**), we normalize spelling variants and store both the original word and its stem for every listing. A listing that says "sofas" is indexed under both `sofas` and `sofa`.
+When we build the index (**index time**), we normalize spelling variants and store both the original word and its stem for every listing. A listing that says "sofas" is indexed under both `sofas` and `sofa`.
 
 Why store both? Because it lets us decide at **query time** whether stemming is switched on. If stemming is off, a query for "sofa" still matches listings that literally wrote "sofa". If stemming is on, it also reaches listings that wrote "sofas".
 
@@ -88,18 +83,16 @@ Use logs and language models to *propose* synonym candidates, then have a human 
 
 ## More matches, but not every query gets better
 
-When we turn on spelling variants, stemming and synonyms in the [companion app's normalization chapter](https://search-evolution-explorer.sebastiansigl.com/search?level=level-1-normalization), mean **NDCG@10 rises from 0.393 to 0.421** across our 246 evaluated queries. Recall@50 increases from 0.091 to 0.104, and MRR from 0.645 to 0.700.
+When we turn on spelling variants, stemming and synonyms in the [companion app](https://search-evolution-explorer.sebastiansigl.com/), mean **NDCG@10 rises from 0.393 to 0.421** across the 246 judged queries.
 
-On average, meeting the seller halfway helps. Queries like "mid century modern", which scored 0.000 in Part 1 because sellers wrote "mid-century" and the index normalized it into a single stem, now find matching listings and reach 0.327.
+On average, meeting the seller halfway helps. Queries like "mid century modern", which found nothing when the query and index treated the hyphen differently, now find matching listings.
 
-But look beneath the average: **38 queries improve, and 23 get worse**.
+Still, some queries get worse. Why would finding more words hurt a search? Two reasons show up right away:
 
-Why would finding more words make a search *worse*? Two reasons show up right away:
-
-1. **Stemming and synonyms can merge different meanings.** Suppose someone searches for "bathroom lighting". Stemming turns "lighting" into `light`. That matches a `#104 Bathroom ceiling light`, which we want, but it also matches a `#219 Light blue bathroom towel`. Outside this example, an English stemmer will also merge "universe" and "universal" into `univers`[^2].
+1. **Stemming and synonyms can merge different meanings.** Suppose someone searches for "bathroom lighting". Stemming turns "lighting" into `light`. That matches a bathroom ceiling light, which we want, but it also matches a light blue bathroom towel. Outside this example, an English stemmer will also merge "universe" and "universal" into `univers`[^2].
 2. **Our ordering is still newest first.** Whenever we broaden matching, we admit more candidates into the pool. Some are the exact products we missed in Part 1. Others are weak matches that only share a stem or a loose synonym. Because we still sort purely by date, a weak new match posted today jumps straight above a relevant listing posted ten days ago.
 
-![For the query "bathroom lighting", stemming turns "lighting" into "light". Both #104 Bathroom ceiling light (10 days ago) and #219 Light blue bathroom towel (Today) match. Sorted newest first, the towel ranks #1 above the ceiling light at #2.](../../images/blog/posts/search-evolution/02-normalization/recall-vs-recency.jpg)
+![For the query "bathroom lighting", stemming turns "lighting" into "light". Both the bathroom ceiling light from ten days ago and the light blue bathroom towel posted today match. Sorted newest first, the towel comes first and the ceiling light second.](../../images/blog/posts/search-evolution/02-normalization/recall-vs-recency.jpg)
 
 **Broadening matching increases recall, but without a relevance score it can push good results down.**
 

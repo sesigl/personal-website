@@ -49,11 +49,11 @@ questions:
       - The synonym table only accepts tokens that end with the letter `i`
     answer: A stem only needs to be a shared identifier that both query and listing map to
     explanation: Stemming strips suffixes by rule rather than looking up dictionary headwords. As long as query and document analysis produce the same token, they match.
-  - question: "When you turn on variants, stemming and synonyms in Part 2, mean NDCG@10 rises from 0.393 to 0.421, yet 23 of the 246 queries get worse. What lesson does that show?"
+  - question: "You turn on stemming and synonyms in a search that sorts newest first. Mean NDCG rises, yet several queries get worse. What explains the drop?"
     options:
       - Relaxing matching increases recall, but without relevance ranking new false positives can push good results down
       - Stemming and synonyms always lower recall when combined with an inverted index
       - Any change that makes even one query worse should be rolled back immediately
-      - Mean NDCG@10 only measures ordering and ignores newly matched candidates
+      - Mean NDCG only measures ordering and ignores newly matched candidates
     answer: Relaxing matching increases recall, but without relevance ranking new false positives can push good results down
     explanation: Broadening matching brings in missing relevant products (raising the mean), but it also admits weaker matches that can take top positions under pure recency sorting.
