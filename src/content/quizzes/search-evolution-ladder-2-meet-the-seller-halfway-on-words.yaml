@@ -1,0 +1,59 @@
+# Quiz for /blog/search-evolution-ladder-2-meet-the-seller-halfway-on-words
+# Format: see .claude/skills/publish-blog-post/SKILL.md
+questions:
+  - question: "Sellers write \"mid-century\" in titles, which the index normalizes to `midcentury`. A buyer searches \"mid century\" without variant normalization on the query. What happens?"
+    options:
+      - The query looks up `mid` and `century` separately and misses `midcentury`
+      - The stemmer automatically merges `mid` and `century` into one token
+      - The synonym table connects `mid` and `century` at query time
+      - The listing still matches, but its recency score is cut in half
+    answer: The query looks up `mid` and `century` separately and misses `midcentury`
+    explanation: Index-time and query-time analysis must agree. If the index collapsed the two words into `midcentury`, a query that leaves them separate will not match that token.
+  - question: "You expand \"couch\" to `[\"couch\", \"sofa\"]` for the query \"blue couch\". How should the index combine the postings lists?"
+    options:
+      - Union `couch` and `sofa`, then intersect with `blue`
+      - Intersect `couch` and `sofa`, then union with `blue`
+      - Union `blue`, `couch` and `sofa` into one candidate set
+      - Intersect `blue`, `couch` and `sofa` so all three must appear
+    answer: Union `couch` and `sofa`, then intersect with `blue`
+    explanation: Alternatives for the same query word combine with OR (union), while every query group remains required with AND (intersection).
+  - question: "Why do many search teams expand synonyms at query time rather than at index time?"
+    options:
+      - You can fix or remove a bad synonym rule without reindexing every listing
+      - Query-time expansion requires fewer postings-list lookups per request
+      - Index-time expansion cannot work with an inverted index
+      - Query-time expansion prevents synonyms from matching product descriptions
+    answer: You can fix or remove a bad synonym rule without reindexing every listing
+    explanation: When synonyms live only on the query side, updating the synonym table takes effect immediately without rebuilding the index.
+  - question: "Your analytics show that many buyers search for \"sofa\" and then search for \"coffee table\" in the same session. What should you conclude?"
+    options:
+      - Treat it as a candidate signal only, because the buyer may have moved to a new item
+      - Add `sofa <-> coffee table` to the synonym table automatically
+      - Merge the postings lists for `sofa` and `coffee table` at index time
+      - Drop `table` as a stop word so both queries share more results
+    answer: Treat it as a candidate signal only, because the buyer may have moved to a new item
+    explanation: Session rephrasings can surface useful synonyms, but they also capture buyers shopping for complementary products. Human review is still needed.
+  - question: "After enabling stemming, a search for \"bathroom lighting\" starts returning a newly posted \"Light blue bathroom towel\" at rank 1 above a 10-day-old \"Bathroom ceiling light\". Why?"
+    options:
+      - Stemming mapped "lighting" to `light`, and newest-first sorting favored the newer towel
+      - The stemmer gave the adjective "light" a higher text score than the noun "lighting"
+      - The synonym table replaced "bathroom lighting" with "bathroom towel"
+      - Stemming removed the "Bathroom ceiling light" from the candidate set
+    answer: Stemming mapped "lighting" to `light`, and newest-first sorting favored the newer towel
+    explanation: Stemming broadened matching so both listings became candidates under `bathroom` AND `light`. Because ordering is still newest first, the towel posted today outranks the older light fixture.
+  - question: "Why does the stemmer turn \"midcentury\" into `midcenturi` even though `midcenturi` is not an English word?"
+    options:
+      - A stem only needs to be a shared identifier that both query and listing map to
+      - The stemmer is correcting a typo in the word "midcentury"
+      - The index requires every stem to have the exact same character length
+      - The synonym table only accepts tokens that end with the letter `i`
+    answer: A stem only needs to be a shared identifier that both query and listing map to
+    explanation: Stemming strips suffixes by rule rather than looking up dictionary headwords. As long as query and document analysis produce the same token, they match.
+  - question: "You turn on stemming and synonyms in a search that sorts newest first. Mean NDCG rises, yet several queries get worse. What explains the drop?"
+    options:
+      - Relaxing matching increases recall, but without relevance ranking new false positives can push good results down
+      - Stemming and synonyms always lower recall when combined with an inverted index
+      - Any change that makes even one query worse should be rolled back immediately
+      - Mean NDCG only measures ordering and ignores newly matched candidates
+    answer: Relaxing matching increases recall, but without relevance ranking new false positives can push good results down
+    explanation: Broadening matching brings in missing relevant products (raising the mean), but it also admits weaker matches that can take top positions under pure recency sorting.
