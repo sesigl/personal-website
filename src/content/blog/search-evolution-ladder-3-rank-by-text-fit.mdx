@@ -129,9 +129,9 @@ The sofa ranks first, even though the coffee table is ten days newer. And now we
 
 So freshness only decides between listings that fit the query about equally well.
 
-I picked 0.1 and 7 days for the companion app. For your product, you choose them. On a marketplace for used furniture, where good listings sell within days, you might want a larger weight or a shorter half-life than a shop with fixed stock. The nice part is that you can now talk about it with your product team in their terms: "a new listing may be this much worse and still win against a week-old one". Then you test your choice with real users.
+I chose 0.1 and 7 days for this example. For your own product, you pick them yourself. On a marketplace for used furniture, where good listings sell within days, you might want a larger weight or a shorter half-life than a shop with fixed stock. The nice part is that you can now talk about it with your product team in their terms: "a new listing may be this much worse and still win against a week-old one". Then you test your choice with real users.
 
-A text fit of 0.76 also doesn't mean the listing is 76% relevant. The scale is the same for every query, but the same value can mean a better match for one query than for another. And because the app evaluates a fixed catalog snapshot, it counts age from the newest listing in the catalog instead of from today's date.
+A text fit of 0.76 also doesn't mean the listing is 76% relevant. The scale is the same for every query, but the same value can mean a better match for one query than for another.
 
 ## Use the same analyzer for the statistics
 
@@ -139,9 +139,9 @@ BM25 depends on counts: how many listings contain a word, how often a listing re
 
 The counts must use the same text processing as the query. In Part 2, the query "lighting" becomes the stem `light`. If the index counted the document frequency of "lighting" instead of `light`, BM25 would give the word the wrong weight.
 
-The same is true for length. In the app, the index stores both the normalized word and its stem, so a listing's analyzed length can be longer than its word count. That's fine, as long as the query side and the index side count the same way.
+The same is true for length. If the index stores both the normalized word and its stem, as we did in Part 2, a listing's analyzed length can be longer than its word count. That's fine, as long as the query side and the index side count the same way.
 
-And in a real marketplace, the catalog changes every minute. A word that suddenly appears in thousands of new listings should lose some of its rarity weight. So you need a plan for when to update these statistics. The companion app evaluates a fixed snapshot, so it doesn't have this problem.
+And in a real marketplace, the catalog changes every minute. A word that suddenly appears in thousands of new listings should lose some of its rarity weight. So you need a plan for when to update these statistics.
 
 ## Does better text fit mean better search?
 
