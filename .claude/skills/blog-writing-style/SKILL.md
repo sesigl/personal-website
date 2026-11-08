@@ -14,6 +14,8 @@ These rules come from the author's own edits to drafts (Search Evolution Ladder 
 - Link every technical consequence to what the user experiences. Write "our search starts to feel broken", not only "we can miss matches".
 - Say the idea plainly. Name the concept, then use it: "So we operate on sets and can use set operations."
 - Introduce an optimization by what it is: "one smart optimization is starting with the rarest word".
+- Don't write slogans: no "X, not Y" contrasts, no short dramatic sentence pairs ("The candidates are fine. The order is the problem."), and no bold one-line conclusions that repeat the paragraph above. Say the point in a connected sentence that explains why.
+- Don't announce what comes next ("Two notes before you copy this", "The question is how much."). Write the content directly.
 
 ## Structure
 
