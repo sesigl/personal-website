@@ -14,6 +14,8 @@ heroImage: "/src/images/blog/posts/search-evolution/03-bm25/hero.jpg"
 
 In [Part 2](/blog/search-evolution-ladder-2-meet-the-seller-halfway-on-words), we made matching more forgiving. Spelling variants, stemming and synonyms now bring in listings that strict matching missed.
 
+As in the earlier parts, we use a marketplace like eBay as our example: sellers write their own listings, and good listings are often gone after a few days. Other businesses work differently, so some of the choices in this part depend on yours.
+
 But more candidates also means more listings that only mention the query words in passing. And we still sort newest first.
 
 A buyer searches for "blue sofa". Two listings match:
@@ -91,7 +93,7 @@ Now let's see what keyword stuffing buys a seller. If our 20-word sofa listing s
 
 ## How many days is a better match worth?
 
-We don't throw away the date. On a marketplace, a fresh listing is more likely to still be available, so we want it to count. But how much should a few days of age be worth?
+We don't throw away the date. A fresh listing is more likely to still be available, so we want it to count. But how much should a few days of age be worth?
 
 With raw BM25, we can't answer that, because BM25 has no fixed upper limit: our sofa scores 7.69, but in a large catalog a query with rarer words can score much higher. Any recency bonus we add is worth a lot for one query and almost nothing for another.
 
@@ -129,7 +131,17 @@ The sofa ranks first, even though the coffee table is ten days newer. And now we
 
 So freshness only decides between listings that fit the query about equally well.
 
-I chose 0.1 and 7 days for this example. For your own product, you pick them yourself. On a marketplace for used furniture, where good listings sell within days, you might want a larger weight or a shorter half-life than a shop with fixed stock. The nice part is that you can now talk about it with your product team in their terms: "a new listing may be this much worse and still win against a week-old one". Then you test your choice with real users.
+This formula is also the first time we combine signals with weights, and I think it's an important step in the series. Each signal lies between 0 and 1, and its weight tells us how much it can move a listing at most. Text fit can move a listing by up to 1, freshness by up to 0.1.
+
+In the next parts, more signals join the same way: does the listing match the product type the buyer asked for, does the price fit, is the title any good. Each one gets its own weight:
+
+```text
+score = 1.0 * textFit + 0.1 * freshness + w3 * signal3 + w4 * signal4 + ...
+```
+
+Because all signals share the same scale, we can compare the weights directly. A boost with a weight of 0.1 counts as much as being posted today. And once we have many signals, picking the weights by hand gets hard, so later in the series we let data choose them.
+
+I chose 0.1 and 7 days for this example. For your own product, you pick them yourself. If good listings sell within days, as on our marketplace, you might want a larger weight or a shorter half-life. A shop with fixed stock might not need a freshness bonus at all. The nice part is that you can now talk about it with your product team in their terms: "a new listing may be this much worse and still win against a week-old one". Then you test your choice with real users.
 
 A text fit of 0.76 also doesn't mean the listing is 76% relevant. The scale is the same for every query, but the same value can mean a better match for one query than for another.
 
@@ -141,7 +153,7 @@ The counts must use the same text processing as the query. In Part 2, the query 
 
 The same is true for length. If the index stores both the normalized word and its stem, as we did in Part 2, a listing's analyzed length can be longer than its word count. That's fine, as long as the query side and the index side count the same way.
 
-And in a real marketplace, the catalog changes every minute. A word that suddenly appears in thousands of new listings should lose some of its rarity weight. So you need a plan for when to update these statistics.
+And a live catalog changes every minute. A word that suddenly appears in thousands of new listings should lose some of its rarity weight. So you need a plan for when to update these statistics.
 
 ## Does better text fit mean better search?
 

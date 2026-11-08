@@ -29,3 +29,5 @@ cards:
     back: No. The scale is fixed, but the same value can mean a better match for one query than for another. It is a way to compare signals, not a probability.
   - front: Name four things BM25 alone cannot do.
     back: It does not know the product type or which meaning of a word the buyer wants, it ignores word order, and it cannot rank a listing that matching did not let through, for example after a typo.
+  - front: Why does it help to put every ranking signal on a 0-to-1 scale before you add boosts?
+    back: Then a weight tells you how much a signal can move a listing at most, and you can compare weights directly. A boost with weight 0.1 counts as much as a freshness bonus of 0.1.
