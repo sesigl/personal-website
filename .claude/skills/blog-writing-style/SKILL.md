@@ -14,6 +14,8 @@ These rules come from the author's own edits to drafts (Search Evolution Ladder 
 - Link every technical consequence to what the user experiences. Write "our search starts to feel broken", not only "we can miss matches".
 - Say the idea plainly. Name the concept, then use it: "So we operate on sets and can use set operations."
 - Introduce an optimization by what it is: "one smart optimization is starting with the rarest word".
+- Don't write slogans: no "X, not Y" contrasts, no short dramatic sentence pairs ("The candidates are fine. The order is the problem."), and no bold one-line conclusions that repeat the paragraph above. Say the point in a connected sentence that explains why.
+- Don't announce what comes next ("Two notes before you copy this", "The question is how much."). Write the content directly.
 
 ## Structure
 
@@ -43,6 +45,7 @@ These rules come from the author's own edits to drafts (Search Evolution Ladder 
 ## Links and sources
 
 - Link the companion app where the text first mentions it, not only at the end.
+- The companion app is optional for the reader. Link it for the measured result and in "What's next", but don't explain how the app works ("in the app, the index stores…", "the app counts age from…"). Say it as a general technique or as a choice in the example.
 - Check that every link opens before you publish. If a source site is down, cite a stable identifier such as a DOI instead.
 - Link app pages that do what the text says. If the text says "search for couch", link the search for "couch", not a page without a search box.
 - In the companion app, a chapter is `/search?level=<level-id>` (explanation, examples and a search box). `/level/<level-id>` is the annotated source code of that chapter. Link "the chapter" to the first, "the code" to the second.

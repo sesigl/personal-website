@@ -1,0 +1,67 @@
+# Quiz for /blog/search-evolution-ladder-3-rank-by-text-fit
+# Format: see .claude/skills/publish-blog-post/SKILL.md
+questions:
+  - question: "Two listings both contain \"blue\" and \"sofa\" once. One has 20 words, the other 80. Which one does BM25 score higher, and why?"
+    options:
+      - The 20-word listing, because each mention counts more in a shorter text
+      - The 60-word listing, because a longer text shows more product detail
+      - Both the same, because they contain the same query words once
+      - The newer listing, because BM25 includes the posting date
+    answer: The 20-word listing, because each mention counts more in a shorter text
+    explanation: Length normalization, controlled by `b`, gives a mention less credit in a listing that is longer than the catalog average.
+  - question: "In a catalog, \"sofa\" appears in 50 listings and \"blue\" in 200. Which word gets the higher IDF?"
+    options:
+      - "\"sofa\", because fewer listings contain it"
+      - "\"blue\", because more listings contain it"
+      - Both the same, because IDF depends only on the query
+      - It depends on how often each listing repeats the word
+    answer: "\"sofa\", because fewer listings contain it"
+    explanation: IDF rewards rarity. A word in a small part of the catalog says more about what a listing is about.
+  - question: A seller repeats "sofa" ten times instead of twice in a short listing. What happens to the BM25 score?
+    options:
+      - It rises a little, because repetition saturates
+      - It rises five times, because the count is five times higher
+      - It drops to zero, because BM25 detects keyword stuffing
+      - It stays the same, because BM25 counts each word only once
+    answer: It rises a little, because repetition saturates
+    explanation: "With `k1 = 1.2`, extra mentions add less and less. In the post's example, the \"sofa\" part rises from 5.30 to about 6.27."
+  - question: Your team adds BM25 and NDCG@10 rises, while the candidate set stays the same. What does that tell you?
+    options:
+      - The gain comes only from a better order of the same listings
+      - The gain comes from finding listings that were missing before
+      - The judged queries must have changed between the two runs
+      - The recency score was removed from the ranking
+    answer: The gain comes only from a better order of the same listings
+    explanation: With the same candidates, the only thing that can change the metric is the order. That is why we change one thing at a time.
+  - question: "The score is `textFit + 0.1 * freshness`, and freshness halves every 7 days. A listing posted today competes with one from a week ago. When does the new one rank higher?"
+    options:
+      - When its text fit is at most 0.05 lower
+      - When its text fit is at most 0.5 lower
+      - Always, because freshness is added last
+      - Only when both have the same text fit
+    answer: When its text fit is at most 0.05 lower
+    explanation: Today the bonus is 0.1, a week ago 0.05. The difference of 0.05 is all that age can make up.
+  - question: Your team wants to add a freshness bonus to raw BM25. What do you do first?
+    options:
+      - Put text fit on a fixed 0-to-1 scale
+      - Raise `k1` so repetition counts more
+      - Remove the length correction `b`
+      - Give the freshness bonus a weight of 1
+    answer: Put text fit on a fixed 0-to-1 scale
+    explanation: Raw BM25 has no fixed upper limit, so the same bonus would mean something different for every query. Divide by the highest score the query can give first.
+  - question: "Your index counts the word \"lighting\", but the query analyzer looks up the stem `light`. What is the risk?"
+    options:
+      - The query word gets the wrong rarity weight
+      - The listing becomes too long for BM25
+      - The recency score is calculated twice
+      - The synonym table stops working for all queries
+    answer: The query word gets the wrong rarity weight
+    explanation: Document frequency must count the same tokens that the query looks up. Otherwise IDF uses the wrong number.
+  - question: A buyer searches "sofq" and gets no results. Which step do you improve first?
+    options:
+      - Correct the typo before matching
+      - Tune `k1` and `b` for the query
+      - Give recency more weight in the score
+      - Add a lower IDF for rare words
+    answer: Correct the typo before matching
+    explanation: BM25 can only order listings that matching lets through. With no candidates, no ranking formula can help.
