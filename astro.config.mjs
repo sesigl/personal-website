@@ -26,7 +26,15 @@ export default defineConfig({
         mermaidConfig: { flowchart: { useMaxWidth: false } },
     }), mdx(), sitemap(), tailwind({ applyBaseStyles: false }), react()],
     adapter: vercel({
-        imageService: true,
+        // Optimize public-page images during the build, not on each new CDN image variant.
+        // Astro's Sharp service emits content-hashed static files and reuses its build cache.
+        imageService: false,
+        // Keep old image URLs working in already-sent newsletters and shared links.
+        // This enables the legacy endpoint only; new pages use Sharp's static files.
+        imagesConfig: {
+            sizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+            domains: [],
+        },
         webAnalytics: {
             enabled: true,
         },
