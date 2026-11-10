@@ -1,0 +1,17 @@
+# Never upload local secrets, worktree links, or generated development files.
+.env
+.env.*
+.astro
+.cache
+.claude
+.opencode
+.specify
+.vercel
+node_modules
+dist
+coverage
+reports
+tmp
+/infrastructure
+**/__pycache__
+**/.DS_Store

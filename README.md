@@ -24,6 +24,20 @@ serverless Postgres via Drizzle (Neon), and secure newsletter management powered
 3. Run locally: `npm run dev`.
 4. Build for production: `npm run build`.
 
+### Image hosting
+
+Public pages use Astro's build-time image optimization. Images are emitted as
+content-hashed static files under `/_astro/`; they do not use Vercel's image
+transformation service. Keep `imageService: false` in the Vercel adapter. A new
+image or size is processed during a build, not when a reader or crawler visits.
+Local development and the normal build command are unchanged.
+
+`imagesConfig` keeps the old Vercel image endpoint available for already-sent
+newsletters and old shared links. Do not use it for new page or newsletter image
+URLs. The default newsletter template now uses the static imported image.
+The post-build check rejects Vercel image URLs in generated public pages and
+checks that their referenced optimized images exist.
+
 ## Testing
 - Run unit tests: `npm test`.
 - Integration tests with Testcontainers.

@@ -1,3 +1,5 @@
+import heroImage from '../../images/blog/posts/agentic_coding_1/agentic_ai_pair_programming.jpg';
+
 const newsletterTemplateDefault = {
   "0cd766b5-80bd-4da0-9d3f-96d4299eec7f": {
     id: "0cd766b5-80bd-4da0-9d3f-96d4299eec7f",
@@ -47,7 +49,7 @@ const newsletterTemplateDefault = {
         id: "f4f70b49-dc45-42e6-a921-7921e2dd86f4",
         type: "image",
         props: {
-          src: "https://www.sebastiansigl.com/_vercel/image?url=_astro%2Fagentic_ai_pair_programming.BIvRXwNv.jpg&w=750&q=100",
+          src: new URL(heroImage.src, 'https://www.sebastiansigl.com').href,
           alt: "AI pair programming illustration",
           srcSet: null,
           bgColor: null,
