@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest",
+    "test:static-images": "node --test scripts/check-static-images.test.mjs",
     "test:ci": "astro sync && tsc && vitest run"
   },
   "dependencies": {
