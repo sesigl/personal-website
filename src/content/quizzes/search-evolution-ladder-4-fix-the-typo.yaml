@@ -1,0 +1,79 @@
+# Quiz for /blog/search-evolution-ladder-4-fix-the-typo
+# Format: see .claude/skills/publish-blog-post/SKILL.md
+questions:
+  - question: "A buyer searches \"blue sofq\" and gets an empty page. Your ranking already uses BM25. What do you improve?"
+    options:
+      - Correct the query word before matching
+      - Give rare words a higher weight in BM25
+      - Sort the empty result by date again
+      - Add "sofq" as a synonym in every listing
+    answer: Correct the query word before matching
+    explanation: Ranking can only order what matching lets through. The typo matches nothing, so the repair has to happen before the lookup.
+  - question: Your team wants to use an English dictionary as the correction vocabulary. What is the main problem?
+    options:
+      - It misses brand names and contains words no listing has
+      - It is too large to load into memory at query time
+      - It can't be used together with edit distance
+      - It only contains words with more than four letters
+    answer: It misses brand names and contains words no listing has
+    explanation: A marketplace has its own words. And a correction into a word that no seller used can't find anything, so the catalog is the better source.
+  - question: "One seller wrote \"coffe table\" in a listing, and every catalog word counts as known. What happens when a buyer searches \"coffe table\"?"
+    options:
+      - The buyer sees only the misspelled listing
+      - The buyer sees all coffee tables in the catalog
+      - The query is corrected to "coffee table"
+      - The buyer gets an empty result page
+    answer: The buyer sees only the misspelled listing
+    explanation: "\"coffe\" is a known word, so it is not corrected. The query matches the one listing with the same typo and none of the correct ones."
+  - question: "What is the classic edit distance between \"sfoa\" and \"sofa\"?"
+    options: ["2", "1", "0", "4"]
+    answer: "2"
+    explanation: Classic edit distance has no swap. Two letters must be replaced, so the distance is 2. With the swap of neighbouring letters as an edit, it would be 1.
+  - question: Why give a four-letter word a budget of only one edit?
+    options:
+      - Short words have many close neighbours
+      - Short words are never misspelled
+      - Edit distance is slow for short words
+      - Short words are missing from the vocabulary
+    answer: Short words have many close neighbours
+    explanation: With two edits, a four-letter typo reaches many unrelated words. A small budget keeps the candidates close to what the buyer typed.
+  - question: "The typo \"sofq\" is one edit away from \"sofa\" and from \"soft\". What does a careful corrector do with edit distance alone?"
+    options:
+      - It leaves the query as typed
+      - It picks the word that comes first in the alphabet
+      - It picks the word with more listings
+      - It searches for both words with AND
+    answer: It leaves the query as typed
+    explanation: Edit distance can't choose between two equally close words. A wrong rewrite shows unrelated listings, so the corrector doesn't guess.
+  - question: You want to break ties by word frequency. Where do you count?
+    options:
+      - In the query logs of your buyers
+      - In the descriptions of all listings
+      - In a general English dictionary
+      - In the titles of the newest listings
+    answer: In the query logs of your buyers
+    explanation: A word can be common in listings and rare in searches. What buyers type is the better guide to what a buyer with a typo meant.
+  - question: "A frequent typo is corrected into a seller typo, because that one is closer than the right word. What is the simplest fix?"
+    options:
+      - Add the typo to a list of fixed rewrites
+      - Raise the edit budget to three edits
+      - Remove the minimum listing count
+      - Turn off correction for short words
+    answer: Add the typo to a list of fixed rewrites
+    explanation: A fixed rewrite is checked before the general rules and always gives the right word. Frequent searches with no results show which typos belong on the list.
+  - question: "A buyer searches for a product name that appears in only one listing, and the corrector rewrites it into a more common word. Which rule would have prevented this?"
+    options:
+      - Search as typed first, correct only when nothing is found
+      - Allow three edits for words with more than six letters
+      - Correct every query word, also the known ones
+      - Hide the correction from the buyer
+    answer: Search as typed first, correct only when nothing is found
+    explanation: The original query finds the listing, so there is no reason to rewrite it. Correction is for queries that find little or nothing.
+  - question: "After adding spelling correction, mean NDCG@10 over your judged queries rises only a little. What do you do first?"
+    options:
+      - Look at which queries changed and in which direction
+      - Remove the corrector because it has no effect
+      - Raise the edit budget until the mean moves more
+      - Ship it, because the mean did not go down
+    answer: Look at which queries changed and in which direction
+    explanation: Judged queries are mostly spelled correctly, so few scores change. A big win on one query can hide a big loss on another, and only the single queries show it.
