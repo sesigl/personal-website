@@ -11,6 +11,8 @@ cards:
     back: It keeps one-off seller typos out of the vocabulary. The price is that rare but correct words, such as a product name with one listing, become unknown too.
   - front: What does the edit distance between two words measure?
     back: The smallest number of single-letter edits (replace, insert or delete) that turn one word into the other. A small distance means the word is a likely correction.
+  - front: How does a program find the smallest number of edits between two words without trying every sequence?
+    back: It fills a table where each cell holds the distance between the first letters of both words. Each cell takes the cheapest of delete, insert and keep-or-replace from three neighbours that are already filled. The last cell is the answer.
   - front: Why do short words get a smaller edit budget than long words?
     back: Short words have many neighbours. With two edits, a four-letter typo can become many unrelated words, and the buyer meant only one of them.
   - front: Why does the classic edit distance handle swapped letters badly?

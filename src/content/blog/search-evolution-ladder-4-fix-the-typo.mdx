@@ -4,7 +4,7 @@ pubDate: "2026-11-15"
 description: "How to correct search typos with the words your sellers wrote and edit distance, why two words can be equally close, and why a careful corrector sometimes leaves a typo alone."
 category: "tech"
 slug: "search-evolution-ladder-4-fix-the-typo"
-readingTimeInMinutes: 8
+readingTimeInMinutes: 10
 appLink: "https://search-evolution-explorer.sebastiansigl.com/"
 infographicLink: "/infographics/search-evolution-ladder-4-fix-the-typo.html"
 heroImage: "/src/images/blog/posts/search-evolution/04-spelling/hero.jpg"
@@ -44,6 +44,57 @@ We need a way to say that "sofq" is close to "sofa" and far from "table". The cl
 
 ![The typo sofq becomes sofa with one replaced letter, so the edit distance is 1. The typo sfoa needs two replaced letters, or one swap of two neighbouring letters.](../../images/blog/posts/search-evolution/04-spelling/edit-distance.jpg)
 
+But how does a program find the *smallest* number of edits? Trying every possible sequence of edits would take forever. The trick is to solve small versions of the problem first and reuse their answers.
+
+We fill a table. Each cell answers one small question: how many edits turn the first letters of the typo into the first letters of the word? Here is the table for "sofq" and "sofa":
+
+```text
+          ""   s   o   f   a
+    ""     0   1   2   3   4
+    s      1   0   1   2   3
+    o      2   1   0   1   2
+    f      3   2   1   0   1
+    q      4   3   2   1   1   ← the answer is in the last cell
+```
+
+The first row and the first column are easy. To turn nothing into "sof", we insert three letters. To turn "sof" into nothing, we delete three.
+
+Every other cell looks at three neighbours that are already filled and takes the cheapest way to get there:
+
+- from the cell **above**, plus 1: delete a letter of the typo
+- from the cell to the **left**, plus 1: insert a letter of the word
+- from the cell **diagonally above**: plus 0 if the two letters are the same, plus 1 to replace one with the other
+
+Follow the diagonal: "s", "o" and "f" are the same in both words, so the cost stays at 0. In the last cell, "q" and "a" differ, so we pay 1 for the replacement. That last cell is the edit distance.
+
+In Python, the whole algorithm is a few lines:
+
+```python
+def edit_distance(typo, word):
+    # table[i][j] = edits to turn the first i letters of typo
+    #               into the first j letters of word
+    table = [[0] * (len(word) + 1) for _ in range(len(typo) + 1)]
+    for i in range(len(typo) + 1):
+        table[i][0] = i  # delete all i letters
+    for j in range(len(word) + 1):
+        table[0][j] = j  # insert all j letters
+
+    for i in range(1, len(typo) + 1):
+        for j in range(1, len(word) + 1):
+            same = typo[i - 1] == word[j - 1]
+            table[i][j] = min(
+                table[i - 1][j] + 1,                      # delete a letter
+                table[i][j - 1] + 1,                      # insert a letter
+                table[i - 1][j - 1] + (0 if same else 1)  # keep or replace
+            )
+    return table[-1][-1]
+
+print(edit_distance("sofq", "sofa"))   # 1
+print(edit_distance("sofq", "table"))  # 5
+```
+
+For two words of four and five letters, that is a table of 30 cells, so one comparison is cheap.
+
 Now we can search the vocabulary for words that are close to the typo. How close is close enough? Most typos are one slip of the finger. In an early study, more than 80% of the spelling errors were a single wrong, missing, extra or swapped letter[^2]. So a small budget is enough:
 
 ```text
@@ -64,6 +115,27 @@ Both are real words from our catalog, and both are exactly one edit away. Edit d
 ![The typo sofq sits between two catalog words. Both sofa and soft are exactly one edit away, so edit distance alone can't choose.](../../images/blog/posts/search-evolution/04-spelling/two-close-words.jpg)
 
 The careful rule is to **correct only when the closest word is unique**. With this rule, "sofq" stays as it is, and the buyer still gets an empty page. That hurts, but showing soft blankets to someone who wants a sofa is the worse mistake, because we changed the query and the buyer has to figure out why.
+
+With the distance function from above, the whole corrector fits in a few lines. We measure the distance to every vocabulary word, keep the closest ones, and correct only when exactly one is left:
+
+```python
+def correct(word, vocabulary):
+    if word in vocabulary:
+        return word  # known words stay as they are
+
+    budget = 1 if len(word) <= 4 else 2
+    distances = {known: edit_distance(word, known) for known in vocabulary}
+    best = min(distances.values())
+    if best > budget:
+        return word  # nothing is close enough
+
+    closest = [known for known, distance in distances.items() if distance == best]
+    return closest[0] if len(closest) == 1 else word  # a tie stays as typed
+
+vocabulary = {"blue", "sofa", "soft", "velvet", "coffee", "table"}
+print(correct("cofee", vocabulary))  # coffee
+print(correct("sofq", vocabulary))   # sofq, because sofa and soft tie
+```
 
 To decide such a tie, we need more than letters:
 
