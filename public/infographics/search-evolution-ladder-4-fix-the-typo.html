@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Fix the Typo Before You Look It Up – Infographic | Sebastian Sigl</title>
+	<meta name="description" content="A study sheet for search spelling correction: a vocabulary from the catalog, edit distance, correcting only a unique match, putting a missing space back, and why rare names need protection.">
+	<style>
+		:root { --paper: #f4efe4; --ink: #26211b; --muted: #5c5347; --line: #d8ccb8; --accent: #b03c12; }
+		@media (prefers-color-scheme: dark) {
+			:root { --paper: #171715; --ink: #f6f6f3; --muted: #b0aea4; --line: #3a3932; --accent: #f5a47f; }
+		}
+		* { box-sizing: border-box; }
+		body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 "Helvetica Neue", Arial, sans-serif; }
+		main { width: min(1280px, 100%); margin: 0 auto; padding: 24px 16px 48px; }
+		.top { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
+		.kicker { margin: 0; color: var(--muted); font: 600 12px/1.4 ui-monospace, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; }
+		h1 { margin: 4px 0 0; font: 700 clamp(22px, 3vw, 32px)/1.15 Georgia, serif; }
+		a { color: var(--accent); }
+		figure { margin: 0; }
+		img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; background: #f4efe4; }
+		figcaption { margin-top: 8px; color: var(--muted); font-size: 14px; }
+		details { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 16px; }
+		summary { cursor: pointer; font-weight: 600; }
+		ol { padding-left: 20px; }
+		li { margin: 8px 0; }
+	</style>
+</head>
+<body>
+<main>
+	<div class="top">
+		<div>
+			<p class="kicker">The Search Evolution Ladder · Part 4 · Infographic</p>
+			<h1>Fix the typo before you look it up</h1>
+		</div>
+		<a href="/blog/search-evolution-ladder-4-fix-the-typo">← Read the article</a>
+	</div>
+	<figure>
+		<a href="/infographics/search-evolution-ladder-4-fix-the-typo.webp" title="Open the full-size image">
+			<img
+				src="/infographics/search-evolution-ladder-4-fix-the-typo.webp"
+				width="1280" height="720"
+				alt="Study sheet with five panels: know your words, count the edits, correct only a unique match, put the space back, and rare names break. The full text is in the text version below the image.">
+		</a>
+		<figcaption>A study sheet for spelling correction. Select the image to open it at full size.</figcaption>
+	</figure>
+	<details>
+		<summary>Text version</summary>
+		<ol>
+			<li><strong>Know your words.</strong> The vocabulary is every word that appears in at least two listings. A known query word is left alone. An unknown word is corrected into a word from the vocabulary.</li>
+			<li><strong>Count the edits.</strong> "sofq" becomes "sofa" with one replaced letter, so the edit distance is 1. Short words may differ by one edit, longer words by two.</li>
+			<li><strong>Correct only a unique match.</strong> "sofq" is one edit away from "sofa" and from "soft". Edit distance can't choose between them, so the corrector doesn't guess.</li>
+			<li><strong>Put the space back.</strong> When both halves of an unknown word are known words, split it: "bluesofa" becomes "blue sofa".</li>
+			<li><strong>Rare names break.</strong> "geralyn" appears in only one listing, so the corrector doesn't know it and rewrites it to "merlyn". Search as typed first.</li>
+		</ol>
+		<p>Show every correction, so the buyer can undo it.</p>
+	</details>
+</main>
+</body>
+</html>

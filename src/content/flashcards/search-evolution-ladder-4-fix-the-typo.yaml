@@ -1,0 +1,37 @@
+# Flashcards for /blog/search-evolution-ladder-4-fix-the-typo
+# Format: see .claude/skills/publish-blog-post/SKILL.md
+cards:
+  - front: Why correct a typo before matching and not during ranking?
+    back: Ranking can only order listings that matching lets through. A typo matches no listing, so there is nothing to rank and the buyer sees an empty page.
+  - front: Why build the correction vocabulary from the catalog and not from a dictionary?
+    back: A marketplace has its own words, such as brand names, that no dictionary contains. And a correction into a word that no seller used can't find a listing anyway.
+  - front: What is the risk of taking every catalog word into the vocabulary?
+    back: Sellers make typos too. A seller typo becomes a known word, so a buyer with the same typo is not corrected and sees only the few misspelled listings.
+  - front: Why require a word to appear in at least two listings before it counts as known?
+    back: It keeps one-off seller typos out of the vocabulary. The price is that rare but correct words, such as a product name with one listing, become unknown too.
+  - front: What does the edit distance between two words measure?
+    back: The smallest number of single-letter edits (replace, insert or delete) that turn one word into the other. A small distance means the word is a likely correction.
+  - front: How does a program find the smallest number of edits between two words without trying every sequence?
+    back: It fills a table where each cell holds the distance between the first letters of both words. Each cell takes the cheapest of delete, insert and keep-or-replace from three neighbours that are already filled. The last cell is the answer.
+  - front: Why do short words get a smaller edit budget than long words?
+    back: Short words have many neighbours. With two edits, a four-letter typo can become many unrelated words, and the buyer meant only one of them.
+  - front: Why does the classic edit distance handle swapped letters badly?
+    back: The buyer made one mistake, but it counts as two replacements and can be over the budget. Adding the swap of two neighbouring letters as an edit that costs 1 fixes this.
+  - front: Two vocabulary words are equally close to the typo. What does a careful corrector do?
+    back: It doesn't correct. Rewriting the query to the wrong word shows the buyer unrelated listings, and they have to figure out why. An empty page or a "did you mean" is the smaller mistake.
+  - front: What can decide between two equally close corrections?
+    back: How common each word is in what buyers search, how likely the exact slip is on a keyboard, and the other words in the query.
+  - front: Why are listing counts a poor guide to which correction buyers mean?
+    back: A word can be common in descriptions and rare in searches. Query logs show what buyers actually type, so they are the better source for word frequency.
+  - front: Which tie between two close words is safe to decide without more data?
+    back: When both candidates are forms of the same word, such as singular and plural. Stemming makes them match the same listings, so you pick the base form.
+  - front: When is a list of fixed rewrites better than edit distance?
+    back: For frequent typos that the general rules get wrong, for example when a seller typo is closer than the right word. Your most frequent searches with no results tell you which ones.
+  - front: How do you repair a query where the buyer forgot the space?
+    back: When no correction works, try every split position and keep the split when both halves are known words.
+  - front: How can a spelling corrector make a correct query worse?
+    back: A rare but correct word, such as a product name, is not in the vocabulary. The corrector rewrites it into a more common word, and the listing the buyer asked for is gone.
+  - front: Name three ways to limit the damage of wrong corrections.
+    back: Search as typed first and correct only when little or nothing is found, keep product names, brands and model numbers as known words, and show the correction so the buyer can undo it.
+  - front: Why does a mean metric over a judged query set say little about a spelling corrector?
+    back: Judged queries are mostly spelled correctly, so only a few scores change, and a big win can hide a big loss. A test set with typos, rare names and ambiguous cases shows both.

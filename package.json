@@ -10,7 +10,7 @@
     "astro": "astro",
     "test": "vitest",
     "test:static-images": "node --test scripts/check-static-images.test.mjs",
-    "test:ci": "astro sync && tsc && vitest run"
+    "test:ci": "astro sync && tsc && vitest run && npm run test:static-images"
   },
   "dependencies": {
     "@astrojs/mdx": "4.2.3",
