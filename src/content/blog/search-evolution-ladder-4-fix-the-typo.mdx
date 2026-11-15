@@ -22,15 +22,13 @@ So before we look anything up, we want to repair the query. In this part, we bui
 
 ## Which words do we know?
 
-To notice a typo, we first need to know what a correct word looks like. We could load an English dictionary, but our marketplace has its own language. A brand name like "Moen" is in no dictionary, and a dictionary word that no seller ever used can't match a listing anyway.
+To notice a typo, we first need to know what a correct word looks like. We could load an English dictionary, but usually each application has its own language. On this post, we again put us in the shoes of a marketplace similar to eBay.
 
-So we take the **vocabulary** from the catalog itself: every word that appears in our listings. Consider having millions of listings. Whatever a buyer can find is in there.
+A brand name like "Moen" is in no dictionary, and a dictionary word that no seller ever used can't match a listing anyway. So we take the **vocabulary** from the catalog itself: every word that appears in our listings. Consider having millions of listings. Whatever a buyer can find is in there.
 
-A query word that is in the vocabulary is left alone. Only an unknown word like "sofq" gets corrected, and only into a word from the vocabulary, so every correction can find something.
+A search build for a correction use case requires a mental shift. A query word that is in our catalog is not what matters. Only an unknown word like "sofq" gets corrected, and only into a word from the our catalog, so every correction can find something.
 
-The devil is in the detail here. Sellers make typos too. If one seller writes "coffe table", then "coffe" is a word in our catalog. A buyer who makes the same typo is not corrected and sees that one listing, and none of the thousands of coffee tables.
-
-A simple protection is a minimum count: a word only enters the vocabulary if it appears in at least two listings. It removes the one-off typos, but a typo that several sellers make stays in. We also pay a price for this rule, and we will see it later in this part.
+The devil is in the detail here. Sellers make typos too. If one seller writes "coffe table", then "coffe" is a word in our catalog. A buyer who makes the same typo is not corrected and sees that one listing, and none of the thousands of coffee tables. While there a many much more complicated solutions to that problem, a simple protection is a minimum count: a word only enters the vocabulary if it appears in at least a few listings. It removes the one-off typos, but a typo that several sellers make stays in. Other solutions deserve a dedicate blogpost, so lets move to how we can calculate a distance to familar words in our catalog.
 
 ## How far is "sofq" from "sofa"?
 
