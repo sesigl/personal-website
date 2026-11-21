@@ -1,0 +1,79 @@
+# Quiz for /blog/search-evolution-ladder-5-match-the-attribute
+# Format: see .claude/skills/publish-blog-post/SKILL.md
+questions:
+  - question: "A seller lists \"Velvet couch\" and selects `Color: Blue` in the form without writing \"blue\" in the title. A buyer searches \"blue sofa\". Why does attribute matching find it?"
+    options:
+      - Both sides map to the same color and product type concepts
+      - Attribute matching lowers the minimum word match count to one
+      - Attribute matching copies the buyer query into the listing title
+      - Attribute matching ignores color words during the first lookup
+    answer: Both sides map to the same color and product type concepts
+    explanation: "The shared table maps \"blue\" and `Color: Blue` to `color: BLUE`, and maps \"sofa\" and \"couch\" to `productType: SOFA`, so both sides meet on the same concepts."
+  - question: "For \"blue sofa\", the tagger extracts `color: BLUE` and `productType: SOFA`. A blue table lamp has `Color: Blue` in its form fields. Does it enter via the attribute path?"
+    options:
+      - No, because it must satisfy every concept in the query
+      - Yes, because it matches the structured color field cleanly
+      - Yes, because attribute matching uses OR across all concepts
+      - No, because lamps are excluded from the attribute table
+    answer: No, because it must satisfy every concept in the query
+    explanation: "Attribute matching requires AND across query concepts. Matching `color: BLUE` alone is not enough when `productType: SOFA` is missing."
+  - question: Your team wants to replace word matching with the attribute matcher so only listings with matching attributes appear. What is the main risk?
+    options:
+      - Queries with words outside the table lose valid listings
+      - Structured fields can no longer receive a ranking bonus
+      - Spelling correction stops running before attribute lookup
+      - Listings with both title and field matches appear twice
+    answer: Queries with words outside the table lose valid listings
+    explanation: An attribute table is never complete and sellers leave optional fields blank. Taking the union with word matches recovers missed listings without breaking queries that use unlisted words.
+  - question: Why does a structured field match receive a larger score bonus than a text alias match?
+    options:
+      - Choosing a form field is stronger evidence than a text mention
+      - Structured fields take more CPU time to check at query time
+      - Text aliases are already removed before ranking begins
+      - Form fields only exist for the newest listings in the catalog
+    answer: Choosing a form field is stronger evidence than a text mention
+    explanation: A seller selecting a value in the listing form is stronger evidence of what the item is than a word appearing anywhere in a free-text description.
+  - question: "A listing matches two query concepts in both its structured fields (`+0.05` each) and its text (`+0.025` each). What is its total attribute bonus?"
+    options: ["0.15", "0.075", "0.10", "0.20"]
+    answer: "0.15"
+    explanation: Each matched concept adds `0.05 + 0.025 = 0.075`. Across two concepts, `2 * 0.075 = 0.15`, which outweighs the `0.1` freshness bonus on the same 0-to-1 scale.
+  - question: "Sellers leave optional fields blank, so your team runs the alias lookup table over descriptions to fill missing tags. A throw pillow says \"fits any blue sofa\". What goes wrong?"
+    options:
+      - The pillow gets tagged as a sofa and earns the sofa bonus
+      - The tagger rejects the listing because two colors appear
+      - The pillow disappears from the word-matching candidate set
+      - The lookup table strips "sofa" from the buyer's query
+    answer: The pillow gets tagged as a sofa and earns the sofa bonus
+    explanation: "A word-based tagger has no model of sentence structure. It sees \"sofa\" in a compatibility mention, assigns `productType: SOFA`, and the ranker treats the pillow like a sofa."
+  - question: When missing structured tags are derived from the listing's own description text, what happens to the field bonus and the text bonus?
+    options:
+      - Both fire from the same word and stop being independent
+      - The field bonus cancels out the text fit score completely
+      - The text bonus stops firing for any tagged listing
+      - Both bonuses drop to zero whenever a word repeats
+    answer: Both fire from the same word and stop being independent
+    explanation: When derived tags come from the description itself, a single mention triggers both the field match bonus and the text alias bonus instead of giving two independent signals.
+  - question: "Buyers search \"bathroom vanity knobs\". Your table knows `productType: VANITY` but does not know \"knobs\". What happens to the results?"
+    options:
+      - Full bathroom vanities get boosted above actual knobs
+      - The search returns an empty page until "knobs" is added
+      - Spelling correction rewrites "knobs" into "vanity"
+      - Only listings with blank fields appear in the top ten
+    answer: Full bathroom vanities get boosted above actual knobs
+    explanation: "Partial tagging extracts only `VANITY` and ignores \"knobs\". The attribute path pulls in full vanities and awards them the `VANITY` bonus, pushing them above actual knobs."
+  - question: Attribute matching works well in small tests, yet median query latency jumps sharply as the catalog grows. What is the standard fix?
+    options:
+      - Build a concept inverted index at index time
+      - Scan only the newest listings at query time
+      - Remove text aliases from the attribute table
+      - Move attribute matching after BM25 ranking
+    answer: Build a concept inverted index at index time
+    explanation: Extracting attributes once at index time and storing concept-to-listing postings lists turns a slow catalog scan into a fast intersection of sorted lists.
+  - question: Even with clean seller fields and a fast concept index, what problem remains when a buyer searches for a product and accessories mention the same word?
+    options:
+      - Boosting alone cannot remove mismatched accessories
+      - Inverted indexes cannot intersect two concept lists
+      - Spelling correction breaks every two-word accessory query
+      - Freshness scores always outweigh product type bonuses
+    answer: Boosting alone cannot remove mismatched accessories
+    explanation: When a main product and an accessory share a tag or mention, score bonuses can only nudge bad matches down rather than filter mismatched product families out.

@@ -1,0 +1,31 @@
+# Flashcards for /blog/search-evolution-ladder-5-match-the-attribute
+# Format: see .claude/skills/publish-blog-post/SKILL.md
+cards:
+  - front: "Why does word matching miss a listing titled \"Velvet couch\" when a buyer searches \"blue sofa\" and the seller set Color to Blue in the form?"
+    back: "Word matching checks only the listing text. Neither \"blue\" nor \"sofa\" is in the title, and word matching can't read the structured color field or connect \"couch\" to the same product type."
+  - front: What does a shared attribute table do for both queries and listings?
+    back: "It maps words, phrases and form fields to the same typed concepts, such as `color: BLUE` or `productType: SOFA`, so both sides speak the same language."
+  - front: Why does attribute extraction run after spelling correction?
+    back: "A typo or missing space, such as \"bluesofa\", won't match any alias in the table. Spelling correction repairs the words first so the tagger can recognize `color: BLUE` and `productType: SOFA`."
+  - front: How do AND and OR work together when matching listings by attributes?
+    back: Every concept in the query must hold (AND across concepts), and each concept can be satisfied by either a structured field or a text alias (OR across representations).
+  - front: Why take the union of word matches and attribute matches instead of using the attribute table as a hard filter?
+    back: An attribute table is never complete and sellers leave optional fields blank. A hard filter drops valid listings whenever a word is missing from the table, while the union recovers missed listings without breaking what already works.
+  - front: Why does a structured field match receive a larger score bonus than a text alias match?
+    back: A seller selecting a value in a structured listing form is stronger evidence of what the product is than a word showing up somewhere in a free-text description.
+  - front: Why keep attribute bonuses on the same 0-to-1 scale as text fit and freshness?
+    back: A shared scale lets you compare weights directly. You can make matching the requested attributes outweigh freshness without drowning out text fit between two matching listings.
+  - front: How can a word-based tagger assign the wrong product type to a listing?
+    back: "It matches words without sentence structure. A throw pillow whose description says \"fits any blue sofa\" gets tagged with `productType: SOFA`, the exact same tag as a real sofa."
+  - front: What is the hidden scoring problem when you derive missing listing tags from the description text?
+    back: The field bonus and the text bonus stop being independent evidence. Both fire from the exact same word in the description, so a single passing mention gets rewarded twice.
+  - front: "What do you need to separate a product's own attributes from compatibility mentions like \"fits any blue sofa\"?"
+    back: Either trusted structured fields filled in by the seller or a model trained to read context, such as a sequence tagger or a product classifier.
+  - front: What is partial tagging, and how does it hurt search results?
+    back: "When a query names a part or accessory that isn't in the table, such as \"bathroom vanity knobs\", the tagger extracts only the known word (`VANITY`) and boosts full vanities above actual knobs."
+  - front: Why is maintaining an attribute table an ongoing product task rather than a one-time setup?
+    back: "New brands appear every week, sellers use new phrasing, and ambiguous words like \"marble\" need clear definitions. Without an owner and a list of tricky queries, a new alias can quietly break an existing search."
+  - front: Why should you never check attribute rules by scanning every listing at query time?
+    back: A linear scan over the catalog makes queries dramatically slower and fails to scale to millions of listings. Extracting attributes at index time into a concept inverted index keeps lookup to fast list intersections.
+  - front: After adding attribute matching, why inspect per-query wins and losses instead of stopping at a higher mean NDCG@10?
+    back: A higher mean shows the layer helps overall, while the regressions point straight at missing product types and accessory queries where a flat alias table pulls the wrong items to the top.
